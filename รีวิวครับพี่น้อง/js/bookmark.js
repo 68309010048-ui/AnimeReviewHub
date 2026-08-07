@@ -1,65 +1,172 @@
-const bookmark=
-JSON.parse(localStorage.getItem("bookmark")) || [];
+import { auth, db } from "./firebase.js";
 
 import {
-    doc,
-    getDoc
-}
-from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 
-const list = document.getElementById("favoriteList");
+import {
 
-let favorite =
-    JSON.parse(localStorage.getItem("favorite")) || [];
+collection,
+query,
+where,
+getDocs,
+deleteDoc,
+doc
 
-loadFavorite();
+} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
-async function loadFavorite(){
+const bookmarkList=document.getElementById("bookmarkList");
+const bookmarkCount=document.getElementById("bookmarkCount");
+const emptyBox=document.getElementById("emptyBox");
+const search=document.getElementById("searchBookmark");
 
-    list.innerHTML = "";
+let bookmark=[];
+let currentUser=null;
 
-    if(favorite.length===0){
+onAuthStateChanged(auth,async(user)=>{
 
-        list.innerHTML="<h2>ยังไม่มีรายการโปรด</h2>";
+if(!user){
 
-        return;
-
-    }
-
-    for(const id of favorite){
-
-        const snap = await getDoc(doc(db,"anime",id));
-
-        if(!snap.exists()) continue;
-
-        const anime=snap.data();
-
-        list.innerHTML+=`
-
-        <div class="anime-card">
-
-            <img src="${anime.image}">
-
-            <h3>${anime.title}</h3>
-
-            <button onclick="openAnime('${id}')">
-
-                ดูรายละเอียด
-
-            </button>
-
-        </div>
-
-        `;
-
-    }
+location.href="../login.html";
+return;
 
 }
 
-window.openAnime=function(id){
+currentUser=user;
 
-    localStorage.setItem("animeId",id);
+loadBookmark();
 
-    location.href="detail.html";
+});
+
+async function loadBookmark(){
+
+bookmark=[];
+
+const q=query(
+
+collection(db,"bookmarks"),
+
+where("uid","==",currentUser.uid)
+
+);
+
+const snap=await getDocs(q);
+
+snap.forEach(docSnap=>{
+
+bookmark.push({
+
+id:docSnap.id,
+
+...docSnap.data()
+
+});
+
+});
+
+showBookmark(bookmark);
+
+}
+
+function showBookmark(list){
+
+bookmarkList.innerHTML="";
+
+bookmarkCount.textContent=list.length;
+
+if(list.length===0){
+
+bookmarkList.style.display="none";
+emptyBox.style.display="block";
+return;
+
+}
+
+bookmarkList.style.display="grid";
+emptyBox.style.display="none";
+
+list.forEach(item=>{
+
+bookmarkList.innerHTML+=`
+
+<div class="card">
+
+<img src="${item.image}">
+
+<div class="card-content">
+
+<h3>${item.title}</h3>
+
+<p class="genre">
+
+${item.category}
+
+</p>
+
+<p class="rating">
+
+⭐ ${Number(item.score||0).toFixed(1)}
+
+</p>
+
+<div class="card-buttons">
+
+<button
+class="detail-btn"
+onclick="showDetail('${item.animeId}')">
+
+ดูรายละเอียด
+
+</button>
+
+<button
+class="remove-btn"
+onclick="removeBookmark('${item.id}')">
+
+🔖 ลบออก
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+search.addEventListener("keyup",()=>{
+
+const keyword=search.value.toLowerCase();
+
+const result=bookmark.filter(item=>
+
+item.title.toLowerCase().includes(keyword)
+
+);
+
+showBookmark(result);
+
+});
+
+window.showDetail=function(id){
+
+localStorage.setItem("animeId",id);
+
+location.href="detail.html";
+
+}
+
+window.removeBookmark=async function(id){
+
+if(!confirm("ลบ Bookmark ?")) return;
+
+await deleteDoc(doc(db,"bookmarks",id));
+
+loadBookmark();
 
 }

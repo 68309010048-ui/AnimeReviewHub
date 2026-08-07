@@ -71,60 +71,98 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
 
     <!-- Search -->
 
-    <div class="search">
-
-        <input
-        type="text"
-        id="searchAnime"
-        placeholder="🔍 ค้นหาอนิเมะ...">
-
-    </div>
-
-    <!-- Form -->
-
     <div class="card">
 
-        <h2>
+    <h2>เพิ่ม / แก้ไข อนิเมะ</h2>
 
-            เพิ่ม / แก้ไข อนิเมะ
+    <input type="text"
+           id="title"
+           placeholder="ชื่ออนิเมะ">
 
-        </h2>
+    <input type="text"
+           id="image"
+           placeholder="URL รูปภาพ">
 
-        <input type="text" id="title" placeholder="ชื่ออนิเมะ">
+    <!-- Category -->
 
-    <input type="text" id="image" placeholder="URL รูปภาพ">
+    <label class="form-title">
 
-    <input type="text" id="category" placeholder="หมวดหมู่">
+        Category
 
-    <input type="number" id="episodes" placeholder="จำนวนตอน">   
+    </label>
 
-    <input type="text" id="status" placeholder="สถานะ เช่น Finished Airing">
+    <div class="category-group">
 
-    <input type="text" id="type" placeholder="ประเภท เช่น TV, Movie, OVA">
+        <label><input type="checkbox" value="Action"> 🟣 Action</label>
 
-    <input type="text" id="trailer" placeholder="YouTube URL">  
+        <label><input type="checkbox" value="Adventure"> 🟢 Adventure</label>
 
-    <textarea id="description" placeholder="รายละเอียด"></textarea>
+        <label><input type="checkbox" value="Fantasy"> 🟠 Fantasy</label>
 
-        <div class="btn-group">
+        <label><input type="checkbox" value="Comedy"> 🟡 Comedy</label>
 
-            <button id="addAnime">
+        <label><input type="checkbox" value="Romance"> ❤️ Romance</label>
 
-                เพิ่มอนิเมะ
+        <label><input type="checkbox" value="Sport"> ⚽ Sport</label>
 
-            </button>
+        <label><input type="checkbox" value="Drama"> 🎭 Drama</label>
 
-            <button
-            id="cancelEdit"
-            style="display:none;">
+        <label><input type="checkbox" value="Sci-Fi"> 🚀 Sci-Fi</label>
 
-                ยกเลิกการแก้ไข
+        <label><input type="checkbox" value="Mystery"> 🕵️ Mystery</label>
 
-            </button>
+        <label><input type="checkbox" value="Horror"> 👻 Horror</label>
 
-        </div>
+        <label><input type="checkbox" value="School"> 🏫 School</label>
+
+        <label><input type="checkbox" value="Slice of Life"> 🌸 Slice of Life</label>
+
+        <label><input type="checkbox" value="Supernatural"> ✨ Supernatural</label>
+
+        <label><input type="checkbox" value="Isekai"> 🌍 Isekai</label>
+
+        <label><input type="checkbox" value="Music"> 🎵 Music</label>
 
     </div>
+
+    <input type="number"
+           id="episodes"
+           placeholder="จำนวนตอน">
+
+    <input type="text"
+           id="status"
+           placeholder="สถานะ">
+
+    <input type="text"
+           id="type"
+           placeholder="ประเภท">
+
+    <input type="text"
+           id="trailer"
+           placeholder="YouTube URL">
+
+    <textarea
+        id="description"
+        placeholder="เรื่องย่อ"></textarea>
+
+    <div class="btn-group">
+
+        <button id="addAnime">
+
+            เพิ่มอนิเมะ
+
+        </button>
+
+        <button id="cancelEdit"
+                style="display:none">
+
+            ยกเลิกการแก้ไข
+
+        </button>
+
+    </div>
+
+</div>
 
     <hr>
 

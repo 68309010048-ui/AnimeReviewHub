@@ -83,13 +83,19 @@ addBtn.addEventListener("click", async () => {
 
     const image = document.getElementById("image").value.trim();
 
-    const category = document.getElementById("category").value.trim();
+    const category = [];
+
+    document
+    .querySelectorAll(".category-group input:checked")
+    .forEach(item=>{
+
+    category.push(item.value);
+
+});
 
     const trailer = document.getElementById("trailer").value.trim();
 
     const description = document.getElementById("description").value.trim();
-
-    const score = parseFloat(document.getElementById("score").value) || 0;
 
     const episodes = parseInt(document.getElementById("episodes").value) || 0;
 
@@ -100,7 +106,7 @@ addBtn.addEventListener("click", async () => {
     if (
     !title ||
     !image ||
-    !category ||
+    category.length === 0 ||
     !description ||
     !status ||
     !type
@@ -143,35 +149,25 @@ addBtn.addEventListener("click", async () => {
 
         else {
 
-            await addDoc(
+            await addDoc(collection(db,"anime"),{
 
-    collection(db, "anime"),
+    title,
 
-    {
+    image,
 
-        title,
+    category,
 
-        image,
+    description,
 
-        category,
+    episodes,
 
-        score,
+    status,
 
-        episodes,
+    type,
 
-        status,
+    trailer
 
-        type,
-
-        trailer,
-
-        description,
-
-        createdAt: serverTimestamp()
-
-    }
-
-);
+});
 
 alert("เพิ่มอนิเมะสำเร็จ");
 
@@ -201,15 +197,6 @@ alert("เพิ่มอนิเมะสำเร็จ");
 
 async function loadDashboard() {
 
-    const animeSnap = await getDocs(collection(db, "anime"));
-
-    document.getElementById("animeCount").textContent = animeSnap.size;
-
-    const userSnap = await getDocs(collection(db, "users"));
-
-    document.getElementById("userCount").textContent = userSnap.size;
-
-    const reviewSnap = await getDocs(collection(db, "reviews"));
 
     document.getElementById("reviewCount").textContent = reviewSnap.size;
     
@@ -242,7 +229,13 @@ async function loadAnime() {
 
                 <h3>${data.title}</h3>
 
-                <p><b>หมวด :</b> ${data.category}</p>
+                <p><b>หมวด :</b>
+${
+             Array.isArray(data.category)
+        ? data.category.join(", ")
+        : data.category
+            }
+            </p>
 
                 <p>${data.description}</p>
 
@@ -310,7 +303,13 @@ if (searchBox) {
 
                         <h3>${data.title}</h3>
 
-                        <p><b>หมวด :</b> ${data.category}</p>
+                       <p><b>หมวด :</b>
+${
+                        Array.isArray(data.category)
+                    ? data.category.join(", ")
+                     : data.category
+}
+                </p>
 
                         <p>${data.description}</p>
 
@@ -369,7 +368,33 @@ window.editAnime = async (id) => {
 
     document.getElementById("image").value = data.image;
 
-    document.getElementById("category").value = data.category;
+    // ล้าง Checkbox ก่อน
+document.querySelectorAll(".category-group input").forEach(input => {
+    input.checked = false;
+});
+
+// รองรับทั้ง Array และ String
+if (Array.isArray(data.category)) {
+
+    data.category.forEach(cat => {
+
+        const checkbox = document.querySelector(
+            `.category-group input[value="${cat}"]`
+        );
+
+        if (checkbox) checkbox.checked = true;
+
+    });
+
+} else if (data.category) {
+
+    const checkbox = document.querySelector(
+        `.category-group input[value="${data.category}"]`
+    );
+
+    if (checkbox) checkbox.checked = true;
+
+}
 
     document.getElementById("trailer").value = data.trailer || "";
 
@@ -466,7 +491,11 @@ function clearForm() {
 
     document.getElementById("image").value = "";
 
-    document.getElementById("category").value = "";
+    document.querySelectorAll(".category-group input").forEach(input => {
+
+    input.checked = false;
+
+});
 
     document.getElementById("trailer").value = "";
 

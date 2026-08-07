@@ -1,3 +1,4 @@
+
 import { auth, db } from "./firebase.js";
 
 import {
@@ -18,9 +19,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
 
-// ===============================
-// Variable
-// ===============================
+// =====================================================
+// Anime ID
+// =====================================================
 
 const animeId = localStorage.getItem("animeId");
 
@@ -30,6 +31,11 @@ if (!animeId) {
 
 }
 
+
+// =====================================================
+// Variable
+// =====================================================
+
 let currentAnime = null;
 
 let currentUser = null;
@@ -38,116 +44,238 @@ let currentReviewId = null;
 
 let selectedRating = 10;
 
-// ===============================
+let reviewData = [];
+
+
+// =====================================================
+// Element
+// =====================================================
+
+const poster =
+document.getElementById("poster");
+
+const banner =
+document.getElementById("banner");
+
+const title =
+document.getElementById("title");
+
+const description =
+document.getElementById("description");
+
+const episodes =
+document.getElementById("episodes");
+
+const status =
+document.getElementById("status");
+
+const type =
+document.getElementById("type");
+
+const category =
+document.getElementById("category");
+
+const trailerBox =
+document.getElementById("trailerBox");
+
+const reviewList =
+document.getElementById("reviewList");
+
+const username =
+document.getElementById("username");
+
+const comment =
+document.getElementById("comment");
+
+const submitReview =
+document.getElementById("submitReview");
+
+const favoriteBtn =
+document.getElementById("favoriteBtn");
+
+const bookmarkBtn =
+document.getElementById("bookmarkBtn");
+
+const shareBtn =
+document.getElementById("shareBtn");
+
+const darkBtn =
+document.getElementById("darkBtn");
+
+const userScore =
+document.getElementById("userScore");
+
+const reviewCount =
+document.getElementById("reviewCount");
+
+const starBox =
+document.getElementById("starRating");
+
+const toast =
+document.getElementById("toast");
+
+
+// =====================================================
+// Init
+// =====================================================
+
+async function init(){
+
+    await loadAnime();
+
+    await loadReviews();
+
+    loadFavoriteBookmark();
+
+    createStars();
+
+}
+
+window.addEventListener(
+
+    "DOMContentLoaded",
+
+    init
+
+);
+// ===========================
 // Login
-// ===============================
+// ===========================
 
 onAuthStateChanged(auth, async (user) => {
 
     currentUser = user;
 
-    const username = document.getElementById("username");
-    const submitBtn = document.getElementById("submitReview");
-
     if (!user) {
 
-        submitBtn.disabled = true;
-        submitBtn.textContent = "เข้าสู่ระบบก่อนรีวิว";
+        submitReview.disabled = true;
+        submitReview.textContent = "เข้าสู่ระบบก่อนรีวิว";
 
         if (username) {
+
             username.value = "";
             username.placeholder = "กรุณาเข้าสู่ระบบ";
+
         }
 
         return;
+
     }
 
-    submitBtn.disabled = false;
-    submitBtn.textContent = "ส่งรีวิว";
+    submitReview.disabled = false;
+    submitReview.textContent = "ส่งรีวิว";
 
-    // ดึงชื่อจาก Firestore
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-
-    let userName = "User";
-
-    if (userDoc.exists()) {
-        userName = userDoc.data().name || "User";
-    }
-
-    if (username) {
-        username.value = userName;
-        username.readOnly = true;
-    }
-
-    // ตรวจสอบว่าเคยรีวิวหรือยัง
-    const q = query(
-        collection(db, "reviews"),
-        where("animeId", "==", animeId),
-        where("uid", "==", user.uid)
-    );
-
-    const snap = await getDocs(q);
-
-    if (!snap.empty) {
-
-        const review = snap.docs[0];
-
-        currentReviewId = review.id;
-
-        const data = review.data();
-
-        document.getElementById("comment").value = data.comment;
-
-        selectedRating = data.rating;
-
-        updateStars();
-
-        submitBtn.textContent = "อัปเดตรีวิว";
-    }
+    await loadUser(user);
 
 });
 
-// ===============================
-// Load Anime
-// ===============================
 
-async function loadAnime() {
+// ===========================
+// Load User
+// ===========================
 
-    if (!animeId) {
+async function loadUser(user){
 
-        location.href = "../index.html";
-
-        return;
-
-    }
-
-    try {
+    try{
 
         const snap = await getDoc(
 
-            doc(db, "anime", animeId)
+            doc(db,"users",user.uid)
 
         );
 
-        if (!snap.exists()) {
+        if(snap.exists()){
+
+            const data = snap.data();
+
+            username.value = data.name || "User";
+
+            username.readOnly = true;
+
+        }
+
+        // ตรวจสอบว่ารีวิวแล้วหรือยัง
+
+        const q = query(
+
+            collection(db,"reviews"),
+
+            where("animeId","==",animeId),
+
+            where("uid","==",user.uid)
+
+        );
+
+        const reviewSnap = await getDocs(q);
+
+        if(!reviewSnap.empty){
+
+            const reviewDoc = reviewSnap.docs[0];
+
+            currentReviewId = reviewDoc.id;
+
+            const review = reviewDoc.data();
+
+            comment.value = review.comment;
+
+            selectedRating = review.rating;
+
+            updateStars();
+
+            submitReview.textContent =
+
+                "อัปเดตรีวิว";
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+// ===========================
+// Load Anime
+// ===========================
+
+async function loadAnime(){
+
+    try{
+
+        const snap = await getDoc(
+
+            doc(db,"anime",animeId)
+
+        );
+
+        if(!snap.exists()){
 
             alert("ไม่พบข้อมูลอนิเมะ");
 
-            location.href = "../index.html";
+            location.href="../index.html";
 
             return;
 
         }
 
-        currentAnime = snap.data();
+        currentAnime = {
+
+            id:snap.id,
+
+            ...snap.data()
+
+        };
 
         showAnime(currentAnime);
 
-        loadReview();
-
     }
 
-    catch (error) {
+    catch(error){
 
         console.error(error);
 
@@ -156,372 +284,481 @@ async function loadAnime() {
     }
 
 }
+function showAnime(anime){
 
-// ===============================
-// Show Anime
-// ===============================
+    // ===========================
+    // Poster / Banner
+    // ===========================
 
-function showAnime(anime) {
+    poster.src = anime.image;
 
-    document.getElementById("poster").src =
-        anime.image;
+    poster.alt = anime.title;
 
-    document.getElementById("banner").style.backgroundImage =
+    banner.style.backgroundImage =
 
-        `linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),url(${anime.image})`;
+    `linear-gradient(
+        rgba(0,0,0,.45),
+        rgba(0,0,0,.55)
+    ),url(${anime.image})`;
 
-    document.getElementById("title").textContent =
+
+    // ===========================
+    // Text
+    // ===========================
+
+    title.textContent =
         anime.title;
 
-    document.getElementById("description").textContent =
+    description.textContent =
         anime.description || "-";
 
-    document.getElementById("episodes").textContent =
+    episodes.textContent =
         anime.episodes || "-";
 
-    document.getElementById("status").textContent =
+    status.textContent =
         anime.status || "-";
 
-    document.getElementById("type").textContent =
+    type.textContent =
         anime.type || "-";
 
-    document.getElementById("category").innerHTML =
 
-        `<span>${anime.category}</span>`;
+    // ===========================
+    // Category
+    // รองรับหลายหมวด
+    // ===========================
 
-    // Trailer
+    category.innerHTML = "";
 
-    const trailerBox =
-        document.getElementById("trailerBox");
+    if(Array.isArray(anime.category)){
 
-   if (anime.trailer) {
+        anime.category.forEach(cat=>{
 
-    let url = anime.trailer;
+            category.innerHTML +=
 
-    if (url.includes("watch?v=")) {
+            `
+            <span>
 
-        url = url.replace("watch?v=", "embed/");
+                ${cat}
+
+            </span>
+            `;
+
+        });
 
     }
 
-    if (url.includes("youtu.be/")) {
+    else if(anime.category){
 
-        const id = url.split("youtu.be/")[1];
-
-        url = "https://www.youtube.com/embed/" + id;
-
-    }
-
-    trailerBox.innerHTML = `
-        <iframe
-            src="${url}"
-            frameborder="0"
-            allowfullscreen>
-        </iframe>
-    `;
-
-} 
-    
-    else {
-
-        trailerBox.innerHTML =
+        category.innerHTML =
 
         `
-        <div class="no-trailer">
-            <i class="fa-solid fa-video-slash"></i>
-            <p>ยังไม่มีตัวอย่างอนิเมะ</p>
-        </div>
+        <span>
+
+            ${anime.category}
+
+        </span>
         `;
 
     }
 
+    else{
+
+        category.innerHTML =
+
+        `
+        <span>
+
+            -
+
+        </span>
+        `;
+
+    }
+
+
+    // ===========================
+    // Trailer
+    // ===========================
+
+    loadTrailer(anime.trailer);
+
 }
 
-// ===============================
+
+
+// =====================================================
+// Trailer
+// =====================================================
+
+function loadTrailer(url){
+
+    if(!url){
+
+        trailerBox.innerHTML=
+
+        `
+        <div class="no-trailer">
+
+            <i class="fa-solid fa-video-slash"></i>
+
+            <p>
+
+                ยังไม่มีตัวอย่างอนิเมะ
+
+            </p>
+
+        </div>
+        `;
+
+        return;
+
+    }
+
+
+    let embed=url;
+
+
+    if(embed.includes("watch?v=")){
+
+        embed=embed.replace(
+
+            "watch?v=",
+
+            "embed/"
+
+        );
+
+    }
+
+
+    if(embed.includes("youtu.be/")){
+
+        const id=
+
+        embed.split("youtu.be/")[1];
+
+        embed=
+
+        `https://www.youtube.com/embed/${id}`;
+
+    }
+
+
+    trailerBox.innerHTML=
+
+    `
+    <iframe
+
+        src="${embed}"
+
+        allowfullscreen
+
+        loading="lazy"
+
+        frameborder="0">
+
+    </iframe>
+    `;
+
+}
+// ===========================
 // Favorite
-// ===============================
+// ===========================
 
-const favoriteBtn = document.getElementById("favoriteBtn");
+favoriteBtn.addEventListener("click", toggleFavorite);
 
-favoriteBtn.onclick = () => {
+function toggleFavorite() {
 
     let favorite = JSON.parse(
+
         localStorage.getItem("favorite")
+
     ) || [];
 
-    if (!favorite.includes(animeId)) {
+    const index = favorite.indexOf(animeId);
+
+    if (index === -1) {
 
         favorite.push(animeId);
 
-        localStorage.setItem(
-            "favorite",
-            JSON.stringify(favorite)
-        );
-
-        favoriteBtn.innerHTML =
-            "❤️ โปรดแล้ว";
-
-        favoriteBtn.style.background =
-            "#dc2626";
-
-        showToast("เพิ่มในรายการโปรดแล้ว");
+        showToast("❤️ เพิ่มรายการโปรดแล้ว");
 
     }
 
     else {
 
-        showToast("มีในรายการโปรดแล้ว");
+        favorite.splice(index, 1);
+
+        showToast("💔 นำออกจากรายการโปรด");
 
     }
 
-};
+    localStorage.setItem(
 
+        "favorite",
 
-// ===============================
-// Bookmark
-// ===============================
+        JSON.stringify(favorite)
 
-const bookmarkBtn =
-document.getElementById("bookmarkBtn");
+    );
 
-bookmarkBtn.onclick = () => {
+    updateFavoriteButton();
 
-    let bookmark = JSON.parse(
-        localStorage.getItem("bookmark")
-    ) || [];
+}
 
-    if (!bookmark.includes(animeId)) {
-
-        bookmark.push(animeId);
-
-        localStorage.setItem(
-            "bookmark",
-            JSON.stringify(bookmark)
-        );
-
-        bookmarkBtn.innerHTML =
-            "🔖 บันทึกแล้ว";
-
-        bookmarkBtn.style.background =
-            "#2563eb";
-
-        showToast("บันทึกเรียบร้อย");
-
-    }
-
-    else {
-
-        showToast("บันทึกไว้แล้ว");
-
-    }
-
-};
-
-
-// ===============================
-// Load Favorite / Bookmark
-// ===============================
-
-function loadFavoriteBookmark() {
+function updateFavoriteButton() {
 
     const favorite = JSON.parse(
+
         localStorage.getItem("favorite")
+
     ) || [];
 
     if (favorite.includes(animeId)) {
 
         favoriteBtn.innerHTML =
+
             "❤️ โปรดแล้ว";
 
-        favoriteBtn.style.background =
-            "#dc2626";
+        favoriteBtn.classList.add("active");
 
     }
 
-    const bookmark = JSON.parse(
+    else {
+
+        favoriteBtn.innerHTML =
+
+            "🤍 Favorite";
+
+        favoriteBtn.classList.remove("active");
+
+    }
+
+}
+
+
+
+// ===========================
+// Bookmark
+// ===========================
+
+bookmarkBtn.addEventListener("click", toggleBookmark);
+
+function toggleBookmark() {
+
+    let bookmark = JSON.parse(
+
         localStorage.getItem("bookmark")
+
+    ) || [];
+
+    const index = bookmark.indexOf(animeId);
+
+    if (index === -1) {
+
+        bookmark.push(animeId);
+
+        showToast("🔖 บันทึกแล้ว");
+
+    }
+
+    else {
+
+        bookmark.splice(index, 1);
+
+        showToast("🗑 ลบ Bookmark");
+
+    }
+
+    localStorage.setItem(
+
+        "bookmark",
+
+        JSON.stringify(bookmark)
+
+    );
+
+    updateBookmarkButton();
+
+}
+
+function updateBookmarkButton() {
+
+    const bookmark = JSON.parse(
+
+        localStorage.getItem("bookmark")
+
     ) || [];
 
     if (bookmark.includes(animeId)) {
 
         bookmarkBtn.innerHTML =
+
             "🔖 บันทึกแล้ว";
 
-        bookmarkBtn.style.background =
-            "#2563eb";
+        bookmarkBtn.classList.add("active");
+
+    }
+
+    else {
+
+        bookmarkBtn.innerHTML =
+
+            "📑 Bookmark";
+
+        bookmarkBtn.classList.remove("active");
 
     }
 
 }
 
 
-// ===============================
+
+// ===========================
+// Load Favorite / Bookmark
+// ===========================
+
+function loadFavoriteBookmark(){
+
+    updateFavoriteButton();
+
+    updateBookmarkButton();
+
+}
+
+
+
+// ===========================
 // Share
-// ===============================
+// ===========================
 
-const shareBtn =
-document.getElementById("shareBtn");
+shareBtn.addEventListener("click", async()=>{
 
-shareBtn.onclick = async () => {
+    try{
 
-    try {
-
-        if (navigator.share) {
+        if(navigator.share){
 
             await navigator.share({
 
-                title:
-                currentAnime.title,
+                title:currentAnime.title,
 
-                text:
-                currentAnime.description,
+                text:currentAnime.description,
 
-                url:
-                location.href
+                url:location.href
 
             });
 
         }
 
-        else {
+        else{
 
             await navigator.clipboard.writeText(
+
                 location.href
+
             );
 
             showToast(
-                "คัดลอกลิงก์แล้ว"
+
+                "📋 คัดลอกลิงก์แล้ว"
+
             );
 
         }
 
     }
 
-    catch (error) {
+    catch(error){
 
         console.log(error);
 
     }
 
-};
+});
 
 
-// ===============================
+
+// ===========================
 // Dark Mode
-// ===============================
+// ===========================
 
-const darkBtn =
-document.getElementById("darkBtn");
+if(
 
-if (
-    localStorage.getItem("dark")
-    === "true"
-) {
+    localStorage.getItem("dark")==="true"
 
-    document.body.classList.add(
-        "dark"
-    );
+){
+
+    document.body.classList.add("dark");
 
 }
 
-darkBtn.onclick = () => {
+darkBtn.addEventListener("click",()=>{
 
-    document.body.classList.toggle(
-        "dark"
-    );
+    document.body.classList.toggle("dark");
 
     localStorage.setItem(
 
         "dark",
 
-        document.body.classList.contains(
-            "dark"
-        )
-
-    );
-
-};
-
-
-// ===============================
-// Star Rating
-// ===============================
-
-const starBox =
-document.getElementById("starRating");
-
-starBox.innerHTML = "";
-
-for (
-
-    let i = 1;
-
-    i <= 10;
-
-    i++
-
-) {
-
-    starBox.innerHTML += `
-
-        <i
-            class="fa-solid fa-star"
-            data-rate="${i}">
-        </i>
-
-    `;
-
-}
-
-const stars =
-document.querySelectorAll(
-"#starRating i"
-);
-
-stars.forEach(star => {
-
-    star.addEventListener(
-
-        "click",
-
-        () => {
-
-            selectedRating = Number(
-                star.dataset.rate
-            );
-
-            updateStars();
-
-        }
+        document.body.classList.contains("dark")
 
     );
 
 });
+// ===========================
+// Create Stars
+// ===========================
+
+function createStars() {
+
+    starBox.innerHTML = "";
+
+    for (let i = 1; i <= 10; i++) {
+
+        const star = document.createElement("i");
+
+        star.className = "fa-solid fa-star";
+
+        star.dataset.rate = i;
+
+        star.addEventListener("click", () => {
+
+            selectedRating = i;
+
+            updateStars();
+
+        });
+
+        starBox.appendChild(star);
+
+    }
+
+    updateStars();
+
+}
+
+
+
+// ===========================
+// Update Stars
+// ===========================
 
 function updateStars() {
 
+    const stars = starBox.querySelectorAll("i");
+
     stars.forEach(star => {
 
-        const rate =
-        Number(
-            star.dataset.rate
-        );
+        const rate = Number(star.dataset.rate);
 
-        if (
-            rate <= selectedRating
-        ) {
+        if (rate <= selectedRating) {
 
-            star.classList.add(
-                "active-star"
-            );
+            star.classList.add("active-star");
 
         }
 
         else {
 
-            star.classList.remove(
-                "active-star"
-            );
+            star.classList.remove("active-star");
 
         }
 
@@ -529,17 +766,42 @@ function updateStars() {
 
 }
 
-updateStars();
 
-// ===============================
-// Review (Firestore Final)
-// ===============================
 
-document
-    .getElementById("submitReview")
-    .addEventListener("click", addReview);
+// ===========================
+// Set Rating
+// (ใช้ตอนโหลดรีวิวเดิม)
+// ===========================
 
-async function addReview() {
+function setRating(score) {
+
+    selectedRating = Number(score) || 10;
+
+    updateStars();
+
+}
+
+
+
+// ===========================
+// Reset Rating
+// ===========================
+
+function resetRating() {
+
+    selectedRating = 10;
+
+    updateStars();
+
+}
+submitReview.addEventListener("click", saveReview);
+
+
+// ===========================
+// Save Review
+// ===========================
+
+async function saveReview() {
 
     if (!currentUser) {
 
@@ -549,12 +811,9 @@ async function addReview() {
 
     }
 
-    const comment = document
-        .getElementById("comment")
-        .value
-        .trim();
+    const text = comment.value.trim();
 
-    if (comment === "") {
+    if (text === "") {
 
         showToast("กรุณาเขียนรีวิว");
 
@@ -562,60 +821,80 @@ async function addReview() {
 
     }
 
-    const userSnap = await getDoc(doc(db, "users", currentUser.uid));
-
-let userData = {};
-
-if (userSnap.exists()) {
-    userData = userSnap.data();
-}
-
-const data = {
-
-    animeId,
-
-    uid: currentUser.uid,
-
-    username: userData.name || "User",
-
-    email: userData.email || currentUser.email,
-
-    photoURL: userData.photo || "",
-
-    comment,
-
-    rating: selectedRating,
-
-    createdAt: serverTimestamp()
-
-};
-
     try {
+
+        // โหลดข้อมูลผู้ใช้
+        const userSnap = await getDoc(
+            doc(db, "users", currentUser.uid)
+        );
+
+        const userData = userSnap.exists()
+            ? userSnap.data()
+            : {};
+
+        const reviewData = {
+
+            animeId,
+
+            uid: currentUser.uid,
+
+            username:
+                userData.name || "User",
+
+            email:
+                userData.email || currentUser.email,
+
+            photoURL:
+                userData.photo || "",
+
+            rating:
+                selectedRating,
+
+            comment:
+                text,
+
+            createdAt:
+                serverTimestamp()
+
+        };
+
+
+        // =====================
+        // Update
+        // =====================
 
         if (currentReviewId) {
 
             await updateDoc(
 
-                doc(db, "reviews", currentReviewId),
+                doc(
+                    db,
+                    "reviews",
+                    currentReviewId
+                ),
 
-                data
+                reviewData
 
             );
 
-            showToast("อัปเดตรีวิวแล้ว");
+            showToast("อัปเดตรีวิวสำเร็จ");
 
-            loadReview();
-             averageReview();
-       
-            }
+        }
+
+        // =====================
+        // Add
+        // =====================
 
         else {
 
             const ref = await addDoc(
 
-                collection(db, "reviews"),
+                collection(
+                    db,
+                    "reviews"
+                ),
 
-                data
+                reviewData
 
             );
 
@@ -623,15 +902,23 @@ const data = {
 
             showToast("ส่งรีวิวสำเร็จ");
 
-            document.getElementById("comment").value = "";
+        }
 
-selectedRating = 10;
 
-updateStars();
-       
-}
+        // รีเซ็ต
 
-        await loadReview();
+        comment.value = "";
+
+        resetRating();
+
+        submitReview.textContent =
+            "อัปเดตรีวิว";
+
+
+        // โหลดใหม่
+
+        await loadReviews();
+
         await averageReview();
 
     }
@@ -640,48 +927,40 @@ updateStars();
 
         console.error(error);
 
-        showToast("ไม่สามารถบันทึกรีวิว");
+        showToast("บันทึกรีวิวไม่สำเร็จ");
 
     }
 
 }
+// ===========================
+// Load Reviews
+// ===========================
 
-// ===============================
-// Load Review
-// ===============================
-
-async function loadReview() {
-
-    const reviewList =
-
-        document.getElementById("reviewList");
+async function loadReviews() {
 
     reviewList.innerHTML = "";
 
     const q = query(
-
         collection(db, "reviews"),
-
         where("animeId", "==", animeId)
-
     );
 
     const snap = await getDocs(q);
 
+    reviewData = [];
+
     if (snap.empty) {
 
-        reviewList.innerHTML =
+        reviewList.innerHTML = `
 
-        `
-        <div class="review-card">
+        <div class="review-card empty-review">
 
-            <p style="text-align:center">
+            <i class="fa-solid fa-comments"></i>
 
-                ยังไม่มีรีวิว
-
-            </p>
+            <p>ยังไม่มีรีวิว</p>
 
         </div>
+
         `;
 
         averageReview();
@@ -692,17 +971,48 @@ async function loadReview() {
 
     snap.forEach(docSnap => {
 
-        const review = docSnap.data();
+        reviewData.push({
 
-        const canDelete =
+            id: docSnap.id,
+
+            ...docSnap.data()
+
+        });
+
+    });
+
+    renderReviews();
+
+    averageReview();
+
+}
+
+
+
+// ===========================
+// Render Reviews
+// ===========================
+
+function renderReviews(){
+
+    reviewList.innerHTML="";
+
+    reviewData.forEach(review=>{
+
+        const canDelete=
 
             currentUser &&
 
-            review.uid === currentUser.uid;
+            review.uid===currentUser.uid;
 
-        reviewList.innerHTML +=
+        const avatar=
 
-        `
+            review.photoURL ||
+
+            `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(review.username)}`;
+
+        reviewList.innerHTML+=`
+
         <div class="review-card">
 
             <div class="review-top">
@@ -710,8 +1020,12 @@ async function loadReview() {
                 <div class="review-user">
 
                     <img
+
                         class="avatar"
-                        src="${review.photoURL || `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(review.username)}` }">
+
+                        src="${avatar}"
+
+                    >
 
                     <div>
 
@@ -723,9 +1037,7 @@ async function loadReview() {
 
                         <div class="review-stars">
 
-                            ${"⭐".repeat(review.rating)}
-
-                            (${review.rating}/10)
+                            ⭐ ${review.rating}/10
 
                         </div>
 
@@ -742,13 +1054,19 @@ async function loadReview() {
             </p>
 
             ${canDelete ? `
-                <button
-                    class="delete-btn"
-                    onclick="deleteReview('${docSnap.id}')">
 
-                    🗑 ลบรีวิว
+            <button
 
-                </button>
+                class="delete-btn"
+
+                onclick="deleteReview('${review.id}')"
+
+            >
+
+                🗑 ลบรีวิว
+
+            </button>
+
             ` : ""}
 
         </div>
@@ -757,13 +1075,13 @@ async function loadReview() {
 
     });
 
-    averageReview();
-
 }
 
-// ===============================
+
+
+// ===========================
 // Delete Review
-// ===============================
+// ===========================
 
 window.deleteReview = async function(id){
 
@@ -781,27 +1099,35 @@ window.deleteReview = async function(id){
 
         );
 
-        if(id === currentReviewId){
+        reviewData = reviewData.filter(
 
-            currentReviewId = null;
+            item=>item.id!==id
 
-            document.getElementById("comment").value = "";
+        );
 
-            selectedRating = 10;
+        if(id===currentReviewId){
 
-            updateStars();
+            currentReviewId=null;
 
-            document.getElementById("submitReview").textContent =
+            comment.value="";
+
+            resetRating();
+
+            submitReview.textContent=
 
                 "ส่งรีวิว";
 
         }
 
-        showToast("ลบรีวิวเรียบร้อย");
+        renderReviews();
 
-        await loadReview();
+        averageReview();
 
-        await averageReview();
+        showToast(
+
+            "ลบรีวิวแล้ว"
+
+        );
 
     }
 
@@ -809,98 +1135,224 @@ window.deleteReview = async function(id){
 
         console.error(error);
 
-        showToast("ลบรีวิวไม่สำเร็จ");
+        showToast(
+
+            "ลบรีวิวไม่สำเร็จ"
+
+        );
 
     }
 
 };
 
-// ===============================
+
+
+// ===========================
 // Average Review
-// ===============================
+// ===========================
 
-async function averageReview() {
+function averageReview(){
 
-    const q = query(
-        collection(db, "reviews"),
-        where("animeId", "==", animeId)
-    );
+    if(reviewData.length===0){
 
-    const snap = await getDocs(q);
+        userScore.textContent="0.0";
 
-    const userScore =
-        document.getElementById("userScore");
-
-    const reviewCount =
-        document.getElementById("reviewCount");
-
-    if (snap.empty) {
-
-        userScore.textContent = "0.0";
-        reviewCount.textContent = "0 รีวิว";
+        reviewCount.textContent="0 รีวิว";
 
         return;
 
     }
 
-    let total = 0;
+    const total=
 
-    snap.forEach(doc => {
+        reviewData.reduce(
 
-        total += Number(doc.data().rating);
+            (sum,item)=>
 
-    });
+                sum+Number(item.rating),
 
-    const avg = total / snap.size;
+            0
 
-    userScore.textContent = avg.toFixed(1);
+        );
 
-    reviewCount.textContent = `${snap.size} รีวิว`;
+    const avg=
+
+        total/reviewData.length;
+
+    userScore.textContent=
+
+        avg.toFixed(1);
+
+    reviewCount.textContent=
+
+        `${reviewData.length} รีวิว`;
 
 }
 
-// ===============================
+// ===========================
 // Toast
-// ===============================
+// ===========================
 
-function showToast(message) {
+function showToast(message){
 
-    const toast = document.getElementById("toast");
-
-    if (!toast) return;
+    if(!toast) return;
 
     toast.textContent = message;
 
     toast.classList.add("show");
 
-    setTimeout(() => {
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer = setTimeout(()=>{
 
         toast.classList.remove("show");
 
-    }, 2500);
+    },2500);
 
 }
 
-// ===============================
-// Start
-// ===============================
 
-window.addEventListener("DOMContentLoaded", async () => {
 
-    loadFavoriteBookmark();
+// ===========================
+// Refresh Detail
+// ===========================
 
-    updateStars();
+async function refreshPage(){
 
-    await loadAnime();
+    try{
 
-    await averageReview();
+        await Promise.all([
+
+            loadAnime(),
+
+            loadReviews()
+
+        ]);
+
+        loadFavoriteBookmark();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+
+// ===========================
+// Reset Form
+// ===========================
+
+function resetReviewForm(){
+
+    comment.value = "";
+
+    resetRating();
+
+    currentReviewId = null;
+
+    submitReview.textContent =
+
+        "ส่งรีวิว";
+
+}
+
+
+
+// ===========================
+// Reload Current User Review
+// ===========================
+
+async function reloadUserReview(){
+
+    if(!currentUser) return;
+
+    const q = query(
+
+        collection(db,"reviews"),
+
+        where("animeId","==",animeId),
+
+        where("uid","==",currentUser.uid)
+
+    );
+
+    const snap = await getDocs(q);
+
+    if(snap.empty){
+
+        resetReviewForm();
+
+        return;
+
+    }
+
+    const review = snap.docs[0];
+
+    currentReviewId = review.id;
+
+    comment.value = review.data().comment;
+
+    setRating(review.data().rating);
+
+    submitReview.textContent =
+
+        "อัปเดตรีวิว";
+
+}
+
+
+
+// ===========================
+// Refresh เมื่อกลับมาหน้าเว็บ
+// ===========================
+
+window.addEventListener("focus",()=>{
+
+    averageReview();
 
 });
 
-// ===============================
-// Export (optional)
-// ===============================
+
+
+// ===========================
+// Start
+// ===========================
+
+window.addEventListener(
+
+    "DOMContentLoaded",
+
+    async()=>{
+
+        createStars();
+
+        await refreshPage();
+
+    }
+
+);
+
+
+
+// ===========================
+// Export
+// ===========================
 
 window.showToast = showToast;
-window.loadReview = loadReview;
+
+window.refreshPage = refreshPage;
+
+window.reloadUserReview = reloadUserReview;
+
 window.averageReview = averageReview;
+
+window.renderReviews = renderReviews;
+
+window.loadReviews = loadReviews;
+
+window.resetReviewForm = resetReviewForm;

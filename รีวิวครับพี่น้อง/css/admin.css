@@ -275,3 +275,77 @@ button{
     }
 
 }
+
+.form-control{
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #ddd;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    background:#fff;
+
+    outline:none;
+
+    transition:.3s;
+
+}
+
+.form-control:focus{
+
+    border-color:#6d28d9;
+
+    box-shadow:0 0 0 4px rgba(109,40,217,.15);
+
+}
+
+.category-group{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+    gap:12px;
+
+    margin-top:10px;
+
+}
+
+.category-group label{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    background:#f5f5f5;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.category-group label:hover{
+
+    background:#ede9fe;
+
+}
+
+.category-group input{
+
+    width:18px;
+
+    height:18px;
+
+}
