@@ -458,36 +458,35 @@ img{
    Responsive
 ===================================== */
 
-@media(max-width:768px){
+@media(max-width:900px){
 
-.page-header{
-
-    padding:25px;
-
-}
-
-.page-header h1{
-
-    font-size:28px;
+    .anime-grid{
+        grid-template-columns:
+            repeat(3,minmax(0,1fr));
+    }
 
 }
 
-.favorite-info h2{
+@media(max-width:600px){
 
-    font-size:22px;
+    .anime-grid{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
 
-}
+        gap:12px;
+    }
 
-.anime-grid{
+    .card img{
+        height:auto;
+        aspect-ratio:3/4;
+    }
 
-    grid-template-columns:1fr;
+    .card-content{
+        padding:12px;
+    }
 
-}
-
-.card img{
-
-    height:280px;
-
-}
+    .card-content h3{
+        font-size:15px;
+    }
 
 }

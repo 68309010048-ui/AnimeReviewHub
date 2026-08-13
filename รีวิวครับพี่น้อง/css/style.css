@@ -422,23 +422,27 @@ header{
 =========================== */
 
 .category{
+    width:100%;
 
     display:flex;
+    align-items:center;
 
     gap:12px;
 
-    padding:10px 40px 30px;
+    padding:18px 40px;
 
     overflow-x:auto;
+    overflow-y:hidden;
+
+    white-space:nowrap;
 
     scrollbar-width:none;
 
+    background:#edf2f7;
 }
 
 .category::-webkit-scrollbar{
-
     display:none;
-
 }
 
 
@@ -450,60 +454,116 @@ header{
 
     flex:0 0 auto;
 
-    padding:12px 20px;
+    min-width:105px;
 
-    border-radius:30px;
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:11px 18px;
+
+    border-radius:999px;
 
     background:#fff;
 
-    color:#555;
+    color:#374151;
 
     font-size:14px;
 
     font-weight:600;
 
-    border:2px solid transparent;
+    border:1px solid transparent;
 
-    box-shadow:0 6px 15px rgba(0,0,0,.08);
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.07);
 
-    transition:.3s;
+    transition:
+        background .25s,
+        color .25s,
+        transform .25s,
+        box-shadow .25s;
 
 }
 
 .category button:hover{
 
-    color:#fff;
+    background:#ede9fe;
 
-    background:#7c3aed;
+    color:#6d28d9;
 
-    transform:translateY(-3px);
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 8px 18px rgba(124,58,237,.15);
 
 }
 
 .category button.active{
 
-    background:linear-gradient(
-        135deg,
-        #7c3aed,
-        #4f46e5
-    );
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #4f46e5
+        );
 
     color:#fff;
 
     border-color:#7c3aed;
 
+    box-shadow:
+        0 8px 18px rgba(124,58,237,.25);
+
 }
 
 
 /* ===========================
-   Scroll Hint
+   Category Mobile
 =========================== */
 
-.category::after{
+@media(max-width:768px){
 
-    content:"";
+    .category{
 
-    padding-right:10px;
+        gap:9px;
+
+        padding:14px 20px;
+
+    }
+
+    .category button{
+
+        min-width:auto;
+
+        padding:10px 15px;
+
+        font-size:13px;
+
+    }
+
+}
+
+
+/* ===========================
+   Category Small Mobile
+=========================== */
+
+@media(max-width:480px){
+
+    .category{
+
+        padding:12px 15px;
+
+    }
+
+    .category button{
+
+        padding:9px 14px;
+
+        font-size:12px;
+
+    }
 
 }
 
@@ -874,209 +934,243 @@ header{
 ===================================================== */
 
 
-/* ===========================
-   Responsive
-=========================== */
+/* =====================================================
+   RESPONSIVE - SAME UI AS DESKTOP
+===================================================== */
 
-@media (max-width:1024px){
+@media (max-width:1200px){
 
-header{
+    header{
+        padding:30px;
+    }
 
-    padding:30px;
+    .header-top{
+        gap:20px;
+    }
 
-}
+    .logo h1{
+        font-size:30px;
+    }
 
-.header-top{
+    .search-box{
+        max-width:360px;
+    }
 
-    flex-direction:column;
+    .anime-container{
+        grid-template-columns:
+            repeat(3,minmax(0,1fr));
 
-    align-items:flex-start;
+        gap:20px;
 
-}
-
-.search-box{
-
-    max-width:100%;
-
-    width:100%;
-
-}
-
-.title{
-
-    padding:30px;
-
-}
-
-.category{
-
-    padding:10px 30px 25px;
-
-}
-
-.anime-container{
-
-    padding:0 30px 40px;
-
-}
+        padding-left:30px;
+        padding-right:30px;
+    }
 
 }
 
 
-@media (max-width:768px){
+/* =========================
+   Tablet
+========================= */
 
-.top-user{
+@media (max-width:900px){
 
-    padding:14px 20px;
+    .top-user{
+        padding:12px 20px;
+    }
 
-}
+    header{
+        padding:25px 20px;
+    }
 
-.user-left span{
+    .logo i{
+        width:65px;
+        height:65px;
+        font-size:38px;
+    }
 
-    font-size:15px;
+    .logo h1{
+        font-size:26px;
+    }
 
-}
+    .search-box{
+        max-width:320px;
+    }
 
-#logoutBtn{
+    .menu-btn{
+        gap:10px;
+    }
 
-    padding:8px 16px;
+    .nav-btn{
+        padding:10px 16px;
+        font-size:13px;
+    }
 
-    font-size:14px;
+    .title{
+        padding-left:25px;
+        padding-right:25px;
+    }
 
-}
+    .category{
+        padding-left:25px;
+        padding-right:25px;
+    }
 
-header{
+    .anime-container{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
 
-    padding:22px;
-
-}
-
-.logo{
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-}
-
-.logo i{
-
-    width:65px;
-
-    height:65px;
-
-    font-size:36px;
-
-}
-
-.logo h1{
-
-    font-size:28px;
-
-}
-
-.logo p{
-
-    font-size:14px;
-
-}
-
-.menu-btn{
-
-    width:100%;
-
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-}
-
-.nav-btn{
-
-    justify-content:center;
-
-}
-
-.title{
-
-    padding:20px;
-
-}
-
-.title h2{
-
-    font-size:28px;
-
-}
-
-.category{
-
-    padding:10px 20px 20px;
-
-}
-
-.anime-container{
-
-    padding:0 20px 30px;
-
-    grid-template-columns:1fr;
-
-}
-
-.card img{
-
-    height:300px;
-
-}
+        padding-left:25px;
+        padding-right:25px;
+    }
 
 }
 
 
-@media (max-width:480px){
+/* =========================
+   Mobile
+========================= */
 
-.menu-btn{
+@media (max-width:600px){
 
-    grid-template-columns:1fr;
+    .top-user{
+        padding:10px 14px;
+    }
 
-}
+    .user-left i{
+        font-size:22px;
+    }
 
-.logo h1{
+    #username{
+        font-size:13px;
+    }
 
-    font-size:24px;
+    #logoutBtn{
+        padding:8px 13px;
+        font-size:12px;
+    }
 
-}
 
-.search-box{
+    header{
+        padding:20px 15px 22px;
+    }
 
-    padding:12px 18px;
+    .header-top{
+        flex-direction:row;
+        align-items:center;
+        flex-wrap:wrap;
+    }
 
-}
+    .logo{
+        flex:1;
+        min-width:180px;
+        flex-direction:row;
+        align-items:center;
+        gap:10px;
+    }
 
-.search-box input{
+    .logo i{
+        width:50px;
+        height:50px;
+        font-size:27px;
+        border-radius:14px;
+    }
 
-    font-size:14px;
+    .logo h1{
+        font-size:21px;
+    }
 
-}
+    .logo p{
+        font-size:11px;
+    }
 
-.category button{
+    .search-box{
+        width:100%;
+        max-width:none;
+        padding:11px 15px;
+    }
 
-    font-size:13px;
 
-    padding:10px 16px;
+    .menu-btn{
+        margin-top:16px;
+        gap:8px;
+        flex-wrap:wrap;
+    }
 
-}
+    .nav-btn{
+        flex:1 1 auto;
+        min-width:110px;
+        padding:9px 12px;
+        font-size:12px;
+    }
 
-.title h2{
 
-    font-size:24px;
+    .category{
+        padding:12px 15px 18px;
+        gap:8px;
+    }
 
-}
+    .category button{
+        padding:9px 14px;
+        font-size:12px;
+    }
 
-.card-content h3{
 
-    font-size:18px;
+    .title{
+        padding:15px 15px 12px;
+    }
 
-}
+    .title h2{
+        font-size:21px;
+    }
+
+    .title p{
+        font-size:12px;
+    }
+
+
+    /* ยังเป็น Grid ไม่เปลี่ยนเป็น 1 */
+    .anime-container{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+        gap:12px;
+
+        padding:0 15px 30px;
+    }
+
+    .card img{
+        height:auto;
+        aspect-ratio:3/4;
+        object-fit:cover;
+    }
+
+    .card-content{
+        padding:12px;
+    }
+
+    .card-content h3{
+        font-size:15px;
+        min-height:45px;
+    }
+
+    .genre span{
+        font-size:10px;
+        padding:4px 8px;
+    }
+
+    .score{
+        font-size:14px;
+    }
+
+    .review-count{
+        font-size:11px;
+    }
+
+    .card button{
+        padding:10px;
+        font-size:12px;
+    }
 
 }
 

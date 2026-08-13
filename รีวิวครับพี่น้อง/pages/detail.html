@@ -3,210 +3,317 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Anime Detail</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="../css/detail.css">
+    <title>Anime Detail</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="../css/detail.css">
 
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-rel="stylesheet">
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<div id="banner" class="banner">
+    <!-- =========================
+         Banner
+    ========================== -->
 
-<div class="overlay">
+    <div id="banner" class="banner">
 
-<a href="../index.html" class="back">
+        <div class="overlay">
 
-<i class="fa-solid fa-arrow-left"></i>
+            <a href="../index.html" class="back">
 
-กลับ
+                <i class="fa-solid fa-arrow-left"></i>
 
-</a>
+                กลับ
 
-</div>
+            </a>
 
-</div>
-
-<div class="container">
-
-<div class="top-detail">
-
-<div class="poster">
-
-<img id="poster">
-
-</div>
-
-<div class="detail">
-
-<h1 id="title">
-
-กำลังโหลด...
-
-</h1>
-
-<div class="score-box">
-
-    <div class="score-item">
-        <i class="fa-solid fa-star"></i>
-        <h3 id="userScore">0.0</h3>
-        <p>คะแนนผู้ใช้</p>
-    </div>
-
-    <div class="score-item">
-        <i class="fa-solid fa-file-lines"></i>
-        <h3 id="reviewCount">0</h3>
-        <p>รีวิวทั้งหมด</p>
-    </div>
-
-</div>
-
-<div id="category" class="genre-list">
-
-</div>
-
-<div class="info">
-
-<div>
-
-<i class="fa-solid fa-tv"></i>
-
-<p>ตอน</p>
-
-<h3 id="episodes">-</h3>
-
-</div>
-
-<div>
-
-<i class="fa-solid fa-circle-play"></i>
-
-<p>สถานะ</p>
-
-<h3 id="status">-</h3>
-
-</div>
-
-<div>
-
-<i class="fa-solid fa-film"></i>
-
-<p>ประเภท</p>
-
-<h3 id="type">-</h3>
-
-</div>
-
-</div>
-
-<div class="button-group">
-
-<button id="favoriteBtn">
-
-    ❤️ Favorite
-
-</button>
-
-<button id="bookmarkBtn">
-
-🔖 Bookmark
-
-</button>
-
-<button id="shareBtn">
-
-📤 แชร์
-
-</button>
-
-<button id="darkBtn">
-
-🌙 Dark
-
-</button>
-
-
-<div class="detail-card">
-
-<h2>
-
-📖 เรื่องย่อ
-
-</h2>
-
-<p id="description">
-
-กำลังโหลด...
-
-</p>
-
-</div>
-
-<div class="detail-card">
-
-<h2>
-
-🎬 ตัวอย่างอนิเมะ
-
-</h2>
-
-<div id="trailerBox">
-
-</div>
-
-</div>
-
-<div class="detail-card">
-
-<h2>
-
-<div class="detail-card">
-
-    <h2>💬 รีวิว</h2>
-
-    <div class="review-form">
-
-        <input id="username" type="text" placeholder="ชื่อ">
-
-        <div class="rating">
-            <div id="starRating"></div>
         </div>
 
-        <textarea
-            id="comment"
-            placeholder="เขียนรีวิว...">
-        </textarea>
-
-        <button id="submitReview">
-            ส่งรีวิว
-        </button>
-
     </div>
 
-    <div id="reviewList"></div>
 
-</div>
+    <!-- =========================
+         Main Container
+    ========================== -->
 
-</div>
+    <main class="container">
 
-<div id="toast"></div>
 
-<script type="module" src="../js/detail.js"></script>
+        <!-- =========================
+             Top Detail
+        ========================== -->
+
+        <section class="top-detail">
+
+            <!-- Poster -->
+
+            <div class="poster">
+
+                <img
+                    id="poster"
+                    src=""
+                    alt="Anime Poster">
+
+            </div>
+
+
+            <!-- Main Information -->
+
+            <div class="detail">
+
+                <h1 id="title">
+                    กำลังโหลด...
+                </h1>
+
+
+                <!-- Score -->
+
+                <div class="score-box">
+
+                    <div class="score-item">
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <h3 id="userScore">
+                            0.0
+                        </h3>
+
+                        <p>
+                            คะแนนผู้ใช้
+                        </p>
+
+                    </div>
+
+
+                    <div class="score-item">
+
+                        <i class="fa-solid fa-file-lines"></i>
+
+                        <h3 id="reviewCount">
+                            0
+                        </h3>
+
+                        <p>
+                            รีวิวทั้งหมด
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Category -->
+
+                <div
+                    id="category"
+                    class="genre-list">
+                </div>
+
+
+                <!-- Anime Info -->
+
+                <div class="info">
+
+                    <div>
+
+                        <i class="fa-solid fa-tv"></i>
+
+                        <p>ตอน</p>
+
+                        <h3 id="episodes">
+                            -
+                        </h3>
+
+                    </div>
+
+
+                    <div>
+
+                        <i class="fa-solid fa-circle-play"></i>
+
+                        <p>สถานะ</p>
+
+                        <h3 id="status">
+                            -
+                        </h3>
+
+                    </div>
+
+
+                    <div>
+
+                        <i class="fa-solid fa-film"></i>
+
+                        <p>ประเภท</p>
+
+                        <h3 id="type">
+                            -
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Action Buttons -->
+
+                <div class="button-group">
+
+                    <button id="favoriteBtn">
+
+                        ❤️ Favorite
+
+                    </button>
+
+
+                    <button id="bookmarkBtn">
+
+                        🔖 Bookmark
+
+                    </button>
+
+
+                    <button id="shareBtn">
+
+                        📤 แชร์
+
+                    </button>
+
+
+                    <button id="darkBtn">
+
+                        🌙 Dark
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             Description
+        ========================== -->
+
+        <section class="detail-card">
+
+            <h2>
+                📖 เรื่องย่อ
+            </h2>
+
+            <p id="description">
+                กำลังโหลด...
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             Trailer
+        ========================== -->
+
+        <section class="detail-card trailer-card">
+
+            <h2>
+                🎬 ตัวอย่างอนิเมะ
+            </h2>
+
+            <div id="trailerBox">
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             Review
+        ========================== -->
+
+        <section class="detail-card">
+
+            <h2>
+                💬 รีวิว
+            </h2>
+
+
+            <div class="review-form">
+
+                <input
+                    id="username"
+                    type="text"
+                    placeholder="ชื่อ">
+
+
+                <div class="rating">
+
+                    <span class="rating-title">
+                        ให้คะแนน
+                    </span>
+
+                    <div id="starRating">
+                    </div>
+
+                </div>
+
+
+                <textarea
+                    id="comment"
+                    placeholder="เขียนรีวิว...">
+                </textarea>
+
+
+                <button id="submitReview">
+
+                    ส่งรีวิว
+
+                </button>
+
+            </div>
+
+
+            <div id="reviewList">
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         Toast
+    ========================== -->
+
+    <div id="toast">
+    </div>
+
+
+    <!-- =========================
+         JavaScript
+    ========================== -->
+
+    <script
+        type="module"
+        src="../js/detail.js">
+    </script>
 
 </body>
 

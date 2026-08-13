@@ -1,3 +1,8 @@
+// ======================================================
+// Anime Review Hub
+// user.js
+// ======================================================
+
 import { auth, db } from "./firebase.js";
 
 import {
@@ -11,64 +16,209 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
 
+// ======================================================
+// Elements
+// ======================================================
+
+const username =
+    document.getElementById("username");
+
+const adminMenu =
+    document.getElementById("adminMenu");
+
+const logoutBtn =
+    document.getElementById("logoutBtn");
+
+
+// ======================================================
+// Authentication
+// ======================================================
+
 onAuthStateChanged(auth, async (user) => {
 
     if (!user) {
 
-        location.href = "pages/login.html";
+        window.location.href =
+            "pages/login.html";
+
         return;
 
     }
 
-    const username = document.getElementById("username");
-    const adminMenu = document.getElementById("adminMenu");
-
     try {
 
-        const snap = await getDoc(
+        const userSnap = await getDoc(
             doc(db, "users", user.uid)
         );
 
-        if (snap.exists()) {
 
-            const data = snap.data();
+        // ==========================================
+        // Default
+        // ==========================================
 
-            username.textContent =
-                "👋 " + (data.name || user.email);
+        let userName =
+            user.displayName ||
+            user.email ||
+            "User";
 
-            // ซ่อนปุ่ม Admin ก่อน
-            adminMenu.style.display = "none";
+        let role = "user";
 
-            // ถ้าเป็น Admin ค่อยแสดง
-            if (data.role === "admin") {
 
-                adminMenu.style.display = "inline-block";
+        // ==========================================
+        // Firestore User
+        // ==========================================
 
-            }
+        if (userSnap.exists()) {
 
-        } else {
+            const data = userSnap.data();
 
-            username.textContent = "👋 " + user.email;
+            userName =
+                data.name ||
+                user.displayName ||
+                user.email ||
+                "User";
+
+            role =
+                data.role ||
+                "user";
 
         }
 
-    } catch (error) {
 
-        console.log(error);
+        // ==========================================
+        // แสดงชื่อ
+        // ==========================================
 
-        username.textContent = "👋 " + user.email;
+        if (username) {
+
+            username.textContent =
+                "👋 " + userName;
+
+        }
+
+
+        // ==========================================
+        // Admin Menu
+        // admin + superadmin
+        // ==========================================
+
+        if (adminMenu) {
+
+            if (
+                role === "admin" ||
+                role === "superadmin"
+            ) {
+
+                adminMenu.style.display =
+                    "inline-flex";
+
+            }
+            else {
+
+                adminMenu.style.display =
+                    "none";
+
+            }
+
+        }
+
+
+        // ==========================================
+        // Super Admin Menu
+        // ==========================================
+
+        const superAdminMenu =
+            document.getElementById(
+                "superAdminMenu"
+            );
+
+        if (superAdminMenu) {
+
+            if (
+                role === "superadmin"
+            ) {
+
+                superAdminMenu.style.display =
+                    "flex";
+
+            }
+            else {
+
+                superAdminMenu.style.display =
+                    "none";
+
+            }
+
+        }
+
+
+        // ==========================================
+        // Debug
+        // ==========================================
+
+        console.log(
+            "Login:",
+            user.email
+        );
+
+        console.log(
+            "Role:",
+            role
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "User Load Error:",
+            error
+        );
+
+        if (username) {
+
+            username.textContent =
+                "👋 " +
+                (
+                    user.displayName ||
+                    user.email ||
+                    "User"
+                );
+
+        }
 
     }
 
 });
 
 
+// ======================================================
 // Logout
+// ======================================================
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
+if (logoutBtn) {
 
-    await signOut(auth);
+    logoutBtn.addEventListener(
+        "click",
+        async () => {
 
-    location.href = "pages/login.html";
+            try {
 
-});
+                await signOut(auth);
+
+                window.location.href =
+                    "pages/login.html";
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Logout Error:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+}

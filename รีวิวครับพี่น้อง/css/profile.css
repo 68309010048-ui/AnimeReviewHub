@@ -1,0 +1,689 @@
+/* ======================================================
+   Anime Review Hub
+   Profile CSS
+====================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#f3f4f6;
+    color:#1f2937;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+button,
+input{
+    font-family:'Poppins',sans-serif;
+}
+
+
+/* ==========================
+   Header
+========================== */
+
+.profile-header{
+
+    background:
+        linear-gradient(
+            135deg,
+            #6d28d9,
+            #7c3aed,
+            #9333ea
+        );
+
+    color:#fff;
+
+    padding:25px 40px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.15);
+
+}
+
+.back-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    background:rgba(255,255,255,.15);
+
+    border:1px solid rgba(255,255,255,.25);
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.back-btn:hover{
+
+    background:#fff;
+
+    color:#6d28d9;
+
+    transform:translateY(-2px);
+
+}
+
+.header-title{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+    margin-top:20px;
+
+}
+
+.header-title i{
+
+    font-size:30px;
+
+}
+
+.header-title h1{
+
+    font-size:32px;
+
+}
+
+
+/* ==========================
+   Container
+========================== */
+
+.profile-container{
+
+    width:calc(100% - 40px);
+
+    max-width:1000px;
+
+    margin:35px auto 60px;
+
+}
+
+
+/* ==========================
+   Profile Card
+========================== */
+
+.profile-card{
+
+    background:#fff;
+
+    border-radius:25px;
+
+    padding:35px 25px;
+
+    text-align:center;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.08);
+
+}
+
+.profile-image-box{
+
+    width:140px;
+
+    height:140px;
+
+    margin:0 auto 20px;
+
+    padding:5px;
+
+    border-radius:50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #c084fc
+        );
+
+}
+
+.profile-image-box img{
+
+    width:100%;
+
+    height:100%;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    background:#fff;
+
+}
+
+.profile-card h2{
+
+    font-size:28px;
+
+    color:#111827;
+
+}
+
+.profile-card > p{
+
+    color:#6b7280;
+
+    margin-top:5px;
+
+    word-break:break-word;
+
+}
+
+.role-badge{
+
+    display:inline-block;
+
+    margin-top:12px;
+
+    padding:6px 15px;
+
+    border-radius:999px;
+
+    background:#ede9fe;
+
+    color:#6d28d9;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+
+/* ==========================
+   Statistics
+========================== */
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+    gap:18px;
+
+    margin-top:20px;
+
+}
+
+.stat-card{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    text-align:center;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.07);
+
+    transition:.3s;
+
+}
+
+.stat-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.stat-card i{
+
+    font-size:28px;
+
+    margin-bottom:10px;
+
+}
+
+.stat-card h3{
+
+    font-size:30px;
+
+    color:#111827;
+
+}
+
+.stat-card p{
+
+    color:#6b7280;
+
+    font-size:14px;
+
+}
+
+.favorite-stat i{
+    color:#ef4444;
+}
+
+.bookmark-stat i{
+    color:#2563eb;
+}
+
+.review-stat i{
+    color:#7c3aed;
+}
+
+
+/* ==========================
+   Edit Card
+========================== */
+
+.edit-card{
+
+    background:#fff;
+
+    margin-top:20px;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.07);
+
+}
+
+.section-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:20px;
+
+}
+
+.section-title i{
+
+    color:#7c3aed;
+
+    font-size:22px;
+
+}
+
+.section-title h2{
+
+    font-size:22px;
+
+    color:#111827;
+
+}
+
+.edit-card label{
+
+    display:block;
+
+    margin:15px 0 7px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:#374151;
+
+}
+
+.edit-card input{
+
+    width:100%;
+
+    padding:14px 16px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:12px;
+
+    outline:none;
+
+    font-size:15px;
+
+    background:#fff;
+
+    transition:.25s;
+
+}
+
+.edit-card input:focus{
+
+    border-color:#7c3aed;
+
+    box-shadow:
+        0 0 0 4px rgba(124,58,237,.12);
+
+}
+
+#saveProfile{
+
+    width:100%;
+
+    margin-top:20px;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #9333ea
+        );
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+#saveProfile:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(124,58,237,.25);
+
+}
+
+
+/* ==========================
+   Quick Menu
+========================== */
+
+.quick-menu{
+
+    display:grid;
+
+    gap:12px;
+
+    margin-top:20px;
+
+}
+
+.quick-card{
+
+    display:grid;
+
+    grid-template-columns:
+        45px minmax(0,1fr) 20px;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:17px 20px;
+
+    background:#fff;
+
+    border-radius:16px;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.06);
+
+    transition:.3s;
+
+}
+
+.quick-card:hover{
+
+    transform:translateX(5px);
+
+    box-shadow:
+        0 12px 25px rgba(0,0,0,.1);
+
+}
+
+.quick-card > i:first-child{
+
+    width:42px;
+
+    height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:#ede9fe;
+
+    color:#7c3aed;
+
+}
+
+.quick-card h3{
+
+    font-size:16px;
+
+    color:#111827;
+
+}
+
+.quick-card p{
+
+    font-size:13px;
+
+    color:#6b7280;
+
+    margin-top:2px;
+
+}
+
+.quick-card > i:last-child{
+
+    color:#9ca3af;
+
+}
+
+
+/* ==========================
+   Logout
+========================== */
+
+.logout-btn{
+
+    width:100%;
+
+    margin-top:20px;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#ef4444;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.logout-btn:hover{
+
+    background:#dc2626;
+
+}
+
+
+/* ==========================
+   Toast
+========================== */
+
+#toast{
+
+    position:fixed;
+
+    left:50%;
+
+    bottom:25px;
+
+    transform:
+        translate(-50%,20px);
+
+    background:#111827;
+
+    color:#fff;
+
+    padding:13px 20px;
+
+    border-radius:12px;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.3s;
+
+    z-index:9999;
+
+    text-align:center;
+
+}
+
+#toast.show{
+
+    opacity:1;
+
+    transform:
+        translate(-50%,0);
+
+}
+
+
+/* ==========================
+   Responsive
+========================== */
+
+@media(max-width:768px){
+
+    .profile-header{
+
+        padding:20px;
+
+    }
+
+    .header-title h1{
+
+        font-size:26px;
+
+    }
+
+    .profile-container{
+
+        width:calc(100% - 24px);
+
+        margin-top:20px;
+
+    }
+
+    .stats-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .profile-card{
+
+        padding:30px 18px;
+
+    }
+
+    .profile-image-box{
+
+        width:115px;
+
+        height:115px;
+
+    }
+
+}
+
+@media(max-width:480px){
+
+    .back-btn{
+
+        font-size:13px;
+
+        padding:9px 13px;
+
+    }
+
+    .header-title h1{
+
+        font-size:23px;
+
+    }
+
+    .profile-card h2{
+
+        font-size:23px;
+
+    }
+
+    .edit-card{
+
+        padding:18px;
+
+    }
+
+    .quick-card{
+
+        padding:14px;
+
+    }
+
+}
