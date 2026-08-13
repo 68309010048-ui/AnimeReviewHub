@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Profile - Anime Review Hub</title>
+
+    <link rel="stylesheet"
+          href="../css/profile.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+    <!-- =========================
+         Header
+    ========================== -->
+
+    <header class="profile-header">
+
+        <a href="../index.html"
+           class="back-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            กลับหน้าแรก
+
+        </a>
+
+        <div class="header-title">
+
+            <i class="fa-solid fa-user"></i>
+
+            <h1>Profile</h1>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         Main
+    ========================== -->
+
+    <main class="profile-container">
+
+        <!-- Profile Card -->
+
+        <section class="profile-card">
+
+            <div class="profile-image-box">
+
+                <img
+                    id="profileImage"
+                    src="https://api.dicebear.com/9.x/initials/svg?seed=User"
+                    alt="Profile">
+
+            </div>
+
+            <h2 id="displayName">
+                Loading...
+            </h2>
+
+            <p id="displayEmail">
+                Loading...
+            </p>
+
+            <span
+                class="role-badge"
+                id="displayRole">
+
+                User
+
+            </span>
+
+        </section>
+
+
+        <!-- Statistics -->
+
+        <section class="stats-grid">
+
+            <div class="stat-card favorite-stat">
+
+                <i class="fa-solid fa-heart"></i>
+
+                <h3 id="favoriteCount">
+                    0
+                </h3>
+
+                <p>Favorite</p>
+
+            </div>
+
+
+            <div class="stat-card bookmark-stat">
+
+                <i class="fa-solid fa-bookmark"></i>
+
+                <h3 id="bookmarkCount">
+                    0
+                </h3>
+
+                <p>Bookmark</p>
+
+            </div>
+
+
+            <div class="stat-card review-stat">
+
+                <i class="fa-solid fa-comment"></i>
+
+                <h3 id="reviewCount">
+                    0
+                </h3>
+
+                <p>Reviews</p>
+
+            </div>
+
+        </section>
+
+
+        <!-- Edit Profile -->
+
+        <section class="edit-card">
+
+            <div class="section-title">
+
+                <i class="fa-solid fa-user-pen"></i>
+
+                <h2>แก้ไขโปรไฟล์</h2>
+
+            </div>
+
+
+            <label for="name">
+                ชื่อผู้ใช้
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                placeholder="ชื่อผู้ใช้">
+
+
+            <label for="photo">
+                URL รูปโปรไฟล์
+            </label>
+
+            <input
+                type="url"
+                id="photo"
+                placeholder="https://...">
+
+
+            <button
+                id="saveProfile">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                บันทึกข้อมูล
+
+            </button>
+
+        </section>
+
+
+        <!-- Quick Menu -->
+
+        <section class="quick-menu">
+
+            <a href="favorite.html"
+               class="quick-card">
+
+                <i class="fa-solid fa-heart"></i>
+
+                <div>
+
+                    <h3>Favorite</h3>
+
+                    <p>รายการโปรดของคุณ</p>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right"></i>
+
+            </a>
+
+
+            <a href="bookmark.html"
+               class="quick-card">
+
+                <i class="fa-solid fa-bookmark"></i>
+
+                <div>
+
+                    <h3>Bookmark</h3>
+
+                    <p>อนิเมะที่บันทึกไว้</p>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right"></i>
+
+            </a>
+
+        </section>
+
+
+        <!-- Logout -->
+
+        <button
+            id="logoutBtn"
+            class="logout-btn">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Logout
+
+        </button>
+
+    </main>
+
+
+    <!-- Toast -->
+
+    <div id="toast"></div>
+
+
+    <script
+        type="module"
+        src="../js/profile.js">
+    </script>
+
+</body>
+
+</html>

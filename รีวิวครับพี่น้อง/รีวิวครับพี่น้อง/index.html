@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Anime Review Hub</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- ========================= -->
+<!-- User -->
+<!-- ========================= -->
+
+<div class="top-user">
+
+<div class="user-left">
+
+<i class="fa-solid fa-circle-user"></i>
+
+<span id="username">Loading...</span>
+
+</div>
+
+<button id="logoutBtn">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</button>
+
+</div>
+
+<!-- ========================= -->
+<!-- Header -->
+<!-- ========================= -->
+
+<header>
+
+<div class="header-top">
+
+<div class="logo">
+
+<i class="fa-solid fa-film"></i>
+
+<div>
+
+<h1>Anime Review Hub</h1>
+
+<p>Discover • Review • Favorite</p>
+
+</div>
+
+</div>
+
+<div class="search-box">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<input
+type="text"
+id="search"
+placeholder="ค้นหาอนิเมะ...">
+
+</div>
+
+</div>
+
+<!-- Menu -->
+
+<div class="menu-btn">
+
+<a href="pages/favorite.html" class="nav-btn">
+
+❤️ Favorite
+
+</a>
+
+<a href="pages/bookmark.html" class="nav-btn">
+
+🔖 Bookmark
+
+</a>
+
+<a href="pages/profile.html" class="nav-btn">
+
+👤 Profile
+
+</a>
+
+<a
+href="pages/admin.html"
+id="adminMenu"
+class="nav-btn">
+
+⚙️ Admin
+
+</a>
+
+</div>
+
+<div
+    id="superAdminMenu"
+    style="display:none;">
+
+    <a href="pages/users.html"
+       class="nav-btn">
+
+        👥 Users Management
+
+    </a>
+
+    <a href="pages/admins.html"
+       class="nav-btn">
+
+        🛡️ Admin Management
+
+    </a>
+
+</div>
+
+</header>
+
+<!-- ========================= -->
+<!-- Category -->
+<!-- ========================= -->
+
+<section class="category">
+
+<button
+class="active"
+onclick="filterAnime(event,'All')">
+
+🔥 ทั้งหมด
+
+</button>
+
+<button onclick="filterAnime(event,'Action')">
+
+🟣 Action
+
+</button>
+
+<button onclick="filterAnime(event,'Adventure')">
+
+🟢 Adventure
+
+</button>
+
+<button onclick="filterAnime(event,'Fantasy')">
+
+🟠 Fantasy
+
+</button>
+
+<button onclick="filterAnime(event,'Comedy')">
+
+🟡 Comedy
+
+</button>
+
+<button onclick="filterAnime(event,'Romance')">
+
+❤️ Romance
+
+</button>
+
+<button onclick="filterAnime(event,'Sport')">
+
+⚽ Sport
+
+</button>
+
+<button onclick="filterAnime(event,'Drama')">
+
+🎭 Drama
+
+</button>
+
+<button onclick="filterAnime(event,'Sci-Fi')">
+
+🚀 Sci-Fi
+
+</button>
+
+<button onclick="filterAnime(event,'Mystery')">
+
+🕵️ Mystery
+
+</button>
+
+<button onclick="filterAnime(event,'Horror')">
+
+👻 Horror
+
+</button>
+
+<button onclick="filterAnime(event,'School')">
+
+🏫 School
+
+</button>
+
+<button onclick="filterAnime(event,'Slice of Life')">
+
+🌸 Slice of Life
+
+</button>
+
+<button onclick="filterAnime(event,'Supernatural')">
+
+✨ Supernatural
+
+</button>
+
+<button onclick="filterAnime(event,'Isekai')">
+
+🌍 Isekai
+
+</button>
+
+<button onclick="filterAnime(event,'Music')">
+
+🎵 Music
+
+</button>
+
+</section>
+
+<!-- ========================= -->
+<!-- Title -->
+<!-- ========================= -->
+
+<section class="title">
+
+<div>
+
+<h2>
+
+🔥 Trending Anime
+
+</h2>
+
+<p>
+
+ค้นหาอนิเมะที่คุณชื่นชอบและแบ่งปันรีวิวกับทุกคน
+
+</p>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Anime -->
+<!-- ========================= -->
+
+<section
+class="anime-container"
+id="animeList">
+
+<div class="loading">
+
+<div class="loader"></div>
+
+</div>
+
+</section>
+
+<script type="module" src="js/script.js"></script>
+
+<script type="module" src="js/user.js"></script>
+
+</body>
+
+</html>
+```

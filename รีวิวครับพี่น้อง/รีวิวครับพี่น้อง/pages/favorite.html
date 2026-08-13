@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Favorite Anime</title>
+
+<link rel="stylesheet" href="../css/favorite.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- ===========================
+Header
+=========================== -->
+
+<header class="page-header">
+
+<a href="../index.html" class="back-btn">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+<span>กลับหน้าแรก</span>
+
+</a>
+
+<h1>
+
+❤️ Favorite Anime
+
+</h1>
+
+<p>
+
+อนิเมะที่คุณเพิ่มไว้ในรายการโปรด
+
+</p>
+
+</header>
+
+<!-- ===========================
+Search
+=========================== -->
+
+<section class="search-section">
+
+<div class="search-box">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<input
+type="text"
+id="searchFavorite"
+placeholder="ค้นหา Favorite...">
+
+</div>
+
+</section>
+
+<!-- ===========================
+Favorite Count
+=========================== -->
+
+<section class="favorite-info">
+
+<h2>
+
+❤️ ทั้งหมด
+
+<span id="favoriteCount">
+
+0
+
+</span>
+
+เรื่อง
+
+</h2>
+
+</section>
+
+<!-- ===========================
+Anime List
+=========================== -->
+
+<section
+class="anime-grid"
+id="favoriteList">
+
+<div class="loading">
+
+<div class="loader"></div>
+
+</div>
+
+</section>
+
+<!-- ===========================
+Empty
+=========================== -->
+
+<div
+class="empty-box"
+id="emptyBox"
+style="display:none;">
+
+<i class="fa-solid fa-heart-crack"></i>
+
+<h2>
+
+ยังไม่มีอนิเมะที่ถูกใจ
+
+</h2>
+
+<p>
+
+กดปุ่ม ❤️ จากหน้ารายละเอียด
+เพื่อเพิ่มรายการโปรด
+
+</p>
+
+<a
+href="../index.html"
+class="home-btn">
+
+เลือกอนิเมะ
+
+</a>
+
+</div>
+
+<script type="module" src="../js/favorite.js"></script>
+
+</body>
+
+</html>

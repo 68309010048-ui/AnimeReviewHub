@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Bookmark Anime</title>
+
+<link rel="stylesheet" href="../css/bookmark.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<header class="page-header">
+
+<a href="../index.html" class="back-btn">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+กลับหน้าแรก
+
+</a>
+
+<h1>🔖 Bookmark</h1>
+
+<p>รายการอนิเมะที่คุณบันทึกไว้</p>
+
+</header>
+
+<section class="search-section">
+
+<div class="search-box">
+
+<i class="fa-solid fa-search"></i>
+
+<input
+type="text"
+id="searchBookmark"
+placeholder="ค้นหา Bookmark...">
+
+</div>
+
+</section>
+
+<section class="favorite-info">
+
+<h2>
+
+🔖 ทั้งหมด
+
+<span id="bookmarkCount">
+
+0
+
+</span>
+
+เรื่อง
+
+</h2>
+
+</section>
+
+<section
+id="bookmarkList"
+class="anime-grid">
+
+<div class="loading">
+
+<div class="loader"></div>
+
+</div>
+
+</section>
+
+<div
+id="emptyBox"
+class="empty-box"
+style="display:none;">
+
+<i class="fa-solid fa-bookmark"></i>
+
+<h2>ยังไม่มี Bookmark</h2>
+
+<p>กดปุ่ม 🔖 จากหน้ารายละเอียดเพื่อบันทึก</p>
+
+<a href="../index.html" class="home-btn">
+
+เลือกอนิเมะ
+
+</a>
+
+</div>
+
+<script type="module" src="../js/bookmark.js"></script>
+
+</body>
+</html>

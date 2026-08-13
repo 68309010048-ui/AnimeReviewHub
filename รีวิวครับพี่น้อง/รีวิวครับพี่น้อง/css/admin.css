@@ -1,0 +1,904 @@
+/* ======================================================
+   Anime Review Hub
+   Admin Dashboard CSS V2.0
+====================================================== */
+
+/* ==========================
+   RESET
+========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#f3f4f6;
+    color:#1f2937;
+    overflow-x:hidden;
+}
+
+button,
+input,
+textarea,
+select{
+    font-family:'Poppins',sans-serif;
+}
+
+
+/* ==========================
+   TOP BAR
+========================== */
+
+.topbar{
+
+    width:100%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6d28d9,
+            #7c3aed,
+            #9333ea
+        );
+
+    color:#fff;
+
+    padding:20px 35px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.12);
+
+}
+
+.topbar h1{
+
+    font-size:28px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.homeBtn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    background:#fff;
+
+    color:#6d28d9;
+
+    padding:11px 18px;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+    text-decoration:none;
+
+    transition:.3s;
+
+}
+
+.homeBtn:hover{
+
+    transform:translateY(-2px);
+
+    background:#ede9fe;
+
+}
+
+
+/* ==========================
+   DASHBOARD
+========================== */
+
+.dashboard{
+
+    width:calc(100% - 40px);
+
+    max-width:1400px;
+
+    margin:25px auto;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+    gap:20px;
+
+}
+
+.box{
+
+    position:relative;
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    min-height:150px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+    overflow:hidden;
+
+}
+
+.box::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    top:0;
+
+    width:100%;
+
+    height:5px;
+
+    background:#7c3aed;
+
+}
+
+.box:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+        0 16px 35px rgba(0,0,0,.12);
+
+}
+
+.box-icon{
+
+    width:48px;
+
+    height:48px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:14px;
+
+    background:#ede9fe;
+
+    font-size:24px;
+
+    margin-bottom:10px;
+
+}
+
+.box h2{
+
+    font-size:38px;
+
+    line-height:1;
+
+    color:#6d28d9;
+
+    margin-bottom:8px;
+
+}
+
+.box p{
+
+    font-size:15px;
+
+    color:#6b7280;
+
+}
+
+
+/* ==========================
+   CARD FORM
+========================== */
+
+.card{
+
+    width:calc(100% - 40px);
+
+    max-width:1400px;
+
+    margin:0 auto 25px;
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:28px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.card h2{
+
+    font-size:26px;
+
+    color:#111827;
+
+    margin-bottom:20px;
+
+}
+
+
+/* ==========================
+   FORM INPUT
+========================== */
+
+.card input,
+.card textarea{
+
+    width:100%;
+
+    padding:14px 16px;
+
+    margin-bottom:14px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:12px;
+
+    background:#fff;
+
+    color:#111827;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:.25s;
+
+}
+
+.card textarea{
+
+    min-height:160px;
+
+    resize:vertical;
+
+}
+
+.card input:focus,
+.card textarea:focus{
+
+    border-color:#7c3aed;
+
+    box-shadow:
+        0 0 0 4px rgba(124,58,237,.12);
+
+}
+
+
+/* ==========================
+   FORM LABEL
+========================== */
+
+.form-title,
+.form-group > label{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    color:#374151;
+
+}
+
+
+/* ==========================
+   CATEGORY
+========================== */
+
+.category-group{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(6,minmax(0,1fr));
+
+    gap:10px;
+
+    margin-bottom:18px;
+
+}
+
+.category-group label{
+
+    min-height:50px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:10px 12px;
+
+    background:#f8fafc;
+
+    border:1px solid transparent;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    transition:.25s;
+
+}
+
+.category-group label:hover{
+
+    background:#ede9fe;
+
+    border-color:#c4b5fd;
+
+}
+
+.category-group input{
+
+    width:17px !important;
+
+    height:17px;
+
+    margin:0 !important;
+
+    accent-color:#7c3aed;
+
+}
+
+
+/* ==========================
+   BUTTON GROUP
+========================== */
+
+.btn-group{
+
+    display:flex;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+    margin-top:10px;
+
+}
+
+.btn-group button{
+
+    min-width:150px;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:13px 20px;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+#addAnime{
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #9333ea
+        );
+
+}
+
+#addAnime:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(124,58,237,.25);
+
+}
+
+#cancelEdit{
+
+    background:#6b7280;
+
+}
+
+#cancelEdit:hover{
+
+    background:#4b5563;
+
+}
+
+
+/* ==========================
+   LIST TITLE
+========================== */
+
+.list-title{
+
+    width:calc(100% - 40px);
+
+    max-width:1400px;
+
+    margin:35px auto 20px;
+
+    font-size:28px;
+
+    color:#111827;
+
+}
+
+
+/* ==========================
+   SEARCH
+========================== */
+
+#searchAnime{
+
+    width:calc(100% - 40px);
+
+    max-width:1400px;
+
+    margin:0 auto 25px;
+
+    display:block;
+
+    padding:14px 18px;
+
+    background:#fff;
+
+    border:1px solid #d1d5db;
+
+    border-radius:14px;
+
+    font-size:15px;
+
+    outline:none;
+
+}
+
+#searchAnime:focus{
+
+    border-color:#7c3aed;
+
+    box-shadow:
+        0 0 0 4px rgba(124,58,237,.12);
+
+}
+
+
+/* ==========================
+   ANIME LIST
+========================== */
+
+#animeList{
+
+    width:calc(100% - 40px);
+
+    max-width:1400px;
+
+    margin:0 auto 50px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+
+    gap:20px;
+
+}
+
+
+/* ==========================
+   ANIME CARD
+========================== */
+
+.anime-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.anime-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+        0 15px 30px rgba(0,0,0,.12);
+
+}
+
+.anime-card > img{
+
+    width:100%;
+
+    height:320px;
+
+    object-fit:cover;
+
+}
+
+.anime-info{
+
+    padding:18px;
+
+    flex:1;
+
+}
+
+.anime-info h3{
+
+    font-size:19px;
+
+    line-height:1.5;
+
+    margin-bottom:10px;
+
+    color:#111827;
+
+}
+
+.anime-info p{
+
+    margin-bottom:8px;
+
+    font-size:14px;
+
+    color:#6b7280;
+
+    line-height:1.6;
+
+}
+
+.anime-info p b{
+
+    color:#374151;
+
+}
+
+
+/* ==========================
+   ACTION
+========================== */
+
+.action{
+
+    display:flex;
+
+    gap:10px;
+
+    padding:0 18px 18px;
+
+}
+
+.editBtn,
+.deleteBtn{
+
+    flex:1;
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:11px;
+
+    color:#fff;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.editBtn{
+
+    background:#2563eb;
+
+}
+
+.editBtn:hover{
+
+    background:#1d4ed8;
+
+}
+
+.deleteBtn{
+
+    background:#dc2626;
+
+}
+
+.deleteBtn:hover{
+
+    background:#b91c1c;
+
+}
+
+
+/* ==========================
+   HR
+========================== */
+
+hr{
+
+    width:calc(100% - 40px);
+
+    max-width:1400px;
+
+    margin:30px auto;
+
+    border:none;
+
+    border-top:1px solid #e5e7eb;
+
+}
+
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media(max-width:900px){
+
+    .dashboard{
+        grid-template-columns:
+            repeat(3,minmax(0,1fr));
+    }
+
+    #animeList{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    .category-group{
+        grid-template-columns:
+            repeat(3,minmax(0,1fr));
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    .dashboard{
+        grid-template-columns:
+            repeat(3,minmax(0,1fr));
+
+        gap:8px;
+    }
+
+    .box{
+        min-height:100px;
+        padding:12px 6px;
+    }
+
+    .box h2{
+        font-size:24px;
+    }
+
+    .box p{
+        font-size:11px;
+    }
+
+    .category-group{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    #animeList{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    .anime-card > img{
+        height:220px;
+    }
+
+    .anime-info{
+        padding:12px;
+    }
+
+    .anime-info h3{
+        font-size:15px;
+    }
+
+    .anime-info p{
+        font-size:11px;
+    }
+
+    .action{
+        padding:0 10px 10px;
+        gap:6px;
+    }
+
+    .editBtn,
+    .deleteBtn{
+        padding:8px 5px;
+        font-size:11px;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .topbar{
+
+        padding:18px;
+
+    }
+
+    .topbar h1{
+
+        font-size:22px;
+
+    }
+
+    .dashboard{
+
+        width:calc(100% - 20px);
+
+        gap:12px;
+
+    }
+
+    .box{
+
+        min-height:125px;
+
+    }
+
+    .box h2{
+
+        font-size:32px;
+
+    }
+
+    .card{
+
+        width:calc(100% - 20px);
+
+        padding:18px;
+
+    }
+
+    .category-group{
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+    }
+
+    #animeList{
+
+        width:calc(100% - 20px);
+
+        grid-template-columns:1fr;
+
+    }
+
+    .list-title{
+
+        width:calc(100% - 20px);
+
+        font-size:24px;
+
+    }
+
+    #searchAnime{
+
+        width:calc(100% - 20px);
+
+    }
+
+    hr{
+
+        width:calc(100% - 20px);
+
+    }
+
+    .btn-group{
+
+        flex-direction:column;
+
+    }
+
+    .btn-group button{
+
+        width:100%;
+
+    }
+
+}
+
+@media(max-width:400px){
+
+    .category-group{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .anime-card > img{
+
+        height:350px;
+
+    }
+
+}
+
