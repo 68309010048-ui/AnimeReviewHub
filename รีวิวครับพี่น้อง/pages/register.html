@@ -4,13 +4,24 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Register</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="../css/auth.css">
+    <title>Register - Anime Review Hub</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        rel="stylesheet"
+        href="../css/auth.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
@@ -18,39 +29,72 @@
 
 <div class="auth-box">
 
-    <div class="card" style="max-width:500px;margin:50px auto;">
+    <div
+        class="card"
+        style="max-width:500px;margin:50px auto;">
 
         <h2 style="text-align:center;">
             สมัครสมาชิก
         </h2>
 
-        <input
-        type="text"
-        id="name"
-        placeholder="ชื่อ">
 
-        <input  
-        type="email"
-        id="email"
-        placeholder="Email">
+        <!-- Name -->
 
         <input
-        type="password"
-        id="password"
-        placeholder="Password">
+            type="text"
+            id="name"
+            placeholder="ชื่อ">
+
+
+        <!-- Email -->
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Email">
+
+
+        <!-- Password -->
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Password">
+
+
+        <!-- Register -->
 
         <button id="registerBtn">
-        สมัครสมาชิก
+
+            <i class="fa-solid fa-user-plus"></i>
+
+            สมัครสมาชิก
+
         </button>
 
-        <br>
+
+        <!-- Google Register -->
+
+        <button
+            id="googleRegisterBtn"
+            class="google-btn">
+
+            <i class="fa-brands fa-google"></i>
+
+            สมัครสมาชิกด้วย Google
+
+        </button>
+
+
+        <!-- Login -->
 
         <p style="text-align:center;">
 
             มีบัญชีแล้ว ?
 
-            <a href="login.html"
-               style="color:#6d28d9;font-weight:bold;">
+            <a
+                href="login.html"
+                style="color:#6d28d9;font-weight:bold;">
 
                 เข้าสู่ระบบ
 
@@ -58,10 +102,20 @@
 
         </p>
 
+        <p
+            id="message"
+            class="message">
+        </p>
+
     </div>
 
+</div>
 
-<script type="module" src="../js/auth.js"></script>
+
+<script
+    type="module"
+    src="../js/auth.js">
+</script>
 
 </body>
 

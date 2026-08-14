@@ -5,59 +5,71 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <title>Users Management - Anime Review Hub</title>
+    <title>User Management - Anime Review Hub</title>
 
-    <link rel="stylesheet"
-          href="../css/users.css">
+    <link
+        rel="stylesheet"
+        href="../css/users.css">
 
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
 
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-
-    <!-- =========================================
+    <!-- =========================
          Header
-    ========================================== -->
+    ========================== -->
 
     <header class="users-header">
 
         <div class="header-left">
 
-            <a href="admin.html"
-               class="back-btn">
+            <a
+                href="../index.html"
+                class="back-btn">
 
                 <i class="fa-solid fa-arrow-left"></i>
 
-                กลับ Admin
+                กลับหน้าแรก
 
             </a>
 
             <div class="page-title">
 
-                <i class="fa-solid fa-users"></i>
+                <div class="title-icon">
+
+                    <i class="fa-solid fa-users-gear"></i>
+
+                </div>
 
                 <div>
 
-                    <h1>Users Management</h1>
+                    <h1>
+                        User Management
+                    </h1>
 
                     <p>
-                        จัดการผู้ใช้และสิทธิ์การเข้าใช้งาน
+                        จัดการ Users และ Admin
                     </p>
 
                 </div>
@@ -68,7 +80,7 @@
 
         <div class="role-badge">
 
-            <i class="fa-solid fa-shield-halved"></i>
+            <i class="fa-solid fa-crown"></i>
 
             Super Admin
 
@@ -77,22 +89,24 @@
     </header>
 
 
-    <!-- =========================================
+    <!-- =========================
          Main
-    ========================================== -->
+    ========================== -->
 
     <main class="users-container">
 
 
-        <!-- =====================================
-             Dashboard
-        ====================================== -->
+        <!-- =========================
+             Summary
+        ========================== -->
 
-        <section class="users-summary">
+        <section class="summary-grid">
 
-            <div class="summary-card">
+            <div
+                class="summary-card user-card"
+                data-filter="user">
 
-                <div class="summary-icon user-icon">
+                <div class="summary-icon">
 
                     <i class="fa-solid fa-user"></i>
 
@@ -113,9 +127,11 @@
             </div>
 
 
-            <div class="summary-card">
+            <div
+                class="summary-card admin-card"
+                data-filter="admin">
 
-                <div class="summary-icon admin-icon">
+                <div class="summary-icon">
 
                     <i class="fa-solid fa-user-shield"></i>
 
@@ -136,9 +152,11 @@
             </div>
 
 
-            <div class="summary-card">
+            <div
+                class="summary-card super-card"
+                data-filter="superadmin">
 
-                <div class="summary-icon superadmin-icon">
+                <div class="summary-icon">
 
                     <i class="fa-solid fa-crown"></i>
 
@@ -161,9 +179,9 @@
         </section>
 
 
-        <!-- =====================================
+        <!-- =========================
              Search
-        ====================================== -->
+        ========================== -->
 
         <section class="search-panel">
 
@@ -181,13 +199,54 @@
         </section>
 
 
-        <!-- =====================================
-             User List
-        ====================================== -->
+        <!-- =========================
+             Filter
+        ========================== -->
+
+        <section class="filter-bar">
+
+            <button
+                class="filter-btn active"
+                data-filter="all">
+
+                ทั้งหมด
+
+            </button>
+
+            <button
+                class="filter-btn"
+                data-filter="user">
+
+                👤 Users
+
+            </button>
+
+            <button
+                class="filter-btn"
+                data-filter="admin">
+
+                🛡 Admins
+
+            </button>
+
+            <button
+                class="filter-btn"
+                data-filter="superadmin">
+
+                👑 Super Admins
+
+            </button>
+
+        </section>
+
+
+        <!-- =========================
+             User Table
+        ========================== -->
 
         <section class="users-card">
 
-            <div class="users-card-header">
+            <div class="card-header">
 
                 <div>
 
@@ -195,8 +254,8 @@
                         รายชื่อผู้ใช้
                     </h2>
 
-                    <p>
-                        ผู้ใช้ทั้งหมดในระบบ
+                    <p id="resultText">
+                        กำลังโหลด...
                     </p>
 
                 </div>
@@ -229,7 +288,7 @@
             </div>
 
 
-            <!-- User Table -->
+            <!-- Table -->
 
             <div
                 id="usersTableWrapper"
@@ -281,11 +340,11 @@
                 <i class="fa-solid fa-user-slash"></i>
 
                 <h3>
-                    ไม่พบผู้ใช้
+                    ไม่พบข้อมูล
                 </h3>
 
                 <p>
-                    ยังไม่มีข้อมูลผู้ใช้ที่ตรงกับการค้นหา
+                    ลองค้นหาหรือเลือก Role อื่น
                 </p>
 
             </div>
@@ -295,20 +354,14 @@
     </main>
 
 
-    <!-- =========================================
-         Toast
-    ========================================== -->
+    <!-- Toast -->
 
     <div id="toast"></div>
 
 
-    <!-- =========================================
-         Script
-    ========================================== -->
-
     <script
         type="module"
-        src="../js/user.js">
+        src="../js/users.js">
     </script>
 
 </body>
