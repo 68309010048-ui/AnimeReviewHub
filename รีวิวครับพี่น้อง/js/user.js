@@ -23,6 +23,9 @@ import {
 const username =
     document.getElementById("username");
 
+const userAvatar =
+    document.getElementById("userAvatar");
+
 const adminMenu =
     document.getElementById("adminMenu");
 
@@ -51,17 +54,18 @@ onAuthStateChanged(auth, async (user) => {
             doc(db, "users", user.uid)
         );
 
-
-        // ==========================================
-        // Default
-        // ==========================================
-
         let userName =
             user.displayName ||
             user.email ||
             "User";
 
         let role = "user";
+
+        let photo =
+            user.photoURL ||
+            `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+                userName
+            )}`;
 
 
         // ==========================================
@@ -82,17 +86,39 @@ onAuthStateChanged(auth, async (user) => {
                 data.role ||
                 "user";
 
+            photo =
+                data.photo ||
+                data.photoURL ||
+                user.photoURL ||
+                `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+                    userName
+                )}`;
+
         }
 
 
         // ==========================================
-        // แสดงชื่อ
+        // ชื่อ
         // ==========================================
 
         if (username) {
 
             username.textContent =
                 "👋 " + userName;
+
+        }
+
+
+        // ==========================================
+        // รูป Profile
+        // ==========================================
+
+        if (userAvatar) {
+
+            userAvatar.src = photo;
+
+            userAvatar.alt =
+                userName;
 
         }
 
@@ -152,10 +178,6 @@ onAuthStateChanged(auth, async (user) => {
         }
 
 
-        // ==========================================
-        // Debug
-        // ==========================================
-
         console.log(
             "Login:",
             user.email
@@ -166,6 +188,11 @@ onAuthStateChanged(auth, async (user) => {
             role
         );
 
+        console.log(
+            "Profile Photo:",
+            photo
+        );
+
     }
     catch (error) {
 
@@ -173,18 +200,6 @@ onAuthStateChanged(auth, async (user) => {
             "User Load Error:",
             error
         );
-
-        if (username) {
-
-            username.textContent =
-                "👋 " +
-                (
-                    user.displayName ||
-                    user.email ||
-                    "User"
-                );
-
-        }
 
     }
 

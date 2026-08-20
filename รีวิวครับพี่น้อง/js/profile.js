@@ -17,7 +17,8 @@ import {
     collection,
     query,
     where,
-    getDocs
+    getDocs,
+    writeBatch
 } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
 
@@ -282,6 +283,10 @@ saveBtn.addEventListener("click", async () => {
 
     try {
 
+        // =========================
+        // Update Profile
+        // =========================
+
         const userRef =
             doc(
                 db,
@@ -297,6 +302,54 @@ saveBtn.addEventListener("click", async () => {
             }
         );
 
+
+        // =========================
+        // Update Reviews
+        // =========================
+
+        const reviewQuery = query(
+
+            collection(db, "reviews"),
+
+            where(
+                "uid",
+                "==",
+                currentUser.uid
+            )
+
+        );
+
+        const reviewSnap =
+            await getDocs(reviewQuery);
+
+
+        if (!reviewSnap.empty) {
+
+            const batch =
+                writeBatch(db);
+
+            reviewSnap.forEach(
+                reviewDoc => {
+
+                    batch.update(
+                        reviewDoc.ref,
+                        {
+                            username: name,
+                            photoURL: photo
+                        }
+                    );
+
+                }
+            );
+
+            await batch.commit();
+
+        }
+
+
+        // =========================
+        // Update Profile Page
+        // =========================
 
         const image =
             photo ||
