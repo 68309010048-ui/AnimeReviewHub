@@ -3,281 +3,464 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Anime Review Hub</title>
+    <title>Anime Review Hub</title>
 
-<link rel="stylesheet" href="css/style.css">
+    <!-- CSS -->
+    <link
+        rel="stylesheet"
+        href="css/style.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
+
 <body>
 
-<!-- ========================= -->
-<!-- User -->
-<!-- ========================= -->
+
+<!-- =====================================================
+     USER BAR
+===================================================== -->
 
 <div class="top-user">
 
-<div class="user-left">
+    <div class="user-left">
 
-    <img
-        id="userAvatar"
-        class="user-avatar"
-        src="https://api.dicebear.com/9.x/initials/svg?seed=User"
-        alt="Profile">
+        <!-- Profile Image -->
 
-    <span id="username">
-        Loading...
-    </span>
+        <img
+            id="userAvatar"
+            class="user-avatar"
+            src="https://api.dicebear.com/9.x/initials/svg?seed=User"
+            alt="Profile">
+
+
+        <!-- User Info -->
+
+        <div class="user-info">
+
+            <span id="username">
+                Loading...
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- User Actions -->
+
+    <div class="user-actions">
+
+
+        <!-- Dark Mode -->
+
+        <button
+            id="darkBtn"
+            class="top-action-btn"
+            type="button"
+            title="เปลี่ยนธีม">
+
+            🌙
+
+        </button>
+
+
+        <!-- Logout -->
+
+        <button
+            id="logoutBtn"
+            type="button">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Logout
+
+        </button>
+
+    </div>
 
 </div>
 
-<button id="logoutBtn">
 
-<i class="fa-solid fa-right-from-bracket"></i>
 
-Logout
-
-</button>
-
-</div>
-
-<!-- ========================= -->
-<!-- Header -->
-<!-- ========================= -->
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header>
 
-<div class="header-top">
+    <div class="hero">
 
-<div class="logo">
 
-<i class="fa-solid fa-film"></i>
+        <!-- =================================================
+             LOGO + SEARCH
+        ================================================= -->
 
-<div>
+        <div class="hero-top">
 
-<h1>Anime Review Hub</h1>
 
-<p>Discover • Review • Favorite</p>
+            <!-- Logo -->
 
-</div>
+            <div class="logo">
 
-</div>
+                <div class="logo-icon">
 
-<div class="search-box">
+                    <img
+                        src="images/logo-icon.png"
+                        alt="Anime Review Hub">
 
-<i class="fa-solid fa-magnifying-glass"></i>
+                </div>
 
-<input
-type="text"
-id="search"
-placeholder="ค้นหาอนิเมะ...">
 
-</div>
+                <div class="logo-text">
 
-</div>
+                    <h1>
+                        Anime Review Hub
+                    </h1>
 
-<!-- Menu -->
+                    <p>
+                        Discover • Review • Favorite
+                    </p>
 
-<div class="menu-btn">
+                </div>
 
-<a href="pages/favorite.html" class="nav-btn">
+            </div>
 
-❤️ Favorite
 
-</a>
+            <!-- Search -->
 
-<a href="pages/bookmark.html" class="nav-btn">
+            <div class="hero-search">
 
-🔖 Bookmark
+                <i
+                    class="fa-solid fa-magnifying-glass">
+                </i>
 
-</a>
+                <input
+                    type="text"
+                    id="searchAnime"
+                    placeholder="ค้นหาอนิเมะ...">
 
-<a href="pages/profile.html" class="nav-btn">
+            </div>
 
-👤 Profile
 
-</a>
+        </div>
 
-<a
-href="pages/admin.html"
-id="adminMenu"
-class="nav-btn">
 
-⚙️ Admin
 
-</a>
+        <!-- =================================================
+             MAIN MENU
+        ================================================= -->
 
-</div>
+        <div class="menu-btn">
 
-<div id="superAdminMenu" class="super-admin-menu" style="display:none;">
 
-    <a href="pages/users.html" class="nav-btn">
-        👥 Users Management
-    </a>
-</div>
+            <!-- Favorite -->
+
+            <a
+                href="pages/favorite.html"
+                class="nav-btn">
+
+                ❤️ Favorite
+
+            </a>
+
+
+            <!-- Bookmark -->
+
+            <a
+                href="pages/bookmark.html"
+                class="nav-btn">
+
+                🔖 Bookmark
+
+            </a>
+
+
+            <!-- Profile -->
+
+            <a
+                href="pages/profile.html"
+                class="nav-btn">
+
+                👤 Profile
+
+            </a>
+
+
+            <!-- Admin -->
+
+            <a
+                href="pages/admin.html"
+                id="adminMenu"
+                class="nav-btn"
+                style="display:none;">
+
+                ⚙️ Admin
+
+            </a>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             SUPER ADMIN MENU
+        ================================================= -->
+
+        <div
+            id="superAdminMenu"
+            class="super-admin-menu"
+            style="display:none;">
+
+            <a
+                href="pages/users.html"
+                class="nav-btn">
+
+                👥 Users Management
+
+            </a>
+
+        </div>
+
+
+    </div>
 
 </header>
 
-<!-- ========================= -->
-<!-- Category -->
-<!-- ========================= -->
+
+
+<!-- =====================================================
+     CATEGORY
+===================================================== -->
 
 <section class="category">
 
-<button
-class="active"
-onclick="filterAnime(event,'All')">
 
-🔥 ทั้งหมด
+    <button
+        class="active"
+        type="button"
+        onclick="filterAnime(event,'All')">
 
-</button>
+        🔥 ทั้งหมด
 
-<button onclick="filterAnime(event,'Action')">
+    </button>
 
-🟣 Action
 
-</button>
+    <button
+        type="button"
+        onclick="filterAnime(event,'Action')">
 
-<button onclick="filterAnime(event,'Adventure')">
+        🟣 Action
 
-🟢 Adventure
+    </button>
 
-</button>
 
-<button onclick="filterAnime(event,'Fantasy')">
+    <button
+        type="button"
+        onclick="filterAnime(event,'Adventure')">
 
-🟠 Fantasy
+        🟢 Adventure
 
-</button>
+    </button>
 
-<button onclick="filterAnime(event,'Comedy')">
 
-🟡 Comedy
+    <button
+        type="button"
+        onclick="filterAnime(event,'Fantasy')">
 
-</button>
+        🟠 Fantasy
 
-<button onclick="filterAnime(event,'Romance')">
+    </button>
 
-❤️ Romance
 
-</button>
+    <button
+        type="button"
+        onclick="filterAnime(event,'Comedy')">
 
-<button onclick="filterAnime(event,'Sport')">
+        🟡 Comedy
 
-⚽ Sport
+    </button>
 
-</button>
 
-<button onclick="filterAnime(event,'Drama')">
+    <button
+        type="button"
+        onclick="filterAnime(event,'Romance')">
 
-🎭 Drama
+        ❤️ Romance
 
-</button>
+    </button>
 
-<button onclick="filterAnime(event,'Sci-Fi')">
 
-🚀 Sci-Fi
+    <button
+        type="button"
+        onclick="filterAnime(event,'Sport')">
 
-</button>
+        ⚽ Sport
 
-<button onclick="filterAnime(event,'Mystery')">
+    </button>
 
-🕵️ Mystery
 
-</button>
+    <button
+        type="button"
+        onclick="filterAnime(event,'Drama')">
 
-<button onclick="filterAnime(event,'Horror')">
+        🎭 Drama
 
-👻 Horror
+    </button>
 
-</button>
 
-<button onclick="filterAnime(event,'School')">
+    <button
+        type="button"
+        onclick="filterAnime(event,'Sci-Fi')">
 
-🏫 School
+        🚀 Sci-Fi
 
-</button>
+    </button>
 
-<button onclick="filterAnime(event,'Slice of Life')">
 
-🌸 Slice of Life
+    <button
+        type="button"
+        onclick="filterAnime(event,'Mystery')">
 
-</button>
+        🕵️ Mystery
 
-<button onclick="filterAnime(event,'Supernatural')">
+    </button>
 
-✨ Supernatural
 
-</button>
+    <button
+        type="button"
+        onclick="filterAnime(event,'Horror')">
 
-<button onclick="filterAnime(event,'Isekai')">
+        👻 Horror
 
-🌍 Isekai
+    </button>
 
-</button>
 
-<button onclick="filterAnime(event,'Music')">
+    <button
+        type="button"
+        onclick="filterAnime(event,'School')">
 
-🎵 Music
+        🏫 School
 
-</button>
+    </button>
+
+
+    <button
+        type="button"
+        onclick="filterAnime(event,'Slice of Life')">
+
+        🌸 Slice of Life
+
+    </button>
+
+
+    <button
+        type="button"
+        onclick="filterAnime(event,'Supernatural')">
+
+        ✨ Supernatural
+
+    </button>
+
+
+    <button
+        type="button"
+        onclick="filterAnime(event,'Isekai')">
+
+        🌍 Isekai
+
+    </button>
+
+
+    <button
+        type="button"
+        onclick="filterAnime(event,'Music')">
+
+        🎵 Music
+
+    </button>
+
 
 </section>
 
-<!-- ========================= -->
-<!-- Title -->
-<!-- ========================= -->
+
+
+<!-- =====================================================
+     TITLE
+===================================================== -->
 
 <section class="title">
 
-<div>
+    <div>
 
-<h2>
+        <h2>
+            🔥 Trending Anime
+        </h2>
 
-🔥 Trending Anime
+        <p>
+            ค้นหาอนิเมะที่คุณชื่นชอบและแบ่งปันรีวิวกับทุกคน
+        </p>
 
-</h2>
-
-<p>
-
-ค้นหาอนิเมะที่คุณชื่นชอบและแบ่งปันรีวิวกับทุกคน
-
-</p>
-
-</div>
+    </div>
 
 </section>
 
-<!-- ========================= -->
-<!-- Anime -->
-<!-- ========================= -->
+
+
+<!-- =====================================================
+     ANIME LIST
+===================================================== -->
 
 <section
-class="anime-container"
-id="animeList">
+    class="anime-container"
+    id="animeList">
 
-<div class="loading">
 
-<div class="loader"></div>
+    <!-- Loading -->
 
-</div>
+    <div class="loading">
+
+        <div class="loader"></div>
+
+    </div>
+
 
 </section>
 
-<script type="module" src="js/script.js"></script>
 
-<script type="module" src="js/user.js"></script>
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script
+    type="module"
+    src="js/script.js">
+</script>
+
+
+<script
+    type="module"
+    src="js/user.js">
+</script>
+
 
 </body>
 
 </html>
-```

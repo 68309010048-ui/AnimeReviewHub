@@ -879,3 +879,57 @@ function escapeHTML(value) {
         .replaceAll("'", "&#039;");
 
 }
+
+// ======================================================
+// Dark Mode - Home
+// ======================================================
+
+const darkBtn =
+    document.getElementById("darkBtn");
+
+const savedTheme =
+    localStorage.getItem("theme");
+
+if (savedTheme === "light") {
+
+    document.body.classList.add("light");
+
+}
+else {
+
+    document.body.classList.remove("light");
+
+}
+
+
+if (darkBtn) {
+
+    darkBtn.addEventListener(
+        "click",
+        () => {
+
+            document.body.classList.toggle(
+                "light"
+            );
+
+            const isLight =
+                document.body.classList.contains(
+                    "light"
+                );
+
+            localStorage.setItem(
+                "theme",
+                isLight
+                    ? "light"
+                    : "dark"
+            );
+
+            darkBtn.textContent =
+                isLight
+                    ? "☀️"
+                    : "🌙";
+
+        }
+    );
+
+}

@@ -1,11 +1,6 @@
 /* =====================================================
-   Anime Review Hub V2
-   HOME CSS - CLEAN VERSION
-===================================================== */
-
-
-/* =====================================================
-   RESET
+   Anime Review Hub
+   HOME - DARK PURPLE
 ===================================================== */
 
 *{
@@ -19,115 +14,772 @@ html{
 }
 
 body{
+
     font-family:'Poppins',sans-serif;
-    background:#edf2f7;
-    color:#1f2937;
+
+    background:#080b1a;
+
+    color:#f8fafc;
+
     overflow-x:hidden;
-}
 
-a{
-    text-decoration:none;
-    color:inherit;
-}
-
-img{
-    display:block;
-    max-width:100%;
-}
-
-button,
-input{
-    font-family:'Poppins',sans-serif;
 }
 
 
 /* =====================================================
-   USER BAR
+   TOP BAR
 ===================================================== */
 
 .top-user{
+
     width:100%;
 
+    min-height:72px;
+
     display:flex;
-    align-items:center;
+
     justify-content:space-between;
 
-    gap:15px;
+    align-items:center;
 
-    padding:14px 35px;
+    padding:12px 35px;
 
-    background:#fff;
+    background:#090b18;
 
-    box-shadow:
-        0 3px 15px rgba(0,0,0,.08);
+    border-bottom:1px solid rgba(255,255,255,.08);
 
     position:sticky;
+
     top:0;
+
     z-index:999;
+
 }
 
 .user-left{
+
     display:flex;
+
     align-items:center;
+
     gap:10px;
 
-    min-width:0;
 }
 
 .user-avatar{
-    width:36px;
-    height:36px;
 
-    flex-shrink:0;
+    width:40px;
+
+    height:40px;
 
     border-radius:50%;
 
     object-fit:cover;
 
-    border:2px solid #7c3aed;
+    border:2px solid #8b5cf6;
 
-    background:#fff;
+    background:#1e1b4b;
+
+}
+
+.user-info{
+
+    display:flex;
+
+    flex-direction:column;
+
 }
 
 #username{
-    font-size:16px;
-    font-weight:600;
-    color:#333;
 
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-}
-
-#logoutBtn{
-    border:none;
-
-    background:#ef4444;
     color:#fff;
 
-    padding:10px 20px;
-
-    border-radius:10px;
+    font-size:15px;
 
     font-weight:600;
+
+}
+
+.user-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.top-action-btn{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:12px;
+
+    background:#17182d;
+
+    color:#fff;
+
+    border:1px solid rgba(255,255,255,.08);
 
     cursor:pointer;
 
-    transition:.25s;
+    font-size:18px;
+
 }
 
-#logoutBtn:hover{
-    background:#dc2626;
-    transform:translateY(-2px);
+.top-action-btn:hover{
+
+    background:#7c3aed;
+
+}
+
+#logoutBtn{
+
+    padding:10px 18px;
+
+    border-radius:11px;
+
+    background:#ef4444;
+
+    color:#fff;
+
+    font-size:13px;
+
+    font-weight:600;
+
 }
 
 
 /* =====================================================
-   HEADER
+   HEADER / HERO
 ===================================================== */
 
 header{
+
+    position:relative;
+
+    min-height:370px;
+
+    padding:55px 40px;
+
+    color:#fff;
+
+    overflow:hidden;
+
+    background:
+
+        linear-gradient(
+            120deg,
+            #24104f,
+            #4c1d95,
+            #1e1b4b
+        );
+
+}
+
+header::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        radial-gradient(
+            circle at 80% 30%,
+            rgba(168,85,247,.25),
+            transparent 35%
+        );
+
+    pointer-events:none;
+
+}
+
+.hero{
+
+    position:relative;
+
+    z-index:2;
+
+    max-width:1400px;
+
+    margin:auto;
+
+}
+
+.hero-left{
+
     width:100%;
+
+}
+
+
+/* =====================================================
+   LOGO
+===================================================== */
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.logo-icon{
+
+    width:80px;
+
+    height:80px;
+
+    padding:8px;
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #8b5cf6,
+            #6d28d9
+        );
+
+    box-shadow:
+        0 0 35px rgba(139,92,246,.35);
+
+}
+
+.logo-icon img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:contain;
+
+}
+
+.logo h1{
+
+    font-size:42px;
+
+    line-height:1.1;
+
+    font-weight:700;
+
+}
+
+.logo p{
+
+    margin-top:8px;
+
+    color:#d8b4fe;
+
+    font-size:15px;
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.hero-search{
+
+    width:100%;
+
+    max-width:520px;
+
+    margin-top:28px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:15px 20px;
+
+    border-radius:50px;
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(15px);
+
+}
+
+.hero-search i{
+
+    color:#c4b5fd;
+
+}
+
+.hero-search input{
+
+    width:100%;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    color:#fff;
+
+    font-size:15px;
+
+}
+
+.hero-search input::placeholder{
+
+    color:#aaa3c5;
+
+}
+
+
+/* =====================================================
+   MENU
+===================================================== */
+
+.menu-btn{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:12px;
+
+    margin-top:28px;
+
+}
+
+.nav-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    padding:12px 20px;
+
+    border-radius:13px;
+
+    background:rgba(255,255,255,.07);
+
+    border:1px solid rgba(255,255,255,.14);
+
+    color:#fff;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.nav-btn:hover{
+
+    background:#7c3aed;
+
+    transform:translateY(-2px);
+
+}
+
+.nav-btn.active{
+
+    background:#7c3aed;
+
+}
+
+
+/* =====================================================
+   SUPER ADMIN
+===================================================== */
+
+.super-admin-menu{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    margin-top:10px;
+
+}
+
+.super-admin-menu .nav-btn{
+
+    background:rgba(245,158,11,.12);
+
+    border-color:rgba(245,158,11,.25);
+
+}
+
+
+/* =====================================================
+   CATEGORY
+===================================================== */
+
+.category{
+
+    width:100%;
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    padding:18px 40px;
+
+    background:#0c1022;
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+
+}
+
+.category button{
+
+    padding:10px 17px;
+
+    border-radius:999px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    background:#161a2f;
+
+    color:#ddd6fe;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    white-space:nowrap;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.category button:hover{
+
+    background:#312e81;
+
+    color:#fff;
+
+}
+
+.category button.active{
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #4f46e5
+        );
+
+    color:#fff;
+
+    border-color:#8b5cf6;
+
+}
+
+
+/* =====================================================
+   TITLE
+===================================================== */
+
+.title{
+
+    padding:35px 40px 18px;
+
+}
+
+.title h2{
+
+    color:#fff;
+
+    font-size:30px;
+
+}
+
+.title p{
+
+    color:#94a3b8;
+
+    font-size:14px;
+
+    margin-top:5px;
+
+}
+
+
+/* =====================================================
+   ANIME GRID
+===================================================== */
+
+.anime-container{
+
+    width:100%;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fill,minmax(235px,1fr));
+
+    gap:22px;
+
+    padding:0 40px 50px;
+
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.card{
+
+    background:#11162a;
+
+    border:1px solid rgba(255,255,255,.06);
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    display:flex;
+
+    flex-direction:column;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.25);
+
+    transition:.3s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-7px);
+
+    border-color:rgba(139,92,246,.5);
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,.35);
+
+}
+
+
+/* =====================================================
+   IMAGE
+===================================================== */
+
+.card img{
+
+    width:100%;
+
+    height:320px;
+
+    object-fit:cover;
+
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.card-content{
+
+    flex:1;
+
+    padding:16px;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.card-content h3{
+
+    color:#fff;
+
+    font-size:18px;
+
+    line-height:1.4;
+
+    min-height:50px;
+
+    margin-bottom:12px;
+
+    display:-webkit-box;
+
+    -webkit-line-clamp:2;
+
+    -webkit-box-orient:vertical;
+
+    overflow:hidden;
+
+}
+
+
+/* =====================================================
+   GENRE
+===================================================== */
+
+.genre{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:6px;
+
+    margin-bottom:13px;
+
+}
+
+.genre span{
+
+    padding:5px 9px;
+
+    border-radius:999px;
+
+    background:#272044;
+
+    color:#c4b5fd;
+
+    font-size:10px;
+
+    font-weight:600;
+
+}
+
+
+/* =====================================================
+   RATING
+===================================================== */
+
+.rating{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:15px;
+
+}
+
+.score{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    color:#fbbf24;
+
+    font-size:15px;
+
+    font-weight:700;
+
+}
+
+.review-count{
+
+    color:#94a3b8;
+
+    font-size:11px;
+
+}
+
+
+/* =====================================================
+   CARD BUTTON
+===================================================== */
+
+.card button{
+
+    width:100%;
+
+    margin-top:auto;
+
+    padding:11px;
+
+    border:none;
+
+    border-radius:11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #4f46e5
+        );
+
+    color:#fff;
+
+    font-weight:600;
+
+    font-size:13px;
+
+    cursor:pointer;
+
+}
+
+
+/* =====================================================
+   DARK MODE
+   Home เป็น Dark อยู่แล้ว
+===================================================== */
+
+body.light{
+
+    background:#edf2f7;
+
+    color:#1f2937;
+
+}
+
+body.light .top-user{
+
+    background:#fff;
+
+    border-bottom:1px solid #e5e7eb;
+
+}
+
+body.light #username{
+
+    color:#222;
+
+}
+
+body.light .top-action-btn{
+
+    background:#f3f4f6;
+
+    color:#333;
+
+}
+
+body.light header{
 
     background:
         linear-gradient(
@@ -137,813 +789,54 @@ header{
             #4f46e5
         );
 
-    padding:40px;
-
-    color:#fff;
-
-    box-shadow:
-        0 10px 25px rgba(0,0,0,.15);
 }
 
-.header-top{
-    width:100%;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:30px;
-
-    flex-wrap:wrap;
-}
-
-
-/* =====================================================
-   LOGO
-===================================================== */
-
-.logo{
-    display:flex;
-    align-items:center;
-
-    gap:18px;
-
-    min-width:0;
-}
-
-.logo i{
-    width:80px;
-    height:80px;
-
-    flex-shrink:0;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:55px;
-
-    border-radius:20px;
-
-    background:rgba(255,255,255,.15);
-
-    backdrop-filter:blur(15px);
-}
-
-.logo h1{
-    font-size:34px;
-    font-weight:700;
-    line-height:1.2;
-}
-
-.logo p{
-    margin-top:5px;
-
-    font-size:15px;
-
-    opacity:.9;
-}
-
-
-/* =====================================================
-   GLASS / SHADOW
-===================================================== */
-
-.glass{
-    background:rgba(255,255,255,.12);
-
-    backdrop-filter:blur(20px);
-
-    border:1px solid rgba(255,255,255,.2);
-}
-
-.shadow{
-    box-shadow:
-        0 10px 25px rgba(0,0,0,.12);
-}
-
-
-/* =====================================================
-   SEARCH
-===================================================== */
-
-.search-box{
-    flex:1;
-
-    width:100%;
-    max-width:420px;
-
-    background:#fff;
-
-    border-radius:50px;
-
-    display:flex;
-    align-items:center;
-
-    padding:14px 22px;
-
-    box-shadow:
-        0 10px 25px rgba(0,0,0,.12);
-}
-
-.search-box i{
-    flex-shrink:0;
-
-    color:#6d28d9;
-
-    font-size:18px;
-
-    margin-right:12px;
-}
-
-.search-box input{
-    width:100%;
-
-    flex:1;
-
-    border:none;
-    outline:none;
-
-    background:transparent;
-
-    font-size:15px;
-
-    color:#333;
-}
-
-.search-box input::placeholder{
-    color:#9ca3af;
-}
-
-
-/* =====================================================
-   MAIN MENU
-===================================================== */
-
-.menu-btn{
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    margin-top:25px;
-
-    flex-wrap:wrap;
-}
-
-.nav-btn{
-    display:inline-flex;
-
-    align-items:center;
-    justify-content:center;
-
-    gap:8px;
-
-    padding:12px 20px;
-
-    border-radius:14px;
-
-    background:rgba(255,255,255,.15);
-
-    color:#fff;
-
-    font-weight:600;
-
-    border:1px solid rgba(255,255,255,.25);
-
-    backdrop-filter:blur(15px);
-
-    transition:.25s;
-}
-
-.nav-btn:hover{
-    background:#fff;
-
-    color:#6d28d9;
-
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 10px 20px rgba(0,0,0,.15);
-}
-
-
-/* =====================================================
-   SUPER ADMIN MENU
-===================================================== */
-
-.super-admin-menu{
-    width:100%;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    margin-top:10px;
-
-    flex-wrap:wrap;
-}
-
-.super-admin-menu .nav-btn{
-    flex:0 0 auto;
-}
-
-
-/* =====================================================
-   PAGE TITLE
-===================================================== */
-
-.title{
-    padding:35px 40px 15px;
-}
-
-.title h2{
-    font-size:34px;
-
-    color:#222;
-
-    margin-bottom:8px;
-}
-
-.title p{
-    color:#6b7280;
-
-    font-size:15px;
-}
-
-
-/* =====================================================
-   CATEGORY
-   Desktop = 6 columns
-   Tablet  = 4 columns
-   Mobile  = 3 columns
-   Small   = 2 columns
-===================================================== */
-
-.category{
-    width:100%;
-    max-width:100%;
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(6,minmax(0,1fr));
-
-    gap:10px;
-
-    padding:14px 40px;
+body.light .category{
 
     background:#edf2f7;
 
-    overflow:hidden;
 }
 
-.category button{
-    width:100%;
-    min-width:0;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    padding:11px 10px;
-
-    border:none;
-
-    border-radius:999px;
+body.light .category button{
 
     background:#fff;
 
     color:#374151;
 
-    font-size:14px;
-
-    font-weight:600;
-
-    white-space:nowrap;
-
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-
-    box-shadow:
-        0 5px 15px rgba(0,0,0,.07);
-
-    cursor:pointer;
-
-    transition:
-        background .25s,
-        color .25s,
-        transform .25s,
-        box-shadow .25s;
 }
 
-.category button:hover{
-    background:#ede9fe;
-
-    color:#6d28d9;
-
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 8px 18px rgba(124,58,237,.15);
-}
-
-.category button.active{
-    background:
-        linear-gradient(
-            135deg,
-            #7c3aed,
-            #4f46e5
-        );
-
-    color:#fff;
-
-    border-color:#7c3aed;
-
-    box-shadow:
-        0 8px 18px rgba(124,58,237,.25);
-}
-
-
-/* =====================================================
-   ANIME GRID
-===================================================== */
-
-.anime-container{
-    width:100%;
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(auto-fill,minmax(250px,1fr));
-
-    gap:28px;
-
-    padding:0 40px 50px;
-}
-
-
-/* =====================================================
-   ANIME CARD
-===================================================== */
-
-.card{
-    width:100%;
-
-    background:#fff;
-
-    border-radius:20px;
-
-    overflow:hidden;
-
-    display:flex;
-
-    flex-direction:column;
-
-    box-shadow:
-        0 8px 25px rgba(0,0,0,.08);
-
-    transition:.35s;
-
-    animation:fadeUp .45s ease;
-}
-
-.card:hover{
-    transform:translateY(-8px);
-
-    box-shadow:
-        0 18px 40px rgba(0,0,0,.15);
-}
-
-
-/* =====================================================
-   POSTER
-===================================================== */
-
-.card img{
-    width:100%;
-
-    height:340px;
-
-    object-fit:cover;
-
-    transition:.35s;
-}
-
-.card:hover img{
-    transform:scale(1.04);
-}
-
-
-/* =====================================================
-   CARD CONTENT
-===================================================== */
-
-.card-content{
-    display:flex;
-
-    flex-direction:column;
-
-    flex:1;
-
-    padding:18px;
-}
-
-.card-content h3{
-    font-size:20px;
-
-    font-weight:700;
-
-    line-height:1.5;
-
-    min-height:60px;
+body.light .title h2{
 
     color:#222;
 
-    margin-bottom:15px;
-
-    display:-webkit-box;
-
-    -webkit-line-clamp:2;
-
-    -webkit-box-orient:vertical;
-
-    overflow:hidden;
 }
 
+body.light .title p{
 
-/* =====================================================
-   GENRE
-===================================================== */
+    color:#6b7280;
 
-.genre{
-    display:flex;
-
-    flex-wrap:wrap;
-
-    gap:6px;
-
-    margin-bottom:16px;
 }
 
-.genre span{
-    display:inline-flex;
+body.light .card{
 
-    align-items:center;
+    background:#fff;
+
+    border-color:#e5e7eb;
+
+}
+
+body.light .card-content h3{
+
+    color:#222;
+
+}
+
+body.light .genre span{
 
     background:#ede9fe;
 
     color:#6d28d9;
 
-    padding:6px 12px;
-
-    border-radius:50px;
-
-    font-size:12px;
-
-    font-weight:600;
-}
-
-
-/* =====================================================
-   RATING
-===================================================== */
-
-.rating{
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    gap:10px;
-
-    margin-bottom:18px;
-}
-
-.score{
-    display:flex;
-
-    align-items:center;
-
-    gap:6px;
-
-    font-size:18px;
-
-    font-weight:700;
-
-    color:#f59e0b;
-}
-
-.score i{
-    color:#fbbf24;
-}
-
-.review-count{
-    font-size:13px;
-
-    color:#777;
-
-    white-space:nowrap;
-}
-
-
-/* =====================================================
-   CARD BUTTON
-===================================================== */
-
-.card button{
-    width:100%;
-
-    margin-top:auto;
-
-    padding:14px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #7c3aed,
-            #4f46e5
-        );
-
-    color:#fff;
-
-    font-size:15px;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:.25s;
-}
-
-.card button:hover{
-    transform:translateY(-2px);
-
-    background:
-        linear-gradient(
-            135deg,
-            #6d28d9,
-            #4338ca
-        );
-}
-
-
-/* =====================================================
-   EMPTY
-===================================================== */
-
-.empty{
-    grid-column:1 / -1;
-
-    text-align:center;
-
-    padding:80px 20px;
-
-    background:#fff;
-
-    border-radius:20px;
-
-    box-shadow:
-        0 10px 25px rgba(0,0,0,.08);
-}
-
-.empty i{
-    font-size:70px;
-
-    color:#9ca3af;
-
-    margin-bottom:20px;
-}
-
-.empty h2{
-    color:#444;
-
-    margin-bottom:10px;
-}
-
-.empty p{
-    color:#888;
-}
-
-
-/* =====================================================
-   LOADING
-===================================================== */
-
-.loading{
-    grid-column:1 / -1;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    padding:80px;
-}
-
-.loader{
-    width:65px;
-    height:65px;
-
-    border:6px solid #ddd;
-
-    border-top:6px solid #7c3aed;
-
-    border-radius:50%;
-
-    animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-
-    from{
-        transform:rotate(0deg);
-    }
-
-    to{
-        transform:rotate(360deg);
-    }
-}
-
-
-/* =====================================================
-   ANIMATION
-===================================================== */
-
-@keyframes fadeUp{
-
-    from{
-        opacity:0;
-
-        transform:translateY(25px);
-    }
-
-    to{
-        opacity:1;
-
-        transform:translateY(0);
-    }
-}
-
-
-/* =====================================================
-   SCROLLBAR
-===================================================== */
-
-::-webkit-scrollbar{
-    width:10px;
-    height:8px;
-}
-
-::-webkit-scrollbar-thumb{
-    background:#7c3aed;
-
-    border-radius:20px;
-}
-
-::-webkit-scrollbar-track{
-    background:#ececec;
-}
-
-
-/* =====================================================
-   SELECTION
-===================================================== */
-
-::selection{
-    background:#7c3aed;
-
-    color:#fff;
-}
-
-
-/* =====================================================
-   UTILITY
-===================================================== */
-
-.hidden{
-    display:none;
-}
-
-.text-center{
-    text-align:center;
-}
-
-.mt-10{
-    margin-top:10px;
-}
-
-.mt-20{
-    margin-top:20px;
-}
-
-.mt-30{
-    margin-top:30px;
-}
-
-.mb-20{
-    margin-bottom:20px;
-}
-
-.round{
-    border-radius:20px;
-}
-
-
-/* =====================================================
-   DARK MODE
-===================================================== */
-
-body.dark{
-    background:#0f172a;
-
-    color:#f1f5f9;
-}
-
-body.dark .top-user{
-    background:#1e293b;
-}
-
-body.dark header{
-    background:
-        linear-gradient(
-            135deg,
-            #1e1b4b,
-            #312e81,
-            #3730a3
-        );
-}
-
-body.dark .search-box{
-    background:#1e293b;
-}
-
-body.dark .search-box input{
-    color:#fff;
-}
-
-body.dark .search-box input::placeholder{
-    color:#94a3b8;
-}
-
-body.dark .card{
-    background:#1e293b;
-
-    color:#fff;
-}
-
-body.dark .card-content h3{
-    color:#fff;
-}
-
-body.dark .review-count{
-    color:#cbd5e1;
-}
-
-body.dark .empty{
-    background:#1e293b;
-}
-
-body.dark .category{
-    background:#0f172a;
-}
-
-body.dark .category button{
-    background:#1e293b;
-
-    color:#fff;
-}
-
-body.dark .category button.active{
-    background:#7c3aed;
-
-    color:#fff;
-}
-
-body.dark .nav-btn{
-    background:rgba(255,255,255,.08);
-}
-
-body.dark .nav-btn:hover{
-    background:#fff;
-
-    color:#6d28d9;
-}
-
-body.dark #username{
-    color:#fff;
 }
 
 
@@ -951,394 +844,301 @@ body.dark #username{
    RESPONSIVE
 ===================================================== */
 
-
-/* ===========================
-   Large Tablet
-=========================== */
-
-@media(max-width:1200px){
+@media(max-width:900px){
 
     header{
-        padding:30px;
-    }
 
-    .header-top{
-        gap:20px;
+        padding:35px 25px;
+
     }
 
     .logo h1{
-        font-size:30px;
-    }
 
-    .search-box{
-        max-width:360px;
-    }
+        font-size:32px;
 
-    .anime-container{
-        grid-template-columns:
-            repeat(3,minmax(0,1fr));
-
-        gap:20px;
-
-        padding-left:30px;
-        padding-right:30px;
     }
 
     .category{
-        grid-template-columns:
-            repeat(5,minmax(0,1fr));
 
-        padding-left:30px;
-        padding-right:30px;
-    }
-}
+        padding-left:20px;
 
+        padding-right:20px;
 
-/* ===========================
-   Tablet
-=========================== */
-
-@media(max-width:900px){
-
-    .top-user{
-        padding:12px 20px;
-    }
-
-    header{
-        padding:25px 20px;
-    }
-
-    .logo i{
-        width:65px;
-        height:65px;
-
-        font-size:38px;
-    }
-
-    .logo h1{
-        font-size:26px;
-    }
-
-    .search-box{
-        max-width:320px;
-    }
-
-    .menu-btn{
-        gap:10px;
-    }
-
-    .nav-btn{
-        padding:10px 16px;
-
-        font-size:13px;
     }
 
     .title{
+
         padding-left:25px;
+
         padding-right:25px;
-    }
 
-    .category{
-        grid-template-columns:
-            repeat(4,minmax(0,1fr));
-
-        padding-left:20px;
-        padding-right:20px;
-    }
-
-    .category button{
-        font-size:13px;
-
-        padding:10px 8px;
     }
 
     .anime-container{
-        grid-template-columns:
-            repeat(2,minmax(0,1fr));
 
         padding-left:25px;
+
         padding-right:25px;
+
     }
+
 }
 
-
-/* ===========================
-   Mobile
-=========================== */
 
 @media(max-width:600px){
 
     .top-user{
-        padding:10px 14px;
+
+        padding:10px 12px;
+
     }
 
     .user-avatar{
-        width:32px;
-        height:32px;
+
+        width:34px;
+
+        height:34px;
+
     }
 
     #username{
+
         font-size:13px;
+
     }
 
     #logoutBtn{
-        padding:8px 13px;
 
-        font-size:12px;
+        padding:8px 12px;
+
+        font-size:11px;
+
     }
 
+    .top-action-btn{
 
-    /* Header */
+        width:36px;
+
+        height:36px;
+
+    }
+
 
     header{
-        padding:20px 15px 22px;
+
+        padding:25px 15px 28px;
+
     }
-
-    .header-top{
-        flex-direction:row;
-
-        align-items:center;
-
-        flex-wrap:wrap;
-    }
-
-
-    /* Logo */
 
     .logo{
-        flex:1;
-
-        min-width:180px;
 
         gap:10px;
+
     }
 
-    .logo i{
-        width:50px;
-        height:50px;
+    .logo-icon{
 
-        font-size:27px;
+        width:58px;
 
-        border-radius:14px;
+        height:58px;
+
+        border-radius:16px;
+
     }
 
     .logo h1{
-        font-size:21px;
+
+        font-size:23px;
+
     }
 
     .logo p{
+
         font-size:11px;
+
     }
 
 
-    /* Search */
+    .hero-search{
 
-    .search-box{
-        width:100%;
+        margin-top:20px;
 
-        max-width:none;
+        padding:12px 15px;
 
-        padding:11px 15px;
     }
 
-    .search-box input{
-        font-size:14px;
+    .hero-search input{
+
+        font-size:13px;
+
     }
 
-
-    /* Menu */
 
     .menu-btn{
-        width:100%;
-
-        margin-top:16px;
 
         gap:8px;
+
+        margin-top:18px;
+
     }
 
     .nav-btn{
+
         flex:1 1 calc(50% - 8px);
 
         min-width:0;
 
-        padding:9px 10px;
-
-        font-size:12px;
-    }
-
-
-    /* Super Admin */
-
-    .super-admin-menu{
-        width:100%;
-
-        gap:8px;
-
-        margin-top:8px;
-    }
-
-    .super-admin-menu .nav-btn{
-        flex:1 1 calc(50% - 8px);
-
-        min-width:0;
-
-        padding:9px 10px;
-
-        font-size:12px;
-    }
-
-
-    /* Title */
-
-    .title{
-        padding:15px 15px 12px;
-    }
-
-    .title h2{
-        font-size:21px;
-    }
-
-    .title p{
-        font-size:12px;
-    }
-
-
-    /* Category */
-
-    .category{
-        grid-template-columns:
-            repeat(3,minmax(0,1fr));
-
-        gap:8px;
-
-        padding:10px 12px;
-    }
-
-    .category button{
-        padding:9px 5px;
+        padding:10px 7px;
 
         font-size:11px;
 
-        min-width:0;
     }
 
 
-    /* Anime */
+    .super-admin-menu .nav-btn{
+
+        flex:1 1 100%;
+
+    }
+
+
+    .category{
+
+        display:grid;
+
+        grid-template-columns:
+            repeat(3,minmax(0,1fr));
+
+        gap:7px;
+
+        padding:10px 12px;
+
+    }
+
+    .category button{
+
+        width:100%;
+
+        min-width:0;
+
+        padding:8px 5px;
+
+        font-size:10px;
+
+        overflow:hidden;
+
+        text-overflow:ellipsis;
+
+    }
+
+
+    .title{
+
+        padding:22px 15px 12px;
+
+    }
+
+    .title h2{
+
+        font-size:21px;
+
+    }
+
 
     .anime-container{
+
         grid-template-columns:
             repeat(2,minmax(0,1fr));
 
         gap:12px;
 
-        padding:0 15px 30px;
+        padding:0 12px 30px;
+
     }
 
     .card{
-        border-radius:16px;
+
+        border-radius:14px;
+
     }
 
     .card img{
+
         height:auto;
 
         aspect-ratio:3 / 4;
 
-        object-fit:cover;
     }
 
     .card-content{
-        padding:12px;
+
+        padding:10px;
+
     }
 
     .card-content h3{
-        font-size:15px;
 
-        min-height:45px;
+        font-size:14px;
 
-        margin-bottom:10px;
-    }
+        min-height:40px;
 
-    .genre{
-        gap:5px;
-
-        margin-bottom:12px;
     }
 
     .genre span{
-        font-size:10px;
 
-        padding:4px 8px;
-    }
+        padding:4px 7px;
 
-    .rating{
-        margin-bottom:12px;
+        font-size:9px;
+
     }
 
     .score{
-        font-size:14px;
+
+        font-size:13px;
+
     }
 
     .review-count{
-        font-size:11px;
+
+        font-size:10px;
+
     }
 
     .card button{
-        padding:10px;
 
-        font-size:12px;
+        padding:9px;
+
+        font-size:11px;
+
     }
+
 }
 
 
-/* ===========================
-   Small Mobile
-=========================== */
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
 
 @media(max-width:400px){
 
-    .top-user{
-        padding-left:10px;
-        padding-right:10px;
-    }
-
-    #username{
-        max-width:130px;
-    }
-
-    .logo{
-        min-width:100%;
-    }
-
-    .nav-btn{
-        flex-basis:100%;
-    }
-
-    .super-admin-menu .nav-btn{
-        flex-basis:100%;
-    }
-
     .category{
+
         grid-template-columns:
             repeat(2,minmax(0,1fr));
+
     }
 
     .anime-container{
+
         grid-template-columns:
             repeat(2,minmax(0,1fr));
 
-        gap:10px;
+        gap:9px;
 
-        padding-left:10px;
-        padding-right:10px;
+        padding-left:9px;
+
+        padding-right:9px;
+
     }
 
-    .card-content{
-        padding:10px;
-    }
-
-    .card-content h3{
-        font-size:14px;
-
-        min-height:42px;
-    }
 }

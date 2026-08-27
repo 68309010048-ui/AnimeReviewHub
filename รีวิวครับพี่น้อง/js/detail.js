@@ -917,46 +917,6 @@ async function shareAnime() {
 }
 
 
-// =====================================================
-// DARK MODE
-// =====================================================
-
-if (
-    localStorage.getItem("dark") === "true"
-) {
-
-    document.body.classList.add(
-        "dark"
-    );
-
-}
-
-
-if (darkBtn) {
-
-    darkBtn.addEventListener(
-        "click",
-        toggleDarkMode
-    );
-
-}
-
-
-function toggleDarkMode() {
-
-    document.body.classList.toggle(
-        "dark"
-    );
-
-    localStorage.setItem(
-        "dark",
-        document.body.classList.contains(
-            "dark"
-        )
-    );
-
-}
-
 
 // =====================================================
 // STAR RATING
