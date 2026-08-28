@@ -205,3 +205,91 @@ body{
     transform:translateY(-1px);
 
 }
+
+
+/* =====================================================
+   GOOGLE LOGIN
+===================================================== */
+
+.google-btn{
+
+    width:100%;
+
+    margin-top:12px;
+
+    padding:13px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:12px;
+
+    background:#fff;
+
+    color:#374151;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    transition:.25s;
+
+}
+
+
+.google-btn:hover{
+
+    background:#f9fafb;
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.08);
+
+}
+
+
+.google-btn:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+}
+
+
+.google-icon{
+
+    width:24px;
+
+    height:24px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    color:#4285f4;
+
+    font-weight:700;
+
+    font-size:18px;
+
+}
+

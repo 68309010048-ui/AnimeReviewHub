@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="th">
 
@@ -5,15 +6,19 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Login</title>
 
-    <link rel="stylesheet" href="../css/auth.css">
+    <link
+        rel="stylesheet"
+        href="../css/auth.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
 </head>
 
@@ -21,23 +26,49 @@
 
 <div class="auth-box">
 
-    <h2>เข้าสู่ระบบ</h2>
+    <h2>
+        เข้าสู่ระบบ
+    </h2>
 
-   <input
-type="email"
-id="loginEmail"
-placeholder="Email">
 
-<input
-type="password"
-id="loginPassword"
-placeholder="Password">
+    <input
+        type="email"
+        id="loginEmail"
+        placeholder="Email">
 
-<button id="loginBtn">
 
-เข้าสู่ระบบ
+    <input
+        type="password"
+        id="loginPassword"
+        placeholder="Password">
 
-</button>
+
+    <!-- Email Login -->
+
+    <button
+        id="loginBtn">
+
+        เข้าสู่ระบบ
+
+    </button>
+
+
+    <!-- Google Login -->
+
+    <button
+        id="googleLoginBtn"
+        type="button"
+        class="google-btn">
+
+        <span class="google-icon">
+            G
+        </span>
+
+        เข้าสู่ระบบด้วย Google
+
+    </button>
+
+
     <p>
 
         ยังไม่มีบัญชี ?
@@ -50,12 +81,21 @@ placeholder="Password">
 
     </p>
 
-    <p id="message" class="message"></p>
+
+    <p
+        id="message"
+        class="message">
+    </p>
 
 </div>
 
-<script type="module" src="../js/auth.js"></script>
+
+<script
+    type="module"
+    src="../js/auth.js">
+</script>
 
 </body>
 
 </html>
+
