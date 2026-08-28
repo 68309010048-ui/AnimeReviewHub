@@ -1,11 +1,13 @@
 /* ======================================================
    Anime Review Hub
-   Admin Dashboard CSS V2.0
+   Admin Dashboard CSS
+   Light / Dark Mode
 ====================================================== */
 
-/* ==========================
+
+/* ======================================================
    RESET
-========================== */
+====================================================== */
 
 *{
     margin:0;
@@ -19,9 +21,18 @@ html{
 
 body{
     font-family:'Poppins',sans-serif;
+
     background:#f3f4f6;
+
     color:#1f2937;
+
     overflow-x:hidden;
+
+    min-height:100vh;
+
+    transition:
+        background .25s ease,
+        color .25s ease;
 }
 
 button,
@@ -32,9 +43,9 @@ select{
 }
 
 
-/* ==========================
+/* ======================================================
    TOP BAR
-========================== */
+====================================================== */
 
 .topbar{
 
@@ -75,6 +86,8 @@ select{
 
     gap:12px;
 
+    color:#fff;
+
 }
 
 .homeBtn{
@@ -82,6 +95,8 @@ select{
     display:inline-flex;
 
     align-items:center;
+
+    justify-content:center;
 
     gap:8px;
 
@@ -110,9 +125,9 @@ select{
 }
 
 
-/* ==========================
+/* ======================================================
    DASHBOARD
-========================== */
+====================================================== */
 
 .dashboard{
 
@@ -137,6 +152,10 @@ select{
 
     background:#fff;
 
+    color:#1f2937;
+
+    border:1px solid #e5e7eb;
+
     border-radius:20px;
 
     padding:25px;
@@ -156,7 +175,11 @@ select{
     box-shadow:
         0 10px 30px rgba(0,0,0,.08);
 
-    transition:.3s;
+    transition:
+        transform .3s ease,
+        background .25s ease,
+        border-color .25s ease,
+        color .25s ease;
 
     overflow:hidden;
 
@@ -205,6 +228,8 @@ select{
 
     background:#ede9fe;
 
+    color:#7c3aed;
+
     font-size:24px;
 
     margin-bottom:10px;
@@ -232,9 +257,9 @@ select{
 }
 
 
-/* ==========================
+/* ======================================================
    CARD FORM
-========================== */
+====================================================== */
 
 .card{
 
@@ -245,6 +270,10 @@ select{
     margin:0 auto 25px;
 
     background:#fff;
+
+    color:#1f2937;
+
+    border:1px solid #e5e7eb;
 
     border-radius:20px;
 
@@ -266,12 +295,13 @@ select{
 }
 
 
-/* ==========================
+/* ======================================================
    FORM INPUT
-========================== */
+====================================================== */
 
 .card input,
-.card textarea{
+.card textarea,
+.card select{
 
     width:100%;
 
@@ -304,19 +334,21 @@ select{
 }
 
 .card input:focus,
-.card textarea:focus{
+.card textarea:focus,
+.card select:focus{
 
     border-color:#7c3aed;
 
     box-shadow:
-        0 0 0 4px rgba(124,58,237,.12);
+        0 0 0 4px
+        rgba(124,58,237,.12);
 
 }
 
 
-/* ==========================
+/* ======================================================
    FORM LABEL
-========================== */
+====================================================== */
 
 .form-title,
 .form-group > label{
@@ -334,9 +366,9 @@ select{
 }
 
 
-/* ==========================
+/* ======================================================
    CATEGORY
-========================== */
+====================================================== */
 
 .category-group{
 
@@ -365,7 +397,9 @@ select{
 
     background:#f8fafc;
 
-    border:1px solid transparent;
+    color:#374151;
+
+    border:1px solid #e5e7eb;
 
     border-radius:12px;
 
@@ -398,9 +432,9 @@ select{
 }
 
 
-/* ==========================
+/* ======================================================
    BUTTON GROUP
-========================== */
+====================================================== */
 
 .btn-group{
 
@@ -452,7 +486,8 @@ select{
     transform:translateY(-2px);
 
     box-shadow:
-        0 8px 20px rgba(124,58,237,.25);
+        0 8px 20px
+        rgba(124,58,237,.25);
 
 }
 
@@ -469,9 +504,9 @@ select{
 }
 
 
-/* ==========================
+/* ======================================================
    LIST TITLE
-========================== */
+====================================================== */
 
 .list-title{
 
@@ -488,9 +523,9 @@ select{
 }
 
 
-/* ==========================
+/* ======================================================
    SEARCH
-========================== */
+====================================================== */
 
 #searchAnime{
 
@@ -505,6 +540,8 @@ select{
     padding:14px 18px;
 
     background:#fff;
+
+    color:#111827;
 
     border:1px solid #d1d5db;
 
@@ -521,14 +558,15 @@ select{
     border-color:#7c3aed;
 
     box-shadow:
-        0 0 0 4px rgba(124,58,237,.12);
+        0 0 0 4px
+        rgba(124,58,237,.12);
 
 }
 
 
-/* ==========================
+/* ======================================================
    ANIME LIST
-========================== */
+====================================================== */
 
 #animeList{
 
@@ -548,13 +586,17 @@ select{
 }
 
 
-/* ==========================
+/* ======================================================
    ANIME CARD
-========================== */
+====================================================== */
 
 .anime-card{
 
     background:#fff;
+
+    color:#1f2937;
+
+    border:1px solid #e5e7eb;
 
     border-radius:18px;
 
@@ -629,9 +671,9 @@ select{
 }
 
 
-/* ==========================
+/* ======================================================
    ACTION
-========================== */
+====================================================== */
 
 .action{
 
@@ -691,9 +733,9 @@ select{
 }
 
 
-/* ==========================
+/* ======================================================
    HR
-========================== */
+====================================================== */
 
 hr{
 
@@ -710,96 +752,270 @@ hr{
 }
 
 
-/* ==========================
-   RESPONSIVE
-========================== */
+/* ======================================================
+   DARK MODE
+====================================================== */
+
+body.dark{
+
+    background:#080b1a !important;
+
+    color:#f8fafc !important;
+
+}
+
+
+/* Top */
+
+body.dark .topbar{
+
+    color:#fff;
+
+}
+
+
+/* Dashboard */
+
+body.dark .box{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.3);
+
+}
+
+body.dark .box h2{
+
+    color:#c4b5fd !important;
+
+}
+
+body.dark .box p{
+
+    color:#cbd5e1 !important;
+
+}
+
+body.dark .box-icon{
+
+    background:#272044 !important;
+
+    color:#c4b5fd !important;
+
+}
+
+
+/* Main Form */
+
+body.dark .card{
+
+    background:#11162a !important;
+
+    color:#f8fafc !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.3);
+
+}
+
+body.dark .card h2{
+
+    color:#fff !important;
+
+}
+
+
+/* Labels */
+
+body.dark .form-title,
+body.dark .form-group > label{
+
+    color:#e5e7eb !important;
+
+}
+
+
+/* Inputs */
+
+body.dark .card input,
+body.dark .card textarea,
+body.dark .card select,
+body.dark #searchAnime{
+
+    background:#0f172a !important;
+
+    color:#fff !important;
+
+    border-color:#374151 !important;
+
+}
+
+body.dark .card input::placeholder,
+body.dark .card textarea::placeholder,
+body.dark #searchAnime::placeholder{
+
+    color:#94a3b8 !important;
+
+}
+
+
+/* Category */
+
+body.dark .category-group label{
+
+    background:#171a2d !important;
+
+    color:#e5e7eb !important;
+
+    border-color:#374151 !important;
+
+}
+
+body.dark .category-group label:hover{
+
+    background:#272044 !important;
+
+    border-color:#7c3aed !important;
+
+}
+
+
+/* List */
+
+body.dark .list-title{
+
+    color:#fff !important;
+
+}
+
+
+/* Anime Cards */
+
+body.dark .anime-card{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.3);
+
+}
+
+body.dark .anime-info h3{
+
+    color:#fff !important;
+
+}
+
+body.dark .anime-info p{
+
+    color:#cbd5e1 !important;
+
+}
+
+body.dark .anime-info p b{
+
+    color:#e5e7eb !important;
+
+}
+
+
+/* HR */
+
+body.dark hr{
+
+    border-top-color:#374151 !important;
+
+}
+
+
+/* ======================================================
+   LIGHT MODE
+====================================================== */
+
+body.light{
+
+    background:#f3f4f6;
+
+    color:#1f2937;
+
+}
+
+
+/* ======================================================
+   RESPONSIVE - TABLET
+====================================================== */
+
+@media(max-width:1200px){
+
+    #animeList{
+
+        grid-template-columns:
+            repeat(3,minmax(0,1fr));
+
+    }
+
+}
+
+
+/* ======================================================
+   RESPONSIVE - 900
+====================================================== */
 
 @media(max-width:900px){
 
     .dashboard{
+
         grid-template-columns:
             repeat(3,minmax(0,1fr));
-    }
 
-    #animeList{
-        grid-template-columns:
-            repeat(2,minmax(0,1fr));
+        gap:12px;
+
     }
 
     .category-group{
+
         grid-template-columns:
             repeat(3,minmax(0,1fr));
+
+    }
+
+    #animeList{
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
     }
 
 }
 
 
-@media(max-width:600px){
-
-    .dashboard{
-        grid-template-columns:
-            repeat(3,minmax(0,1fr));
-
-        gap:8px;
-    }
-
-    .box{
-        min-height:100px;
-        padding:12px 6px;
-    }
-
-    .box h2{
-        font-size:24px;
-    }
-
-    .box p{
-        font-size:11px;
-    }
-
-    .category-group{
-        grid-template-columns:
-            repeat(2,minmax(0,1fr));
-    }
-
-    #animeList{
-        grid-template-columns:
-            repeat(2,minmax(0,1fr));
-    }
-
-    .anime-card > img{
-        height:220px;
-    }
-
-    .anime-info{
-        padding:12px;
-    }
-
-    .anime-info h3{
-        font-size:15px;
-    }
-
-    .anime-info p{
-        font-size:11px;
-    }
-
-    .action{
-        padding:0 10px 10px;
-        gap:6px;
-    }
-
-    .editBtn,
-    .deleteBtn{
-        padding:8px 5px;
-        font-size:11px;
-    }
-
-}
+/* ======================================================
+   RESPONSIVE - MOBILE
+====================================================== */
 
 @media(max-width:600px){
 
     .topbar{
 
         padding:18px;
+
+        flex-direction:column;
+
+        align-items:flex-start;
 
     }
 
@@ -809,25 +1025,54 @@ hr{
 
     }
 
+    .homeBtn{
+
+        width:100%;
+
+    }
+
+
     .dashboard{
 
         width:calc(100% - 20px);
 
-        gap:12px;
+        grid-template-columns:
+            repeat(3,minmax(0,1fr));
+
+        gap:8px;
 
     }
 
     .box{
 
-        min-height:125px;
+        min-height:110px;
+
+        padding:12px 6px;
 
     }
 
     .box h2{
 
-        font-size:32px;
+        font-size:26px;
 
     }
+
+    .box p{
+
+        font-size:10px;
+
+    }
+
+    .box-icon{
+
+        width:38px;
+
+        height:38px;
+
+        font-size:18px;
+
+    }
+
 
     .card{
 
@@ -837,28 +1082,32 @@ hr{
 
     }
 
+    .card h2{
+
+        font-size:21px;
+
+    }
+
+
     .category-group{
 
         grid-template-columns:
             repeat(2,minmax(0,1fr));
 
-    }
-
-    #animeList{
-
-        width:calc(100% - 20px);
-
-        grid-template-columns:1fr;
+        gap:8px;
 
     }
 
-    .list-title{
+    .category-group label{
 
-        width:calc(100% - 20px);
+        min-height:46px;
 
-        font-size:24px;
+        padding:8px;
+
+        font-size:11px;
 
     }
+
 
     #searchAnime{
 
@@ -866,17 +1115,89 @@ hr{
 
     }
 
+
+    #animeList{
+
+        width:calc(100% - 20px);
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+        gap:12px;
+
+    }
+
+
+    .anime-card > img{
+
+        height:220px;
+
+    }
+
+
+    .anime-info{
+
+        padding:10px;
+
+    }
+
+
+    .anime-info h3{
+
+        font-size:14px;
+
+    }
+
+
+    .anime-info p{
+
+        font-size:10px;
+
+    }
+
+
+    .action{
+
+        padding:
+            0 10px 10px;
+
+        gap:6px;
+
+    }
+
+
+    .editBtn,
+    .deleteBtn{
+
+        padding:8px 5px;
+
+        font-size:10px;
+
+    }
+
+
+    .list-title{
+
+        width:calc(100% - 20px);
+
+        font-size:22px;
+
+    }
+
+
     hr{
 
         width:calc(100% - 20px);
 
     }
 
+
     .btn-group{
 
         flex-direction:column;
 
     }
+
 
     .btn-group button{
 
@@ -886,13 +1207,53 @@ hr{
 
 }
 
+
+/* ======================================================
+   VERY SMALL MOBILE
+====================================================== */
+
 @media(max-width:400px){
+
+    .dashboard{
+
+        gap:6px;
+
+    }
+
+    .box{
+
+        min-height:100px;
+
+        padding:8px 4px;
+
+    }
+
+    .box h2{
+
+        font-size:22px;
+
+    }
+
+    .box p{
+
+        font-size:9px;
+
+    }
+
 
     .category-group{
 
         grid-template-columns:1fr;
 
     }
+
+
+    #animeList{
+
+        grid-template-columns:1fr;
+
+    }
+
 
     .anime-card > img{
 

@@ -11,17 +11,28 @@
 
     <title>Anime Review Hub</title>
 
-    <!-- CSS -->
-    <link
-        rel="stylesheet"
-        href="css/style.css">
 
-    <!-- Google Font -->
+    <!-- =========================
+         CSS
+    ========================== -->
+
+   <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/theme.css">
+
+
+    <!-- =========================
+         Google Font
+    ========================== -->
+
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
 
-    <!-- Font Awesome -->
+
+    <!-- =========================
+         Font Awesome
+    ========================== -->
+
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
@@ -38,7 +49,13 @@
 
 <div class="top-user">
 
+
+    <!-- =========================
+         User Left
+    ========================== -->
+
     <div class="user-left">
+
 
         <!-- Profile Image -->
 
@@ -49,7 +66,7 @@
             alt="Profile">
 
 
-        <!-- User Info -->
+        <!-- User Name -->
 
         <div class="user-info">
 
@@ -59,10 +76,13 @@
 
         </div>
 
+
     </div>
 
 
-    <!-- User Actions -->
+    <!-- =========================
+         User Actions
+    ========================== -->
 
     <div class="user-actions">
 
@@ -92,7 +112,9 @@
 
         </button>
 
+
     </div>
+
 
 </div>
 
@@ -104,6 +126,7 @@
 
 <header>
 
+
     <div class="hero">
 
 
@@ -114,46 +137,52 @@
         <div class="hero-top">
 
 
-            <!-- Logo -->
+            <!-- =========================
+                 Logo
+            ========================== -->
 
-            <div class="logo">
+          <div class="logo">
 
-                <div class="logo-icon">
+    <div class="logo-icon">
 
-                    <img
-                        src="images/logo-icon.png"
-                        alt="Anime Review Hub">
+       <img
+    src="logo-icon.png"
+    alt="Anime Review Hub">
 
-                </div>
+    </div>
 
+    <div class="logo-text">
 
-                <div class="logo-text">
+        <h1>Anime Review Hub</h1>
 
-                    <h1>
-                        Anime Review Hub
-                    </h1>
+        <p>
+            Discover • Review • Favorite
+        </p>
 
-                    <p>
-                        Discover • Review • Favorite
-                    </p>
+    </div>
 
-                </div>
-
-            </div>
+</div>
 
 
-            <!-- Search -->
+
+            <!-- =========================
+                 Search
+            ========================== -->
 
             <div class="hero-search">
+
 
                 <i
                     class="fa-solid fa-magnifying-glass">
                 </i>
 
+
                 <input
                     type="text"
                     id="searchAnime"
-                    placeholder="ค้นหาอนิเมะ...">
+                    placeholder="ค้นหาอนิเมะ..."
+                    autocomplete="off">
+
 
             </div>
 
@@ -175,7 +204,9 @@
                 href="pages/favorite.html"
                 class="nav-btn">
 
-                ❤️ Favorite
+                <span>❤️</span>
+
+                <span>Favorite</span>
 
             </a>
 
@@ -186,7 +217,9 @@
                 href="pages/bookmark.html"
                 class="nav-btn">
 
-                🔖 Bookmark
+                <span>🔖</span>
+
+                <span>Bookmark</span>
 
             </a>
 
@@ -197,7 +230,9 @@
                 href="pages/profile.html"
                 class="nav-btn">
 
-                👤 Profile
+                <span>👤</span>
+
+                <span>Profile</span>
 
             </a>
 
@@ -210,7 +245,9 @@
                 class="nav-btn"
                 style="display:none;">
 
-                ⚙️ Admin
+                <span>⚙️</span>
+
+                <span>Admin</span>
 
             </a>
 
@@ -228,13 +265,17 @@
             class="super-admin-menu"
             style="display:none;">
 
+
             <a
                 href="pages/users.html"
                 class="nav-btn">
 
-                👥 Users Management
+                <span>👥</span>
+
+                <span>Users Management</span>
 
             </a>
+
 
         </div>
 
@@ -253,9 +294,9 @@
 
 
     <button
-        class="active"
         type="button"
-        onclick="filterAnime(event,'All')">
+        class="active"
+        onclick="filterAnime(event, 'All')">
 
         🔥 ทั้งหมด
 
@@ -264,7 +305,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Action')">
+        onclick="filterAnime(event, 'Action')">
 
         🟣 Action
 
@@ -273,7 +314,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Adventure')">
+        onclick="filterAnime(event, 'Adventure')">
 
         🟢 Adventure
 
@@ -282,7 +323,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Fantasy')">
+        onclick="filterAnime(event, 'Fantasy')">
 
         🟠 Fantasy
 
@@ -291,7 +332,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Comedy')">
+        onclick="filterAnime(event, 'Comedy')">
 
         🟡 Comedy
 
@@ -300,7 +341,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Romance')">
+        onclick="filterAnime(event, 'Romance')">
 
         ❤️ Romance
 
@@ -309,7 +350,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Sport')">
+        onclick="filterAnime(event, 'Sport')">
 
         ⚽ Sport
 
@@ -318,7 +359,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Drama')">
+        onclick="filterAnime(event, 'Drama')">
 
         🎭 Drama
 
@@ -327,7 +368,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Sci-Fi')">
+        onclick="filterAnime(event, 'Sci-Fi')">
 
         🚀 Sci-Fi
 
@@ -336,7 +377,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Mystery')">
+        onclick="filterAnime(event, 'Mystery')">
 
         🕵️ Mystery
 
@@ -345,7 +386,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Horror')">
+        onclick="filterAnime(event, 'Horror')">
 
         👻 Horror
 
@@ -354,7 +395,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'School')">
+        onclick="filterAnime(event, 'School')">
 
         🏫 School
 
@@ -363,7 +404,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Slice of Life')">
+        onclick="filterAnime(event, 'Slice of Life')">
 
         🌸 Slice of Life
 
@@ -372,7 +413,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Supernatural')">
+        onclick="filterAnime(event, 'Supernatural')">
 
         ✨ Supernatural
 
@@ -381,7 +422,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Isekai')">
+        onclick="filterAnime(event, 'Isekai')">
 
         🌍 Isekai
 
@@ -390,7 +431,7 @@
 
     <button
         type="button"
-        onclick="filterAnime(event,'Music')">
+        onclick="filterAnime(event, 'Music')">
 
         🎵 Music
 
@@ -412,6 +453,7 @@
         <h2>
             🔥 Trending Anime
         </h2>
+
 
         <p>
             ค้นหาอนิเมะที่คุณชื่นชอบและแบ่งปันรีวิวกับทุกคน
@@ -449,16 +491,9 @@
      JAVASCRIPT
 ===================================================== -->
 
-<script
-    type="module"
-    src="js/script.js">
-</script>
-
-
-<script
-    type="module"
-    src="js/user.js">
-</script>
+<script type="module" src="js/theme.js"></script>
+<script type="module" src="js/script.js"></script>
+<script type="module" src="js/user.js"></script>
 
 
 </body>

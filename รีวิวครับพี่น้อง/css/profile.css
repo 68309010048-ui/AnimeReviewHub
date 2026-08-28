@@ -1,6 +1,13 @@
+
 /* ======================================================
    Anime Review Hub
    Profile CSS
+   Light / Dark Support
+====================================================== */
+
+
+/* ======================================================
+   RESET
 ====================================================== */
 
 *{
@@ -15,14 +22,23 @@ html{
 
 body{
     font-family:'Poppins',sans-serif;
+
     background:#f3f4f6;
+
     color:#1f2937;
+
     min-height:100vh;
+
     overflow-x:hidden;
+
+    transition:
+        background .25s ease,
+        color .25s ease;
 }
 
 a{
     text-decoration:none;
+
     color:inherit;
 }
 
@@ -32,9 +48,9 @@ input{
 }
 
 
-/* ==========================
-   Header
-========================== */
+/* ======================================================
+   HEADER
+====================================================== */
 
 .profile-header{
 
@@ -52,8 +68,8 @@ input{
 
     box-shadow:
         0 10px 30px rgba(0,0,0,.15);
-
 }
+
 
 .back-btn{
 
@@ -63,18 +79,21 @@ input{
 
     gap:8px;
 
-    background:rgba(255,255,255,.15);
+    background:
+        rgba(255,255,255,.15);
 
-    border:1px solid rgba(255,255,255,.25);
+    border:1px solid
+        rgba(255,255,255,.25);
 
     padding:10px 18px;
 
     border-radius:12px;
 
+    color:#fff;
+
     font-weight:600;
 
     transition:.3s;
-
 }
 
 .back-btn:hover{
@@ -84,8 +103,8 @@ input{
     color:#6d28d9;
 
     transform:translateY(-2px);
-
 }
+
 
 .header-title{
 
@@ -98,25 +117,26 @@ input{
     gap:12px;
 
     margin-top:20px;
-
 }
+
 
 .header-title i{
 
     font-size:30px;
-
 }
+
 
 .header-title h1{
 
     font-size:32px;
 
+    color:#fff;
 }
 
 
-/* ==========================
-   Container
-========================== */
+/* ======================================================
+   CONTAINER
+====================================================== */
 
 .profile-container{
 
@@ -125,17 +145,18 @@ input{
     max-width:1000px;
 
     margin:35px auto 60px;
-
 }
 
 
-/* ==========================
-   Profile Card
-========================== */
+/* ======================================================
+   PROFILE CARD
+====================================================== */
 
 .profile-card{
 
     background:#fff;
+
+    color:#1f2937;
 
     border-radius:25px;
 
@@ -146,7 +167,14 @@ input{
     box-shadow:
         0 12px 30px rgba(0,0,0,.08);
 
+    border:1px solid #e5e7eb;
+
+    transition:
+        background .25s ease,
+        color .25s ease,
+        border-color .25s ease;
 }
+
 
 .profile-image-box{
 
@@ -166,8 +194,8 @@ input{
             #7c3aed,
             #c084fc
         );
-
 }
+
 
 .profile-image-box img{
 
@@ -180,8 +208,8 @@ input{
     object-fit:cover;
 
     background:#fff;
-
 }
+
 
 .profile-card h2{
 
@@ -189,7 +217,9 @@ input{
 
     color:#111827;
 
+    transition:color .25s ease;
 }
+
 
 .profile-card > p{
 
@@ -198,8 +228,8 @@ input{
     margin-top:5px;
 
     word-break:break-word;
-
 }
+
 
 .role-badge{
 
@@ -218,13 +248,12 @@ input{
     font-size:13px;
 
     font-weight:600;
-
 }
 
 
-/* ==========================
-   Statistics
-========================== */
+/* ======================================================
+   STATISTICS
+====================================================== */
 
 .stats-grid{
 
@@ -236,12 +265,16 @@ input{
     gap:18px;
 
     margin-top:20px;
-
 }
+
 
 .stat-card{
 
     background:#fff;
+
+    color:#1f2937;
+
+    border:1px solid #e5e7eb;
 
     border-radius:20px;
 
@@ -252,60 +285,67 @@ input{
     box-shadow:
         0 10px 25px rgba(0,0,0,.07);
 
-    transition:.3s;
-
+    transition:
+        transform .3s ease,
+        background .25s ease,
+        border-color .25s ease;
 }
+
 
 .stat-card:hover{
 
     transform:translateY(-5px);
-
 }
+
 
 .stat-card i{
 
     font-size:28px;
 
     margin-bottom:10px;
-
 }
+
 
 .stat-card h3{
 
     font-size:30px;
 
     color:#111827;
-
 }
+
 
 .stat-card p{
 
     color:#6b7280;
 
     font-size:14px;
-
 }
+
 
 .favorite-stat i{
     color:#ef4444;
 }
 
+
 .bookmark-stat i{
     color:#2563eb;
 }
+
 
 .review-stat i{
     color:#7c3aed;
 }
 
 
-/* ==========================
-   Edit Card
-========================== */
+/* ======================================================
+   EDIT CARD
+====================================================== */
 
 .edit-card{
 
     background:#fff;
+
+    color:#1f2937;
 
     margin-top:20px;
 
@@ -313,10 +353,12 @@ input{
 
     padding:25px;
 
+    border:1px solid #e5e7eb;
+
     box-shadow:
         0 10px 25px rgba(0,0,0,.07);
-
 }
+
 
 .section-title{
 
@@ -327,24 +369,24 @@ input{
     gap:10px;
 
     margin-bottom:20px;
-
 }
+
 
 .section-title i{
 
     color:#7c3aed;
 
     font-size:22px;
-
 }
+
 
 .section-title h2{
 
     font-size:22px;
 
     color:#111827;
-
 }
+
 
 .edit-card label{
 
@@ -357,8 +399,8 @@ input{
     font-weight:600;
 
     color:#374151;
-
 }
+
 
 .edit-card input{
 
@@ -376,18 +418,25 @@ input{
 
     background:#fff;
 
-    transition:.25s;
+    color:#1f2937;
 
+    transition:.25s;
 }
+
 
 .edit-card input:focus{
 
     border-color:#7c3aed;
 
     box-shadow:
-        0 0 0 4px rgba(124,58,237,.12);
-
+        0 0 0 4px
+        rgba(124,58,237,.12);
 }
+
+
+/* ======================================================
+   SAVE BUTTON
+====================================================== */
 
 #saveProfile{
 
@@ -417,22 +466,22 @@ input{
     cursor:pointer;
 
     transition:.3s;
-
 }
+
 
 #saveProfile:hover{
 
     transform:translateY(-2px);
 
     box-shadow:
-        0 8px 20px rgba(124,58,237,.25);
-
+        0 8px 20px
+        rgba(124,58,237,.25);
 }
 
 
-/* ==========================
-   Quick Menu
-========================== */
+/* ======================================================
+   QUICK MENU
+====================================================== */
 
 .quick-menu{
 
@@ -441,8 +490,8 @@ input{
     gap:12px;
 
     margin-top:20px;
-
 }
+
 
 .quick-card{
 
@@ -459,14 +508,21 @@ input{
 
     background:#fff;
 
+    color:#1f2937;
+
+    border:1px solid #e5e7eb;
+
     border-radius:16px;
 
     box-shadow:
         0 8px 20px rgba(0,0,0,.06);
 
-    transition:.3s;
-
+    transition:
+        transform .3s ease,
+        background .25s ease,
+        border-color .25s ease;
 }
+
 
 .quick-card:hover{
 
@@ -474,8 +530,8 @@ input{
 
     box-shadow:
         0 12px 25px rgba(0,0,0,.1);
-
 }
+
 
 .quick-card > i:first-child{
 
@@ -494,16 +550,16 @@ input{
     background:#ede9fe;
 
     color:#7c3aed;
-
 }
+
 
 .quick-card h3{
 
     font-size:16px;
 
     color:#111827;
-
 }
+
 
 .quick-card p{
 
@@ -512,19 +568,18 @@ input{
     color:#6b7280;
 
     margin-top:2px;
-
 }
+
 
 .quick-card > i:last-child{
 
     color:#9ca3af;
-
 }
 
 
-/* ==========================
-   Logout
-========================== */
+/* ======================================================
+   LOGOUT
+====================================================== */
 
 .logout-btn{
 
@@ -549,19 +604,18 @@ input{
     cursor:pointer;
 
     transition:.3s;
-
 }
+
 
 .logout-btn:hover{
 
     background:#dc2626;
-
 }
 
 
-/* ==========================
-   Toast
-========================== */
+/* ======================================================
+   TOAST
+====================================================== */
 
 #toast{
 
@@ -591,8 +645,8 @@ input{
     z-index:9999;
 
     text-align:center;
-
 }
+
 
 #toast.show{
 
@@ -600,13 +654,108 @@ input{
 
     transform:
         translate(-50%,0);
-
 }
 
 
-/* ==========================
-   Responsive
-========================== */
+/* ======================================================
+   DARK MODE
+====================================================== */
+
+body.dark{
+
+    background:#080b1a !important;
+
+    color:#f8fafc !important;
+}
+
+
+body.dark .profile-container{
+
+    background:transparent !important;
+}
+
+
+body.dark .profile-card,
+body.dark .stat-card,
+body.dark .edit-card,
+body.dark .quick-card{
+
+    background:#11162a !important;
+
+    color:#f8fafc !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.3);
+}
+
+
+body.dark .profile-card h2,
+body.dark .stat-card h3,
+body.dark .section-title h2,
+body.dark .quick-card h3{
+
+    color:#fff !important;
+}
+
+
+body.dark .profile-card > p,
+body.dark .stat-card p,
+body.dark .quick-card p{
+
+    color:#cbd5e1 !important;
+}
+
+
+body.dark .edit-card label{
+
+    color:#e5e7eb !important;
+}
+
+
+body.dark .edit-card input{
+
+    background:#0f172a !important;
+
+    color:#fff !important;
+
+    border-color:#374151 !important;
+}
+
+
+body.dark .edit-card input::placeholder{
+
+    color:#94a3b8 !important;
+}
+
+
+body.dark .quick-card > i:first-child{
+
+    background:#272044 !important;
+
+    color:#c4b5fd !important;
+}
+
+
+body.dark .quick-card > i:last-child{
+
+    color:#94a3b8 !important;
+}
+
+
+body.dark .role-badge{
+
+    background:#272044 !important;
+
+    color:#c4b5fd !important;
+}
+
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
 
 @media(max-width:768px){
 
@@ -616,11 +765,13 @@ input{
 
     }
 
+
     .header-title h1{
 
         font-size:26px;
 
     }
+
 
     .profile-container{
 
@@ -630,17 +781,20 @@ input{
 
     }
 
+
     .stats-grid{
 
         grid-template-columns:1fr;
 
     }
 
+
     .profile-card{
 
         padding:30px 18px;
 
     }
+
 
     .profile-image-box{
 
@@ -652,6 +806,7 @@ input{
 
 }
 
+
 @media(max-width:480px){
 
     .back-btn{
@@ -662,11 +817,13 @@ input{
 
     }
 
+
     .header-title h1{
 
         font-size:23px;
 
     }
+
 
     .profile-card h2{
 
@@ -674,11 +831,13 @@ input{
 
     }
 
+
     .edit-card{
 
         padding:18px;
 
     }
+
 
     .quick-card{
 
@@ -687,3 +846,4 @@ input{
     }
 
 }
+

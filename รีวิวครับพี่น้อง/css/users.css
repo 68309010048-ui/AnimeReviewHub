@@ -1,6 +1,12 @@
 /* ======================================================
    Anime Review Hub
    User Management
+   Light / Dark Mode
+====================================================== */
+
+
+/* ======================================================
+   RESET
 ====================================================== */
 
 *{
@@ -15,10 +21,18 @@ html{
 
 body{
     font-family:'Poppins',sans-serif;
+
     background:#f3f4f6;
+
     color:#1f2937;
+
     min-height:100vh;
+
     overflow-x:hidden;
+
+    transition:
+        background .25s ease,
+        color .25s ease;
 }
 
 a{
@@ -32,9 +46,9 @@ input{
 }
 
 
-/* =========================
-   Header
-========================= */
+/* ======================================================
+   HEADER
+====================================================== */
 
 .users-header{
 
@@ -65,6 +79,7 @@ input{
 
 }
 
+
 .header-left{
 
     display:flex;
@@ -77,11 +92,14 @@ input{
 
 }
 
+
 .back-btn{
 
     display:inline-flex;
 
     align-items:center;
+
+    justify-content:center;
 
     gap:8px;
 
@@ -89,9 +107,11 @@ input{
 
     border-radius:12px;
 
-    background:rgba(255,255,255,.15);
+    background:
+        rgba(255,255,255,.15);
 
-    border:1px solid rgba(255,255,255,.25);
+    border:1px solid
+        rgba(255,255,255,.25);
 
     color:#fff;
 
@@ -105,12 +125,17 @@ input{
 
 }
 
+
 .back-btn:hover{
 
     background:#fff;
+
     color:#6d28d9;
 
+    transform:translateY(-2px);
+
 }
+
 
 .page-title{
 
@@ -120,31 +145,43 @@ input{
 
     gap:12px;
 
+    min-width:0;
+
 }
+
 
 .title-icon{
 
     width:48px;
+
     height:48px;
 
     display:flex;
 
     align-items:center;
+
     justify-content:center;
+
+    flex-shrink:0;
 
     border-radius:14px;
 
-    background:rgba(255,255,255,.15);
+    background:
+        rgba(255,255,255,.15);
 
     font-size:22px;
 
 }
 
+
 .page-title h1{
 
     font-size:26px;
 
+    color:#fff;
+
 }
+
 
 .page-title p{
 
@@ -156,11 +193,14 @@ input{
 
 }
 
+
 .role-badge{
 
     display:flex;
 
     align-items:center;
+
+    justify-content:center;
 
     gap:8px;
 
@@ -168,20 +208,26 @@ input{
 
     border-radius:999px;
 
-    background:rgba(255,255,255,.15);
+    background:
+        rgba(255,255,255,.15);
 
-    border:1px solid rgba(255,255,255,.25);
+    border:1px solid
+        rgba(255,255,255,.25);
+
+    color:#fff;
 
     font-size:13px;
 
     font-weight:600;
 
+    white-space:nowrap;
+
 }
 
 
-/* =========================
-   Container
-========================= */
+/* ======================================================
+   CONTAINER
+====================================================== */
 
 .users-container{
 
@@ -194,9 +240,9 @@ input{
 }
 
 
-/* =========================
-   Summary
-========================= */
+/* ======================================================
+   SUMMARY
+====================================================== */
 
 .summary-grid{
 
@@ -211,9 +257,14 @@ input{
 
 }
 
+
 .summary-card{
 
     background:#fff;
+
+    color:#1f2937;
+
+    border:1px solid #e5e7eb;
 
     border-radius:20px;
 
@@ -230,9 +281,13 @@ input{
 
     cursor:pointer;
 
-    transition:.25s;
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        border-color .25s ease;
 
 }
+
 
 .summary-card:hover{
 
@@ -240,15 +295,20 @@ input{
 
 }
 
+
 .summary-icon{
 
     width:52px;
+
     height:52px;
 
     display:flex;
 
     align-items:center;
+
     justify-content:center;
+
+    flex-shrink:0;
 
     border-radius:15px;
 
@@ -256,26 +316,33 @@ input{
 
 }
 
+
 .user-card .summary-icon{
 
     background:#dbeafe;
+
     color:#2563eb;
 
 }
 
+
 .admin-card .summary-icon{
 
     background:#ede9fe;
+
     color:#7c3aed;
 
 }
 
+
 .super-card .summary-icon{
 
     background:#fef3c7;
+
     color:#d97706;
 
 }
+
 
 .summary-card h2{
 
@@ -283,7 +350,10 @@ input{
 
     line-height:1;
 
+    color:#111827;
+
 }
+
 
 .summary-card p{
 
@@ -296,15 +366,16 @@ input{
 }
 
 
-/* =========================
-   Search
-========================= */
+/* ======================================================
+   SEARCH
+====================================================== */
 
 .search-panel{
 
     margin-bottom:15px;
 
 }
+
 
 .search-box{
 
@@ -320,6 +391,10 @@ input{
 
     background:#fff;
 
+    color:#1f2937;
+
+    border:1px solid #e5e7eb;
+
     border-radius:16px;
 
     box-shadow:
@@ -327,11 +402,13 @@ input{
 
 }
 
+
 .search-box i{
 
     color:#7c3aed;
 
 }
+
 
 .search-box input{
 
@@ -343,14 +420,23 @@ input{
 
     background:transparent;
 
+    color:#1f2937;
+
     font-size:15px;
 
 }
 
 
-/* =========================
-   Filter
-========================= */
+.search-box input::placeholder{
+
+    color:#9ca3af;
+
+}
+
+
+/* ======================================================
+   FILTER
+====================================================== */
 
 .filter-bar{
 
@@ -364,9 +450,10 @@ input{
 
 }
 
+
 .filter-btn{
 
-    border:none;
+    border:1px solid #e5e7eb;
 
     padding:10px 18px;
 
@@ -389,6 +476,7 @@ input{
 
 }
 
+
 .filter-btn:hover{
 
     background:#ede9fe;
@@ -396,6 +484,7 @@ input{
     color:#6d28d9;
 
 }
+
 
 .filter-btn.active{
 
@@ -408,16 +497,22 @@ input{
 
     color:#fff;
 
+    border-color:#7c3aed;
+
 }
 
 
-/* =========================
-   Main Card
-========================= */
+/* ======================================================
+   MAIN USERS CARD
+====================================================== */
 
 .users-card{
 
     background:#fff;
+
+    color:#1f2937;
+
+    border:1px solid #e5e7eb;
 
     border-radius:20px;
 
@@ -427,6 +522,7 @@ input{
         0 10px 28px rgba(0,0,0,.07);
 
 }
+
 
 .card-header{
 
@@ -442,11 +538,15 @@ input{
 
 }
 
+
 .card-header h2{
 
     font-size:24px;
 
+    color:#111827;
+
 }
+
 
 .card-header p{
 
@@ -458,11 +558,14 @@ input{
 
 }
 
+
 .refresh-btn{
 
     display:inline-flex;
 
     align-items:center;
+
+    justify-content:center;
 
     gap:8px;
 
@@ -482,12 +585,23 @@ input{
 
     cursor:pointer;
 
+    transition:.25s;
+
 }
 
 
-/* =========================
-   Table
-========================= */
+.refresh-btn:hover{
+
+    background:#6d28d9;
+
+    transform:translateY(-2px);
+
+}
+
+
+/* ======================================================
+   TABLE
+====================================================== */
 
 .table-wrapper{
 
@@ -501,6 +615,7 @@ input{
 
 }
 
+
 table{
 
     width:100%;
@@ -509,13 +624,17 @@ table{
 
     border-collapse:collapse;
 
+    background:#fff;
+
 }
+
 
 thead{
 
     background:#f8fafc;
 
 }
+
 
 th,
 td{
@@ -530,6 +649,7 @@ td{
 
 }
 
+
 th{
 
     font-size:13px;
@@ -538,11 +658,22 @@ th{
 
 }
 
+
 td{
 
     font-size:14px;
 
+    color:#1f2937;
+
 }
+
+
+tbody tr{
+
+    background:#fff;
+
+}
+
 
 tbody tr:hover{
 
@@ -551,9 +682,9 @@ tbody tr:hover{
 }
 
 
-/* =========================
-   User Cell
-========================= */
+/* ======================================================
+   USER CELL
+====================================================== */
 
 .user-cell{
 
@@ -565,9 +696,11 @@ tbody tr:hover{
 
 }
 
+
 .user-avatar{
 
     width:46px;
+
     height:46px;
 
     border-radius:50%;
@@ -576,9 +709,12 @@ tbody tr:hover{
 
     border:2px solid #c4b5fd;
 
+    background:#f3f4f6;
+
     flex-shrink:0;
 
 }
+
 
 .user-name{
 
@@ -589,13 +725,17 @@ tbody tr:hover{
 }
 
 
-/* =========================
-   Role
-========================= */
+/* ======================================================
+   ROLE
+====================================================== */
 
 .user-role{
 
     display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
 
     padding:6px 11px;
 
@@ -607,31 +747,37 @@ tbody tr:hover{
 
 }
 
+
 .role-user{
 
     background:#dbeafe;
+
     color:#1d4ed8;
 
 }
 
+
 .role-admin{
 
     background:#ede9fe;
+
     color:#6d28d9;
 
 }
 
+
 .role-superadmin{
 
     background:#fef3c7;
+
     color:#b45309;
 
 }
 
 
-/* =========================
-   Actions
-========================= */
+/* ======================================================
+   ACTIONS
+====================================================== */
 
 .user-actions{
 
@@ -642,6 +788,7 @@ tbody tr:hover{
     gap:8px;
 
 }
+
 
 .action-btn{
 
@@ -659,7 +806,10 @@ tbody tr:hover{
 
     cursor:pointer;
 
+    transition:.25s;
+
 }
+
 
 .promote-btn{
 
@@ -667,11 +817,13 @@ tbody tr:hover{
 
 }
 
+
 .promote-btn:hover{
 
     background:#6d28d9;
 
 }
+
 
 .demote-btn{
 
@@ -679,11 +831,13 @@ tbody tr:hover{
 
 }
 
+
 .demote-btn:hover{
 
     background:#1d4ed8;
 
 }
+
 
 .disabled-btn{
 
@@ -696,9 +850,9 @@ tbody tr:hover{
 }
 
 
-/* =========================
-   Loading
-========================= */
+/* ======================================================
+   LOADING
+====================================================== */
 
 .loading{
 
@@ -718,9 +872,11 @@ tbody tr:hover{
 
 }
 
+
 .loader{
 
     width:48px;
+
     height:48px;
 
     border:5px solid #e5e7eb;
@@ -733,6 +889,7 @@ tbody tr:hover{
 
 }
 
+
 @keyframes spin{
 
     to{
@@ -742,9 +899,9 @@ tbody tr:hover{
 }
 
 
-/* =========================
-   Empty
-========================= */
+/* ======================================================
+   EMPTY
+====================================================== */
 
 .empty-users{
 
@@ -753,6 +910,7 @@ tbody tr:hover{
     text-align:center;
 
 }
+
 
 .empty-users i{
 
@@ -764,13 +922,17 @@ tbody tr:hover{
 
 }
 
+
 .empty-users h3{
 
     font-size:22px;
 
     margin-bottom:6px;
 
+    color:#111827;
+
 }
+
 
 .empty-users p{
 
@@ -781,15 +943,16 @@ tbody tr:hover{
 }
 
 
-/* =========================
-   Toast
-========================= */
+/* ======================================================
+   TOAST
+====================================================== */
 
 #toast{
 
     position:fixed;
 
     left:50%;
+
     bottom:25px;
 
     transform:
@@ -815,6 +978,7 @@ tbody tr:hover{
 
 }
 
+
 #toast.show{
 
     opacity:1;
@@ -825,9 +989,275 @@ tbody tr:hover{
 }
 
 
-/* =========================
-   Responsive
-========================= */
+/* ======================================================
+   DARK MODE
+====================================================== */
+
+body.dark{
+
+    background:#080b1a !important;
+
+    color:#f8fafc !important;
+
+}
+
+
+body.dark .users-container{
+
+    background:transparent !important;
+
+}
+
+
+/* Summary */
+
+body.dark .summary-card{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.3);
+
+}
+
+
+body.dark .summary-card h2{
+
+    color:#fff !important;
+
+}
+
+
+body.dark .summary-card p{
+
+    color:#cbd5e1 !important;
+
+}
+
+
+/* Search */
+
+body.dark .search-box{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+}
+
+
+body.dark .search-box input{
+
+    background:transparent !important;
+
+    color:#fff !important;
+
+}
+
+
+body.dark .search-box input::placeholder{
+
+    color:#94a3b8 !important;
+
+}
+
+
+/* Filter */
+
+body.dark .filter-btn{
+
+    background:#171a2d !important;
+
+    color:#ddd6fe !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+}
+
+
+body.dark .filter-btn:hover{
+
+    background:#312e81 !important;
+
+    color:#fff !important;
+
+}
+
+
+body.dark .filter-btn.active{
+
+    background:#7c3aed !important;
+
+    color:#fff !important;
+
+}
+
+
+/* Main Card */
+
+body.dark .users-card{
+
+    background:#11162a !important;
+
+    color:#f8fafc !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.3);
+
+}
+
+
+body.dark .card-header h2{
+
+    color:#fff !important;
+
+}
+
+
+body.dark .card-header p{
+
+    color:#cbd5e1 !important;
+
+}
+
+
+/* Table */
+
+body.dark .table-wrapper{
+
+    border-color:#374151 !important;
+
+}
+
+
+body.dark table{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+}
+
+
+body.dark thead{
+
+    background:#1f2937 !important;
+
+}
+
+
+body.dark th{
+
+    background:#1f2937 !important;
+
+    color:#fff !important;
+
+    border-color:#374151 !important;
+
+}
+
+
+body.dark tbody{
+
+    background:#11162a !important;
+
+}
+
+
+body.dark tbody tr{
+
+    background:#11162a !important;
+
+}
+
+
+body.dark tbody tr:hover{
+
+    background:#1a2235 !important;
+
+}
+
+
+body.dark td{
+
+    background:#11162a !important;
+
+    color:#e5e7eb !important;
+
+    border-color:#374151 !important;
+
+}
+
+
+/* User */
+
+body.dark .user-name{
+
+    color:#fff !important;
+
+}
+
+
+body.dark .user-avatar{
+
+    background:#1f2937 !important;
+
+    border-color:#7c3aed !important;
+
+}
+
+
+/* Empty */
+
+body.dark .empty-users{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+}
+
+
+body.dark .empty-users h3{
+
+    color:#fff !important;
+
+}
+
+
+body.dark .empty-users p{
+
+    color:#94a3b8 !important;
+
+}
+
+
+/* Disabled button */
+
+body.dark .disabled-btn{
+
+    background:#374151 !important;
+
+    color:#9ca3af !important;
+
+}
+
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
 
 @media(max-width:900px){
 
@@ -837,11 +1267,13 @@ tbody tr:hover{
 
     }
 
+
     .users-container{
 
         width:calc(100% - 30px);
 
     }
+
 
     .summary-grid{
 
@@ -851,6 +1283,10 @@ tbody tr:hover{
 
 }
 
+
+/* ======================================================
+   MOBILE
+====================================================== */
 
 @media(max-width:600px){
 
@@ -862,6 +1298,7 @@ tbody tr:hover{
 
     }
 
+
     .header-left{
 
         width:100%;
@@ -870,11 +1307,20 @@ tbody tr:hover{
 
     }
 
+
+    .page-title{
+
+        min-width:0;
+
+    }
+
+
     .page-title h1{
 
         font-size:20px;
 
     }
+
 
     .page-title p{
 
@@ -882,14 +1328,17 @@ tbody tr:hover{
 
     }
 
+
     .title-icon{
 
         width:42px;
+
         height:42px;
 
         font-size:18px;
 
     }
+
 
     .role-badge{
 
@@ -901,6 +1350,7 @@ tbody tr:hover{
 
     }
 
+
     .users-container{
 
         width:calc(100% - 20px);
@@ -908,6 +1358,7 @@ tbody tr:hover{
         margin-top:18px;
 
     }
+
 
     .summary-grid{
 
@@ -917,6 +1368,7 @@ tbody tr:hover{
         gap:7px;
 
     }
+
 
     .summary-card{
 
@@ -930,14 +1382,17 @@ tbody tr:hover{
 
     }
 
+
     .summary-icon{
 
         width:36px;
+
         height:36px;
 
         font-size:16px;
 
     }
+
 
     .summary-card h2{
 
@@ -945,11 +1400,13 @@ tbody tr:hover{
 
     }
 
+
     .summary-card p{
 
         font-size:9px;
 
     }
+
 
     .filter-bar{
 
@@ -961,6 +1418,7 @@ tbody tr:hover{
 
     }
 
+
     .filter-btn{
 
         flex:0 0 auto;
@@ -971,6 +1429,7 @@ tbody tr:hover{
 
     }
 
+
     .users-card{
 
         padding:15px;
@@ -979,11 +1438,20 @@ tbody tr:hover{
 
     }
 
+
+    .card-header{
+
+        flex-wrap:wrap;
+
+    }
+
+
     .card-header h2{
 
         font-size:20px;
 
     }
+
 
     .refresh-btn{
 
@@ -993,6 +1461,7 @@ tbody tr:hover{
 
     }
 
+
     table{
 
         min-width:700px;
@@ -1000,3 +1469,4 @@ tbody tr:hover{
     }
 
 }
+

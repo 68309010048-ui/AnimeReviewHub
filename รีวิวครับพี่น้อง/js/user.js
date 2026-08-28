@@ -29,181 +29,320 @@ const userAvatar =
 const adminMenu =
     document.getElementById("adminMenu");
 
+const superAdminMenu =
+    document.getElementById("superAdminMenu");
+
 const logoutBtn =
     document.getElementById("logoutBtn");
+
+const darkBtn =
+    document.getElementById("darkBtn");
+
+
+// ======================================================
+// Theme
+// ======================================================
+
+function loadTheme() {
+
+    const theme =
+        localStorage.getItem("theme") || "dark";
+
+    if (theme === "light") {
+
+        document.body.classList.add("light");
+
+    } else {
+
+        document.body.classList.remove("light");
+
+    }
+
+    updateDarkButton();
+
+}
+
+
+function updateDarkButton() {
+
+    if (!darkBtn) return;
+
+    const isLight =
+        document.body.classList.contains("light");
+
+    darkBtn.textContent =
+        isLight ? "☀️" : "🌙";
+
+}
+
+
+if (darkBtn) {
+
+    darkBtn.addEventListener(
+        "click",
+        () => {
+
+            document.body.classList.toggle(
+                "light"
+            );
+
+            localStorage.setItem(
+                "theme",
+                document.body.classList.contains("light")
+                    ? "light"
+                    : "dark"
+            );
+
+            updateDarkButton();
+
+        }
+    );
+
+}
+
+
+loadTheme();
 
 
 // ======================================================
 // Authentication
 // ======================================================
 
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(
+    auth,
+    async (user) => {
 
-    if (!user) {
-
-        window.location.href =
-            "pages/login.html";
-
-        return;
-
-    }
-
-    try {
-
-        const userSnap = await getDoc(
-            doc(db, "users", user.uid)
+        console.log(
+            "Current Firebase User:",
+            user
         );
 
-        let userName =
-            user.displayName ||
-            user.email ||
-            "User";
 
-        let role = "user";
+        // ==================================================
+        // ไม่ได้ Login
+        // ==================================================
 
-        let photo =
-            user.photoURL ||
-            `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
-                userName
-            )}`;
+        if (!user) {
+
+            if (username) {
+
+                username.textContent =
+                    "กรุณาเข้าสู่ระบบ";
+
+            }
+
+            if (userAvatar) {
+
+                userAvatar.src =
+                    "https://api.dicebear.com/9.x/initials/svg?seed=User";
+
+            }
+
+            if (adminMenu) {
+
+                adminMenu.style.display =
+                    "none";
+
+            }
+
+            if (superAdminMenu) {
+
+                superAdminMenu.style.display =
+                    "none";
+
+            }
+
+            return;
+
+        }
 
 
-        // ==========================================
-        // Firestore User
-        // ==========================================
+        try {
 
-        if (userSnap.exists()) {
+            // ==================================================
+            // Default Firebase data
+            // ==================================================
 
-            const data = userSnap.data();
-
-            userName =
-                data.name ||
+            let userName =
                 user.displayName ||
                 user.email ||
                 "User";
 
-            role =
-                data.role ||
+
+            let photo =
+                user.photoURL ||
+                "";
+
+
+            let role =
                 "user";
 
-            photo =
-                data.photo ||
-                data.photoURL ||
-                user.photoURL ||
-                `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
-                    userName
-                )}`;
 
-        }
+            // ==================================================
+            // Firestore users/{uid}
+            // ==================================================
 
-
-        // ==========================================
-        // ชื่อ
-        // ==========================================
-
-        if (username) {
-
-            username.textContent =
-                "👋 " + userName;
-
-        }
+            const userRef =
+                doc(
+                    db,
+                    "users",
+                    user.uid
+                );
 
 
-        // ==========================================
-        // รูป Profile
-        // ==========================================
-
-        if (userAvatar) {
-
-            userAvatar.src = photo;
-
-            userAvatar.alt =
-                userName;
-
-        }
+            const snap =
+                await getDoc(
+                    userRef
+                );
 
 
-        // ==========================================
-        // Admin Menu
-        // admin + superadmin
-        // ==========================================
-
-        if (adminMenu) {
-
-            if (
-                role === "admin" ||
-                role === "superadmin"
-            ) {
-
-                adminMenu.style.display =
-                    "inline-flex";
-
-            }
-            else {
-
-                adminMenu.style.display =
-                    "none";
-
-            }
-
-        }
-
-
-        // ==========================================
-        // Super Admin Menu
-        // ==========================================
-
-        const superAdminMenu =
-            document.getElementById(
-                "superAdminMenu"
+            console.log(
+                "Firestore User:",
+                snap.exists()
+                    ? snap.data()
+                    : "NOT FOUND"
             );
 
-        if (superAdminMenu) {
 
-            if (
-                role === "superadmin"
-            ) {
+            if (snap.exists()) {
 
-                superAdminMenu.style.display =
-                    "flex";
+                const data =
+                    snap.data();
+
+
+                userName =
+                    data.name ||
+                    userName;
+
+
+                photo =
+                    data.photo ||
+                    data.photoURL ||
+                    photo;
+
+
+                role =
+                    data.role ||
+                    "user";
 
             }
-            else {
+
+
+            // ==================================================
+            // Avatar fallback
+            // ==================================================
+
+            if (!photo) {
+
+                photo =
+                    `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+                        userName
+                    )}`;
+
+            }
+
+
+            // ==================================================
+            // Show Username
+            // ==================================================
+
+            if (username) {
+
+                username.textContent =
+                    "👋 " + userName;
+
+            }
+
+
+            // ==================================================
+            // Show Profile Image
+            // ==================================================
+
+            if (userAvatar) {
+
+                userAvatar.src =
+                    photo;
+
+                userAvatar.alt =
+                    userName;
+
+            }
+
+
+            // ==================================================
+            // Admin
+            // ==================================================
+
+            if (adminMenu) {
+
+                adminMenu.style.display =
+                    (
+                        role === "admin" ||
+                        role === "superadmin"
+                    )
+                        ? "inline-flex"
+                        : "none";
+
+            }
+
+
+            // ==================================================
+            // Super Admin
+            // ==================================================
+
+            if (superAdminMenu) {
 
                 superAdminMenu.style.display =
-                    "none";
+                    role === "superadmin"
+                        ? "flex"
+                        : "none";
+
+            }
+
+
+            // ==================================================
+            // Debug
+            // ==================================================
+
+            console.log(
+                "Name:",
+                userName
+            );
+
+            console.log(
+                "Role:",
+                role
+            );
+
+            console.log(
+                "Photo:",
+                photo
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "User Load Error:",
+                error
+            );
+
+            if (username) {
+
+                username.textContent =
+                    "👋 " +
+                    (
+                        user.displayName ||
+                        user.email ||
+                        "User"
+                    );
 
             }
 
         }
 
-
-        console.log(
-            "Login:",
-            user.email
-        );
-
-        console.log(
-            "Role:",
-            role
-        );
-
-        console.log(
-            "Profile Photo:",
-            photo
-        );
-
     }
-    catch (error) {
-
-        console.error(
-            "User Load Error:",
-            error
-        );
-
-    }
-
-});
+);
 
 
 // ======================================================
@@ -237,3 +376,4 @@ if (logoutBtn) {
     );
 
 }
+

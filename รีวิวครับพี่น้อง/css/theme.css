@@ -1,0 +1,1148 @@
+/* =====================================================
+   Anime Review Hub
+   GLOBAL THEME
+===================================================== */
+
+
+/* =====================================================
+   DEFAULT
+===================================================== */
+
+:root{
+    --bg:#edf2f7;
+
+    --surface:#ffffff;
+
+    --surface-2:#f8fafc;
+
+    --text:#1f2937;
+
+    --text-soft:#6b7280;
+
+    --border:#e5e7eb;
+
+    --purple:#7c3aed;
+
+    --purple-dark:#5b21b6;
+
+    --danger:#ef4444;
+}
+
+
+/* =====================================================
+   LIGHT
+===================================================== */
+
+body.light{
+    background:var(--bg) !important;
+
+    color:var(--text) !important;
+}
+
+
+/* =====================================================
+   DARK
+===================================================== */
+
+body.dark{
+
+    background:#080b1a !important;
+
+    color:#f8fafc !important;
+
+}
+
+
+/* =====================================================
+   COMMON ELEMENTS
+===================================================== */
+
+body.dark main,
+body.dark section,
+body.dark article{
+    color:#f8fafc;
+}
+
+
+body.dark p{
+    color:#cbd5e1;
+}
+
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5{
+    color:#fff;
+}
+
+
+body.dark input,
+body.dark textarea,
+body.dark select{
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:#374151 !important;
+}
+
+
+body.dark input::placeholder,
+body.dark textarea::placeholder{
+    color:#94a3b8 !important;
+}
+
+
+/* =====================================================
+   TOP USER
+===================================================== */
+
+body.dark .top-user{
+
+    background:#090b18 !important;
+
+    color:#fff;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+    box-shadow:
+        0 3px 18px rgba(0,0,0,.3);
+}
+
+
+body.dark #username{
+    color:#fff !important;
+}
+
+
+body.dark .top-action-btn{
+
+    background:#17182d !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.1) !important;
+}
+
+
+body.dark .top-action-btn:hover{
+
+    background:#7c3aed !important;
+
+    color:#fff !important;
+}
+
+
+/* =====================================================
+   NAV / HEADER
+===================================================== */
+
+body.dark header{
+
+    background:
+        linear-gradient(
+            135deg,
+            #24104f,
+            #4c1d95,
+            #312e81
+        ) !important;
+
+    color:#fff;
+}
+
+
+body.dark .nav-btn{
+
+    background:
+        rgba(255,255,255,.07) !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.14) !important;
+}
+
+
+body.dark .nav-btn:hover{
+
+    background:#7c3aed !important;
+
+    color:#fff !important;
+}
+
+
+/* =====================================================
+   CATEGORY
+===================================================== */
+
+body.dark .category{
+
+    background:#0c1022 !important;
+
+    border-color:
+        rgba(255,255,255,.06) !important;
+}
+
+
+body.dark .category button{
+
+    background:#171a2d !important;
+
+    color:#ddd6fe !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+}
+
+
+body.dark .category button:hover{
+
+    background:#312e81 !important;
+
+    color:#fff !important;
+}
+
+
+body.dark .category button.active{
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #4f46e5
+        ) !important;
+
+    color:#fff !important;
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+body.dark .search-box,
+body.dark .hero-search{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.1) !important;
+}
+
+
+body.dark .search-box input,
+body.dark .hero-search input{
+
+    background:transparent !important;
+
+    color:#fff !important;
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+body.dark .card{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.06) !important;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.3);
+}
+
+
+body.dark .card-content h3{
+
+    color:#fff !important;
+}
+
+
+body.dark .genre span{
+
+    background:#272044 !important;
+
+    color:#c4b5fd !important;
+}
+
+
+body.dark .review-count{
+
+    color:#94a3b8 !important;
+}
+
+
+/* =====================================================
+   EMPTY / LOADING
+===================================================== */
+
+body.dark .empty{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.06) !important;
+}
+
+
+body.dark .empty h2{
+
+    color:#fff !important;
+}
+
+
+body.dark .empty p{
+
+    color:#94a3b8 !important;
+}
+
+
+/* =====================================================
+   DETAIL PAGE
+===================================================== */
+
+body.dark .detail{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+}
+
+
+body.dark .detail-card{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.06) !important;
+}
+
+
+body.dark .detail-card p{
+
+    color:#cbd5e1 !important;
+}
+
+
+body.dark .score-item{
+
+    background:#1f2937 !important;
+
+    color:#fff !important;
+}
+
+
+body.dark .info div{
+
+    background:#1f2937 !important;
+
+    color:#fff !important;
+}
+
+
+body.dark .review-form{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+}
+
+
+body.dark .review-card{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+}
+
+
+body.dark .review-user strong{
+
+    color:#fff !important;
+}
+
+
+body.dark .review-comment{
+
+    color:#cbd5e1 !important;
+}
+
+
+body.dark .no-trailer{
+
+    background:#1f2937 !important;
+
+    color:#fff !important;
+}
+
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+body.dark .profile-card,
+body.dark .profile-box,
+body.dark .profile-container{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+}
+
+
+body.dark .profile-card p,
+body.dark .profile-box p{
+
+    color:#cbd5e1 !important;
+}
+
+
+/* =====================================================
+   ADMIN
+===================================================== */
+
+body.dark .admin-card,
+body.dark .dashboard-card,
+body.dark .anime-card,
+body.dark .form-card{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+}
+
+
+body.dark .admin-card h3,
+body.dark .dashboard-card h3,
+body.dark .anime-card h3{
+
+    color:#fff !important;
+}
+
+
+/* =====================================================
+   USERS
+===================================================== */
+
+body.dark .user-card,
+body.dark .user-table,
+body.dark .users-card{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+}
+
+
+body.dark table{
+
+    color:#fff;
+}
+
+
+body.dark th{
+
+    background:#1f2937 !important;
+
+    color:#fff !important;
+}
+
+
+body.dark td{
+
+    border-color:#374151 !important;
+
+    color:#e5e7eb !important;
+}
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+body.dark button{
+
+    color:inherit;
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+body.dark ::-webkit-scrollbar-track{
+
+    background:#080b1a;
+}
+
+
+body.dark ::-webkit-scrollbar-thumb{
+
+    background:#7c3aed;
+}
+
+/* =====================================================
+   DARK MODE OVERRIDE
+   แก้กล่องสีขาวที่ยังเหลือในทุกหน้า
+===================================================== */
+
+body.dark .card,
+body.dark .anime-card,
+body.dark .detail,
+body.dark .detail-card,
+body.dark .review-card,
+body.dark .review-form,
+body.dark .profile-card,
+body.dark .profile-box,
+body.dark .profile-container,
+body.dark .admin-card,
+body.dark .dashboard-card,
+body.dark .form-card,
+body.dark .users-card,
+body.dark .user-card,
+body.dark .user-table,
+body.dark .empty,
+body.dark .stat-card,
+body.dark .stats-card,
+body.dark .content-card,
+body.dark .box,
+body.dark .panel,
+body.dark .container-card {
+
+    background:#11162a !important;
+
+    color:#f8fafc !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+}
+
+
+/* =====================================================
+   กล่องด้านบน / สถิติ
+===================================================== */
+
+body.dark .stat,
+body.dark .stat-item,
+body.dark .stat-box,
+body.dark .dashboard-box,
+body.dark .count-card {
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+}
+
+
+/* =====================================================
+   ตาราง Users
+===================================================== */
+
+body.dark table {
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:#374151 !important;
+
+}
+
+body.dark thead,
+body.dark th {
+
+    background:#1f2937 !important;
+
+    color:#fff !important;
+
+}
+
+body.dark tbody,
+body.dark tr {
+
+    background:#11162a !important;
+
+    color:#e5e7eb !important;
+
+}
+
+body.dark td {
+
+    background:#11162a !important;
+
+    color:#e5e7eb !important;
+
+    border-color:#374151 !important;
+
+}
+
+
+/* =====================================================
+   Input / Textarea / Select
+===================================================== */
+
+body.dark input,
+body.dark textarea,
+body.dark select {
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:#374151 !important;
+
+}
+
+body.dark input::placeholder,
+body.dark textarea::placeholder {
+
+    color:#94a3b8 !important;
+
+}
+
+
+/* =====================================================
+   Label
+===================================================== */
+
+body.dark label {
+
+    color:#e5e7eb !important;
+
+}
+
+
+/* =====================================================
+   ข้อความที่ยังเป็นสีอ่อนจนมองไม่เห็น
+===================================================== */
+
+body.dark .title,
+body.dark .description,
+body.dark .subtitle,
+body.dark .text,
+body.dark .empty p,
+body.dark .card p {
+
+    color:#cbd5e1 !important;
+
+}
+
+
+/* =====================================================
+   หัวข้อ
+===================================================== */
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6 {
+
+    color:#fff !important;
+
+}
+
+
+/* =====================================================
+   Favorite / Bookmark Empty
+===================================================== */
+
+body.dark .empty-state,
+body.dark .empty-box,
+body.dark .no-data {
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+}
+
+
+/* =====================================================
+   ปุ่ม / Filter
+===================================================== */
+
+body.dark .filter-btn,
+body.dark .tab-btn {
+
+    background:#171a2d !important;
+
+    color:#ddd6fe !important;
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+}
+
+body.dark .filter-btn.active,
+body.dark .tab-btn.active {
+
+    background:#7c3aed !important;
+
+    color:#fff !important;
+
+}
+
+
+/* =====================================================
+   Review
+===================================================== */
+
+body.dark .review-user strong {
+
+    color:#fff !important;
+
+}
+
+body.dark .review-comment {
+
+    color:#cbd5e1 !important;
+
+}
+
+body.dark .review-date {
+
+    color:#94a3b8 !important;
+
+}
+
+
+/* =====================================================
+   Profile
+===================================================== */
+
+body.dark .profile-name,
+body.dark .profile-email,
+body.dark .profile-role {
+
+    color:#fff !important;
+
+}
+
+
+/* =====================================================
+   Link
+===================================================== */
+
+body.dark a {
+
+    color:inherit;
+
+}
+
+
+/* =====================================================
+   White background ที่มาจาก inline style
+===================================================== */
+
+body.dark [style*="background:#fff"],
+body.dark [style*="background: #fff"],
+body.dark [style*="background:white"],
+body.dark [style*="background: white"] {
+
+    background:#11162a !important;
+
+}
+
+
+/* =====================================================
+   Border ขาว
+===================================================== */
+
+body.dark [style*="border-color:#fff"],
+body.dark [style*="border:1px solid #fff"] {
+
+    border-color:
+        rgba(255,255,255,.08) !important;
+
+}
+
+
+/* =====================================================
+   SVG / Icon Container
+===================================================== */
+
+body.dark .icon-box,
+body.dark .icon-container {
+
+    background:#1f2937 !important;
+
+    color:#c4b5fd !important;
+
+}
+
+/* =====================================================
+   ADMIN / PROFILE / SUPER ADMIN
+   DARK MODE FIX
+===================================================== */
+
+
+/* =====================================================
+   PAGE BACKGROUND
+===================================================== */
+
+body.dark{
+
+    background:#080b1a !important;
+
+    color:#f8fafc !important;
+
+}
+
+
+/* =====================================================
+   COMMON WHITE CONTAINER
+===================================================== */
+
+body.dark main,
+body.dark .container,
+body.dark .wrapper,
+body.dark .content,
+body.dark .page-container,
+body.dark .page-content{
+
+    background:#080b1a !important;
+
+    color:#f8fafc !important;
+
+}
+
+
+/* =====================================================
+   PROFILE PAGE
+===================================================== */
+
+body.dark .profile-container,
+body.dark .profile-card,
+body.dark .profile-box,
+body.dark .profile-content,
+body.dark .profile-section,
+body.dark .profile-form{
+
+    background:#11162a !important;
+
+    color:#f8fafc !important;
+
+    border-color:
+        #374151 !important;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.25) !important;
+
+}
+
+
+/* Profile labels */
+
+body.dark .profile-container label,
+body.dark .profile-card label,
+body.dark .profile-box label{
+
+    color:#e5e7eb !important;
+
+}
+
+
+/* Profile text */
+
+body.dark .profile-container p,
+body.dark .profile-card p,
+body.dark .profile-box p{
+
+    color:#cbd5e1 !important;
+
+}
+
+
+/* =====================================================
+   ADMIN PAGE
+===================================================== */
+
+body.dark .admin-container,
+body.dark .admin-panel,
+body.dark .admin-card,
+body.dark .admin-box,
+body.dark .admin-content,
+body.dark .admin-form,
+body.dark .form-container,
+body.dark .form-card{
+
+    background:#11162a !important;
+
+    color:#f8fafc !important;
+
+    border-color:#374151 !important;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.25) !important;
+
+}
+
+
+/* Admin dashboard */
+
+body.dark .dashboard,
+body.dark .dashboard-card,
+body.dark .dashboard-item,
+body.dark .stat-card,
+body.dark .stats-card{
+
+    background:#11162a !important;
+
+    color:#f8fafc !important;
+
+    border-color:#374151 !important;
+
+}
+
+
+/* =====================================================
+   SUPER ADMIN / USERS
+===================================================== */
+
+body.dark .users-container,
+body.dark .users-panel,
+body.dark .users-card,
+body.dark .user-container,
+body.dark .user-card,
+body.dark .user-panel,
+body.dark .management-card,
+body.dark .management-panel{
+
+    background:#11162a !important;
+
+    color:#f8fafc !important;
+
+    border-color:#374151 !important;
+
+}
+
+
+/* =====================================================
+   STAT BOX
+===================================================== */
+
+body.dark .stat-box,
+body.dark .count-box,
+body.dark .summary-card{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:#374151 !important;
+
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+body.dark table{
+
+    width:100%;
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:#374151 !important;
+
+}
+
+body.dark thead{
+
+    background:#1f2937 !important;
+
+}
+
+body.dark th{
+
+    background:#1f2937 !important;
+
+    color:#fff !important;
+
+    border-color:#374151 !important;
+
+}
+
+body.dark tbody{
+
+    background:#11162a !important;
+
+}
+
+body.dark tr{
+
+    background:#11162a !important;
+
+}
+
+body.dark td{
+
+    background:#11162a !important;
+
+    color:#e5e7eb !important;
+
+    border-color:#374151 !important;
+
+}
+
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+body.dark input,
+body.dark textarea,
+body.dark select{
+
+    background:#0f172a !important;
+
+    color:#fff !important;
+
+    border:1px solid #374151 !important;
+
+}
+
+
+body.dark input::placeholder,
+body.dark textarea::placeholder{
+
+    color:#94a3b8 !important;
+
+}
+
+
+/* =====================================================
+   HEADINGS
+===================================================== */
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6{
+
+    color:#fff !important;
+
+}
+
+
+/* =====================================================
+   LINKS
+===================================================== */
+
+body.dark a{
+
+    color:#c4b5fd;
+
+}
+
+
+/* =====================================================
+   WHITE BOX FIX
+===================================================== */
+
+/*
+   จัดการ element ที่ CSS เดิมกำหนด background สีขาว
+*/
+
+body.dark [style*="background:#fff"],
+body.dark [style*="background: #fff"],
+body.dark [style*="background:white"],
+body.dark [style*="background: white"]{
+
+    background:#11162a !important;
+
+}
+
+
+/* =====================================================
+   WHITE CARD FIX
+===================================================== */
+
+body.dark .card,
+body.dark .box,
+body.dark .panel,
+body.dark .section,
+body.dark .content-box{
+
+    background:#11162a !important;
+
+    color:#f8fafc !important;
+
+    border-color:#374151 !important;
+
+}
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+body.dark button{
+
+    color:#fff;
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+body.dark .search,
+body.dark .search-box,
+body.dark .search-bar{
+
+    background:#11162a !important;
+
+    color:#fff !important;
+
+    border-color:#374151 !important;
+
+}
+
+
