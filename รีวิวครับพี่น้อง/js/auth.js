@@ -1,7 +1,7 @@
 // =====================================================
 // Anime Review Hub
 // auth.js
-// Email Login + Register + Google Login
+// Register + Email Login + Google Login
 // =====================================================
 
 import { auth, db } from "./firebase.js";
@@ -15,8 +15,8 @@ import {
 
 import {
     doc,
-    setDoc,
     getDoc,
+    setDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
@@ -31,110 +31,108 @@ const registerBtn =
 
 if (registerBtn) {
 
-    registerBtn.addEventListener(
-        "click",
-        async () => {
+    registerBtn.addEventListener("click", async () => {
 
-            const name =
-                document
-                    .getElementById("name")
-                    .value
-                    .trim();
+        const nameInput =
+            document.getElementById("name");
 
+        const emailInput =
+            document.getElementById("email");
 
-            const email =
-                document
-                    .getElementById("email")
-                    .value
-                    .trim();
+        const passwordInput =
+            document.getElementById("password");
 
 
-            const password =
-                document
-                    .getElementById("password")
-                    .value;
+        const name =
+            nameInput
+                ? nameInput.value.trim()
+                : "";
+
+        const email =
+            emailInput
+                ? emailInput.value.trim()
+                : "";
+
+        const password =
+            passwordInput
+                ? passwordInput.value
+                : "";
 
 
-            if (
-                !name ||
-                !email ||
-                !password
-            ) {
+        if (!name || !email || !password) {
 
-                alert(
-                    "กรุณากรอกข้อมูลให้ครบ"
-                );
+            alert(
+                "กรุณากรอกข้อมูลให้ครบ"
+            );
 
-                return;
-
-            }
+            return;
+        }
 
 
-            try {
+        try {
 
-                const userCredential =
-                    await createUserWithEmailAndPassword(
-                        auth,
-                        email,
-                        password
-                    );
-
-
-                await setDoc(
-                    doc(
-                        db,
-                        "users",
-                        userCredential.user.uid
-                    ),
-                    {
-
-                        name:
-                            name,
-
-                        email:
-                            email,
-
-                        role:
-                            "user",
-
-                        photo:
-                            "",
-
-                        createdAt:
-                            serverTimestamp()
-
-                    }
+            const result =
+                await createUserWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
                 );
 
 
-                alert(
-                    "สมัครสมาชิกสำเร็จ"
-                );
+            const user =
+                result.user;
 
 
-                window.location.href =
-                    "login.html";
+            await setDoc(
+                doc(
+                    db,
+                    "users",
+                    user.uid
+                ),
+                {
+                    name: name,
+
+                    email:
+                        user.email || email,
+
+                    role: "user",
+
+                    photo: "",
+
+                    createdAt:
+                        serverTimestamp(),
+
+                    provider: "email"
+                }
+            );
 
 
-            }
-            catch (error) {
-
-                console.error(
-                    "Register Error:",
-                    error
-                );
+            alert(
+                "สมัครสมาชิกสำเร็จ"
+            );
 
 
-                alert(
-                    getAuthErrorMessage(
-                        error
-                    )
-                );
-
-            }
+            window.location.href =
+                "login.html";
 
         }
-    );
+        catch (error) {
+
+            console.error(
+                "Register Error:",
+                error
+            );
+
+
+            alert(
+                getAuthErrorMessage(
+                    error
+                )
+            );
+
+        }
+
+    });
 
 }
 
@@ -149,39 +147,51 @@ const loginBtn =
 
 if (loginBtn) {
 
-    loginBtn.addEventListener(
-        "click",
-        async () => {
+    loginBtn.addEventListener("click", async () => {
 
-            const email =
-                document
-                    .getElementById("loginEmail")
-                    .value
-                    .trim();
+        const emailInput =
+            document.getElementById("loginEmail");
+
+        const passwordInput =
+            document.getElementById("loginPassword");
 
 
-            const password =
-                document
-                    .getElementById("loginPassword")
-                    .value;
+        const email =
+            emailInput
+                ? emailInput.value.trim()
+                : "";
+
+        const password =
+            passwordInput
+                ? passwordInput.value
+                : "";
 
 
-            if (
-                !email ||
-                !password
-            ) {
-
-                alert(
-                    "กรุณากรอก Email และ Password"
-                );
-
-                return;
-
-            }
+        console.log(
+            "Email:",
+            email
+        );
 
 
-            try {
+        if (!email || !password) {
 
+            alert(
+                "กรุณากรอก Email และ Password"
+            );
+
+            return;
+        }
+
+
+        loginBtn.disabled = true;
+
+        loginBtn.textContent =
+            "กำลังเข้าสู่ระบบ...";
+
+
+        try {
+
+            const result =
                 await signInWithEmailAndPassword(
                     auth,
                     email,
@@ -189,29 +199,97 @@ if (loginBtn) {
                 );
 
 
-                window.location.href =
-                    "../index.html";
+            const user =
+                result.user;
 
 
-            }
-            catch (error) {
+            console.log(
+                "Email Login Success:",
+                user.email
+            );
 
-                console.error(
-                    "Login Error:",
-                    error
+
+            // =========================================
+            // ตรวจ users/{uid}
+            // =========================================
+
+            const userRef =
+                doc(
+                    db,
+                    "users",
+                    user.uid
                 );
 
 
-                alert(
-                    getAuthErrorMessage(
-                        error
-                    )
+            const userSnap =
+                await getDoc(
+                    userRef
+                );
+
+
+            // =========================================
+            // ถ้ายังไม่มี Firestore User
+            // =========================================
+
+            if (!userSnap.exists()) {
+
+                await setDoc(
+                    userRef,
+                    {
+                        name:
+                            user.displayName ||
+                            user.email ||
+                            "User",
+
+                        email:
+                            user.email ||
+                            "",
+
+                        role:
+                            "user",
+
+                        photo:
+                            user.photoURL ||
+                            "",
+
+                        createdAt:
+                            serverTimestamp(),
+
+                        provider:
+                            "email"
+                    }
                 );
 
             }
+
+
+            window.location.href =
+                "../index.html";
 
         }
-    );
+        catch (error) {
+
+            console.error(
+                "Email Login Error:",
+                error
+            );
+
+
+            alert(
+                getAuthErrorMessage(
+                    error
+                )
+            );
+
+
+            loginBtn.disabled = false;
+
+            loginBtn.textContent =
+                "เข้าสู่ระบบ";
+
+        }
+
+    });
 
 }
 
@@ -257,9 +335,15 @@ if (googleLoginBtn) {
                     result.user;
 
 
-                // ==========================================
-                // Check Firestore User
-                // ==========================================
+                console.log(
+                    "Google Login:",
+                    user.email
+                );
+
+
+                // =========================================
+                // Firestore User
+                // =========================================
 
                 const userRef =
                     doc(
@@ -275,18 +359,15 @@ if (googleLoginBtn) {
                     );
 
 
-                // ==========================================
-                // First Google Login
-                // ==========================================
+                // =========================================
+                // Google Login ครั้งแรก
+                // =========================================
 
-                if (
-                    !userSnap.exists()
-                ) {
+                if (!userSnap.exists()) {
 
                     await setDoc(
                         userRef,
                         {
-
                             name:
                                 user.displayName ||
                                 "User",
@@ -307,40 +388,39 @@ if (googleLoginBtn) {
 
                             provider:
                                 "google"
-
                         }
                     );
 
                 }
+
+
+                // =========================================
+                // Google Login ครั้งต่อไป
+                // =========================================
+                // ไม่เปลี่ยน photo และ role
+                // =========================================
+
                 else {
 
-                    // ======================================
-                    // อัปเดตรูป Google ล่าสุด
-                    // แต่ไม่เปลี่ยน role
-                    // ======================================
+                    const oldData =
+                        userSnap.data();
+
 
                     await setDoc(
                         userRef,
                         {
-
                             name:
+                                oldData.name ||
                                 user.displayName ||
-                                userSnap.data().name ||
                                 "User",
 
                             email:
+                                oldData.email ||
                                 user.email ||
-                                userSnap.data().email ||
-                                "",
-
-                            photo:
-                                user.photoURL ||
-                                userSnap.data().photo ||
-                                "",
-
+                                ""
                         },
                         {
-                            merge:true
+                            merge: true
                         }
                     );
 
@@ -349,7 +429,6 @@ if (googleLoginBtn) {
 
                 window.location.href =
                     "../index.html";
-
 
             }
             catch (error) {
@@ -387,42 +466,74 @@ if (googleLoginBtn) {
 
 
 // =====================================================
-// AUTH ERROR MESSAGE
+// ERROR MESSAGE
 // =====================================================
 
 function getAuthErrorMessage(error) {
 
-    switch (
-        error.code
-    ) {
+    switch (error.code) {
 
         case "auth/invalid-credential":
+
             return "Email หรือ Password ไม่ถูกต้อง";
 
+
         case "auth/user-not-found":
+
             return "ไม่พบบัญชีผู้ใช้นี้";
 
+
         case "auth/wrong-password":
+
             return "Password ไม่ถูกต้อง";
 
+
+        case "auth/invalid-email":
+
+            return "รูปแบบ Email ไม่ถูกต้อง";
+
+
         case "auth/email-already-in-use":
+
             return "Email นี้ถูกใช้งานแล้ว";
 
+
         case "auth/weak-password":
+
             return "Password ต้องมีอย่างน้อย 6 ตัวอักษร";
 
+
         case "auth/popup-closed-by-user":
+
             return "ปิดหน้าต่าง Google Login";
 
+
         case "auth/popup-blocked":
-            return "Browser บล็อกหน้าต่าง Google กรุณาอนุญาต Popup";
+
+            return "Browser บล็อกหน้าต่าง Google";
+
 
         case "auth/unauthorized-domain":
-            return "Domain นี้ยังไม่ได้รับอนุญาตใน Firebase";
+
+            return "Domain นี้ยังไม่ได้เพิ่มใน Firebase Authorized Domains";
+
+
+        case "auth/network-request-failed":
+
+            return "ไม่สามารถเชื่อมต่อ Firebase ได้";
+
+
+        case "permission-denied":
+
+            return "ไม่มีสิทธิ์เข้าถึง Firestore";
+
 
         default:
-            return error.message ||
-                "เกิดข้อผิดพลาด กรุณาลองใหม่";
+
+            return (
+                error.message ||
+                "เกิดข้อผิดพลาด กรุณาลองใหม่"
+            );
 
     }
 
