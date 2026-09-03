@@ -284,64 +284,141 @@ header::before{
 
 }
 
-
 /* =====================================================
-   SEARCH
+   HOME SEARCH
 ===================================================== */
 
 .hero-search{
-
     width:100%;
-
     max-width:520px;
-
+    height:52px;
     margin-top:28px;
 
     display:flex;
-
     align-items:center;
 
-    gap:12px;
+    background:#11162a;
 
-    padding:15px 20px;
+    border:1px solid rgba(139,92,246,.45);
 
-    border-radius:50px;
+    border-radius:16px;
 
-    background:rgba(255,255,255,.08);
+    overflow:hidden;
 
-    border:1px solid rgba(255,255,255,.12);
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.30);
 
-    backdrop-filter:blur(15px);
-
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease;
 }
+
+
+/* =====================================================
+   SEARCH ICON
+===================================================== */
 
 .hero-search i{
+    width:52px;
+    height:100%;
 
-    color:#c4b5fd;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
+    flex-shrink:0;
+
+    color:#8b5cf6;
+
+    font-size:18px;
+
+    border-right:1px solid rgba(255,255,255,.10);
 }
+
+
+/* =====================================================
+   SEARCH INPUT
+===================================================== */
 
 .hero-search input{
-
     width:100%;
+    height:100%;
+
+    padding:0 15px;
 
     border:none;
-
     outline:none;
 
-    background:transparent;
+    background:#11162a;
 
-    color:#fff;
+    color:#f8fafc;
 
-    font-size:15px;
+    font-family:'Poppins',sans-serif;
 
+    font-size:13px;
 }
+
+
+/* PLACEHOLDER */
 
 .hero-search input::placeholder{
+    color:#94a3b8;
+}
 
-    color:#aaa3c5;
+
+/* =====================================================
+   FOCUS
+===================================================== */
+
+.hero-search:focus-within{
+
+    border-color:#8b5cf6;
+
+    box-shadow:
+        0 0 0 3px rgba(139,92,246,.15),
+        0 10px 30px rgba(0,0,0,.35);
 
 }
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:600px){
+
+    .hero-search{
+
+        max-width:none;
+
+        height:46px;
+
+        margin-top:20px;
+
+        border-radius:14px;
+
+    }
+
+    .hero-search i{
+
+        width:46px;
+
+        font-size:16px;
+
+    }
+
+    .hero-search input{
+
+        padding:0 12px;
+
+        font-size:12px;
+
+    }
+
+}
+
+
+
 
 
 /* =====================================================

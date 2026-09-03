@@ -1,365 +1,370 @@
 <!DOCTYPE html>
+
 <html lang="th">
 
 <head>
 
-    <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
 
-    <title>User Management - Anime Review Hub</title>
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="../css/users.css">
-    <link rel="stylesheet" href="../css/theme.css">
+<title>User Management - Anime Review Hub</title>
 
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="../css/users.css">
+<link rel="stylesheet" href="../css/theme.css">
 
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin>
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 
 </head>
 
 <body>
 
-    <!-- =========================
-         Header
-    ========================== -->
 
-    <header class="users-header">
+<!-- =========================
+     Header
+========================== -->
 
-        <div class="header-left">
+<header class="users-header">
 
-            <a
-                href="../index.html"
-                class="back-btn">
+    <div class="header-left">
 
-                <i class="fa-solid fa-arrow-left"></i>
+        <a
+            href="../index.html"
+            class="back-btn">
 
-                กลับหน้าแรก
+            <i class="fa-solid fa-arrow-left"></i>
 
-            </a>
+            กลับหน้าแรก
 
-            <div class="page-title">
+        </a>
 
-                <div class="title-icon">
+        <div class="page-title">
 
-                    <i class="fa-solid fa-users-gear"></i>
+            <div class="title-icon">
 
-                </div>
+                <i class="fa-solid fa-users-gear"></i>
 
-                <div>
+            </div>
 
-                    <h1>
-                        User Management
-                    </h1>
+            <div>
 
-                    <p>
-                        จัดการ Users และ Admin
-                    </p>
+                <h1>
+                    User Management
+                </h1>
 
-                </div>
+                <p>
+                    จัดการ Users และ Reviewers
+                </p>
 
             </div>
 
         </div>
 
-        <div class="role-badge">
+    </div>
 
-            <i class="fa-solid fa-crown"></i>
+    <div class="role-badge">
 
-            Super Admin
+        <i class="fa-solid fa-crown"></i>
 
-        </div>
+        Super Admin
 
-    </header>
+    </div>
+
+</header>
+
+
+<!-- =========================
+     Main
+========================== -->
+
+<main class="users-container">
 
 
     <!-- =========================
-         Main
+         Summary
     ========================== -->
 
-    <main class="users-container">
+    <section class="summary-grid">
 
+        <div
+            class="summary-card user-card"
+            data-filter="user">
 
-        <!-- =========================
-             Summary
-        ========================== -->
+            <div class="summary-icon">
 
-        <section class="summary-grid">
-
-            <div
-                class="summary-card user-card"
-                data-filter="user">
-
-                <div class="summary-icon">
-
-                    <i class="fa-solid fa-user"></i>
-
-                </div>
-
-                <div>
-
-                    <h2 id="totalUsers">
-                        0
-                    </h2>
-
-                    <p>
-                        Users
-                    </p>
-
-                </div>
+                <i class="fa-solid fa-user"></i>
 
             </div>
 
+            <div>
 
-            <div
-                class="summary-card admin-card"
-                data-filter="admin">
-
-                <div class="summary-icon">
-
-                    <i class="fa-solid fa-user-shield"></i>
-
-                </div>
-
-                <div>
-
-                    <h2 id="totalAdmins">
-                        0
-                    </h2>
-
-                    <p>
-                        Admins
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="summary-card super-card"
-                data-filter="superadmin">
-
-                <div class="summary-icon">
-
-                    <i class="fa-solid fa-crown"></i>
-
-                </div>
-
-                <div>
-
-                    <h2 id="totalSuperAdmins">
-                        0
-                    </h2>
-
-                    <p>
-                        Super Admins
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             Search
-        ========================== -->
-
-        <section class="search-panel">
-
-            <div class="search-box">
-
-                <i class="fa-solid fa-magnifying-glass"></i>
-
-                <input
-                    type="text"
-                    id="searchUser"
-                    placeholder="ค้นหาชื่อหรืออีเมล...">
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             Filter
-        ========================== -->
-
-        <section class="filter-bar">
-
-            <button
-                class="filter-btn active"
-                data-filter="all">
-
-                ทั้งหมด
-
-            </button>
-
-            <button
-                class="filter-btn"
-                data-filter="user">
-
-                👤 Users
-
-            </button>
-
-            <button
-                class="filter-btn"
-                data-filter="admin">
-
-                🛡 Admins
-
-            </button>
-
-            <button
-                class="filter-btn"
-                data-filter="superadmin">
-
-                👑 Super Admins
-
-            </button>
-
-        </section>
-
-
-        <!-- =========================
-             User Table
-        ========================== -->
-
-        <section class="users-card">
-
-            <div class="card-header">
-
-                <div>
-
-                    <h2>
-                        รายชื่อผู้ใช้
-                    </h2>
-
-                    <p id="resultText">
-                        กำลังโหลด...
-                    </p>
-
-                </div>
-
-                <button
-                    id="refreshUsers"
-                    class="refresh-btn">
-
-                    <i class="fa-solid fa-rotate"></i>
-
-                    รีเฟรช
-
-                </button>
-
-            </div>
-
-
-            <!-- Loading -->
-
-            <div
-                id="loading"
-                class="loading">
-
-                <div class="loader"></div>
+                <h2 id="totalUsers">
+                    0
+                </h2>
 
                 <p>
-                    กำลังโหลดข้อมูล...
+                    Users
                 </p>
 
             </div>
 
+        </div>
 
-            <!-- Table -->
 
-            <div
-                id="usersTableWrapper"
-                class="table-wrapper"
-                style="display:none;">
+        <div
+            class="summary-card admin-card"
+            data-filter="admin">
 
-                <table>
+            <div class="summary-icon">
 
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                ผู้ใช้
-                            </th>
-
-                            <th>
-                                Email
-                            </th>
-
-                            <th>
-                                Role
-                            </th>
-
-                            <th>
-                                การจัดการ
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="usersTable">
-
-                    </tbody>
-
-                </table>
+                <i class="fa-solid fa-user-shield"></i>
 
             </div>
 
+            <div>
 
-            <!-- Empty -->
-
-            <div
-                id="emptyUsers"
-                class="empty-users"
-                style="display:none;">
-
-                <i class="fa-solid fa-user-slash"></i>
-
-                <h3>
-                    ไม่พบข้อมูล
-                </h3>
+                <h2 id="totalAdmins">
+                    0
+                </h2>
 
                 <p>
-                    ลองค้นหาหรือเลือก Role อื่น
+                    Reviewers
                 </p>
 
             </div>
 
-        </section>
-
-    </main>
+        </div>
 
 
-    <!-- Toast -->
+        <div
+            class="summary-card super-card"
+            data-filter="superadmin">
 
-    <div id="toast"></div>
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-crown"></i>
+
+            </div>
+
+            <div>
+
+                <h2 id="totalSuperAdmins">
+                    0
+                </h2>
+
+                <p>
+                    Super Admins
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
 
 
-    <script type="module" src="../js/theme.js"></script>
-    <script type="module" src="../js/users.js"></script>
+    <!-- =========================
+         Search
+    ========================== -->
+
+    <section class="search-panel">
+
+        <div class="search-box">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                id="searchUser"
+                placeholder="ค้นหาชื่อหรืออีเมล...">
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         Filter
+    ========================== -->
+
+    <section class="filter-bar">
+
+        <button
+            class="filter-btn active"
+            data-filter="all">
+
+            ทั้งหมด
+
+        </button>
+
+        <button
+            class="filter-btn"
+            data-filter="user">
+
+            👤 Users
+
+        </button>
+
+        <button
+            class="filter-btn"
+            data-filter="admin">
+
+            🛡 Reviewers
+
+        </button>
+
+        <button
+            class="filter-btn"
+            data-filter="superadmin">
+
+            👑 Super Admins
+
+        </button>
+
+    </section>
+
+
+    <!-- =========================
+         User Table
+    ========================== -->
+
+    <section class="users-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h2>
+                    รายชื่อผู้ใช้
+                </h2>
+
+                <p id="resultText">
+                    กำลังโหลด...
+                </p>
+
+            </div>
+
+            <button
+                id="refreshUsers"
+                class="refresh-btn">
+
+                <i class="fa-solid fa-rotate"></i>
+
+                รีเฟรช
+
+            </button>
+
+        </div>
+
+
+        <!-- Loading -->
+
+        <div
+            id="loading"
+            class="loading">
+
+            <div class="loader"></div>
+
+            <p>
+                กำลังโหลดข้อมูล...
+            </p>
+
+        </div>
+
+
+        <!-- Table -->
+
+        <div
+            id="usersTableWrapper"
+            class="table-wrapper"
+            style="display:none;">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ผู้ใช้
+                        </th>
+
+                        <th>
+                            Email
+                        </th>
+
+                        <th>
+                            Role
+                        </th>
+
+                        <th>
+                            การจัดการ
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="usersTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- Empty -->
+
+        <div
+            id="emptyUsers"
+            class="empty-users"
+            style="display:none;">
+
+            <i class="fa-solid fa-user-slash"></i>
+
+            <h3>
+                ไม่พบข้อมูล
+            </h3>
+
+            <p>
+                ลองค้นหาหรือเลือก Role อื่น
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- Toast -->
+
+<div id="toast"></div>
+
+
+<script type="module" src="../js/theme.js"></script>
+<script type="module" src="../js/users.js"></script>
+
 
 </body>
 

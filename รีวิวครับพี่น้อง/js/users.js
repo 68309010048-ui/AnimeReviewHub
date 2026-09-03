@@ -1,7 +1,7 @@
 // ======================================================
 // Anime Review Hub
 // users.js
-// User + Admin Management
+// User + Reviewer Management
 // Super Admin Only
 // ======================================================
 
@@ -87,7 +87,6 @@ onAuthStateChanged(auth, async (user) => {
             "../login.html";
 
         return;
-
     }
 
     currentUser = user;
@@ -106,11 +105,11 @@ onAuthStateChanged(auth, async (user) => {
                 "../index.html";
 
             return;
-
         }
 
         const data = snap.data();
 
+        // Super Admin Only
         if (data.role !== "superadmin") {
 
             alert(
@@ -121,7 +120,6 @@ onAuthStateChanged(auth, async (user) => {
                 "../index.html";
 
             return;
-
         }
 
         await loadUsers();
@@ -137,7 +135,6 @@ onAuthStateChanged(auth, async (user) => {
         showToast(
             "ตรวจสอบสิทธิ์ไม่สำเร็จ"
         );
-
     }
 
 });
@@ -160,7 +157,7 @@ async function loadUsers() {
 
         usersData =
             snapshot.docs.map(
-                docSnap => ({
+                (docSnap) => ({
 
                     id: docSnap.id,
 
@@ -190,23 +187,17 @@ async function loadUsers() {
 
         usersTable.innerHTML = `
             <tr>
-                <td colspan="4"
-                    style="text-align:center;color:red;">
-
+                <td
+                    colspan="4"
+                    style="text-align:center;color:red;"
+                >
                     โหลดข้อมูลไม่สำเร็จ
-
                     <br>
-
-                    ${escapeHTML(
-                        error.message
-                    )}
-
+                    ${escapeHTML(error.message)}
                 </td>
             </tr>
         `;
-
     }
-
 }
 
 
@@ -218,20 +209,20 @@ function updateSummary() {
 
     const users =
         usersData.filter(
-            user =>
+            (user) =>
                 !user.role ||
                 user.role === "user"
         ).length;
 
-    const admins =
+    const reviewers =
         usersData.filter(
-            user =>
+            (user) =>
                 user.role === "admin"
         ).length;
 
     const superadmins =
         usersData.filter(
-            user =>
+            (user) =>
                 user.role === "superadmin"
         ).length;
 
@@ -240,11 +231,10 @@ function updateSummary() {
         users;
 
     totalAdmins.textContent =
-        admins;
+        reviewers;
 
     totalSuperAdmins.textContent =
         superadmins;
-
 }
 
 
@@ -265,50 +255,57 @@ function applyFilter() {
     let result = [...usersData];
 
 
+    // ==================================================
     // Role Filter
+    // ==================================================
+
     if (currentFilter !== "all") {
 
         result =
-            result.filter(user => {
+            result.filter(
+                (user) => {
 
-                const role =
-                    user.role || "user";
+                    const role =
+                        user.role || "user";
 
-                return role === currentFilter;
+                    return role === currentFilter;
 
-            });
-
+                }
+            );
     }
 
 
+    // ==================================================
     // Search
+    // ==================================================
+
     if (keyword) {
 
         result =
-            result.filter(user => {
+            result.filter(
+                (user) => {
 
-                const name =
-                    String(
-                        user.name || ""
-                    ).toLowerCase();
+                    const name =
+                        String(
+                            user.name || ""
+                        ).toLowerCase();
 
-                const email =
-                    String(
-                        user.email || ""
-                    ).toLowerCase();
+                    const email =
+                        String(
+                            user.email || ""
+                        ).toLowerCase();
 
-                return (
-                    name.includes(keyword) ||
-                    email.includes(keyword)
-                );
+                    return (
+                        name.includes(keyword) ||
+                        email.includes(keyword)
+                    );
 
-            });
-
+                }
+            );
     }
 
 
     renderUsers(result);
-
 }
 
 
@@ -340,7 +337,6 @@ function renderUsers(list) {
             "block";
 
         return;
-
     }
 
 
@@ -351,238 +347,254 @@ function renderUsers(list) {
         "none";
 
 
-    list.forEach(user => {
+    list.forEach(
+        (user) => {
 
-        const role =
-            user.role || "user";
-
-
-        const row =
-            document.createElement("tr");
+            const role =
+                user.role || "user";
 
 
-        // =========================
-        // Avatar
-        // =========================
-
-        const avatar =
-            user.photo ||
-            user.photoURL ||
-            `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
-                user.name || "User"
-            )}`;
+            const row =
+                document.createElement("tr");
 
 
-        // =========================
-        // Role
-        // =========================
+            // ==================================================
+            // Avatar
+            // ==================================================
 
-        let roleClass =
-            "role-user";
-
-        let roleText =
-            "User";
-
-
-        if (role === "admin") {
-
-            roleClass =
-                "role-admin";
-
-            roleText =
-                "Admin";
-
-        }
-
-        if (role === "superadmin") {
-
-            roleClass =
-                "role-superadmin";
-
-            roleText =
-                "Super Admin";
-
-        }
+            const avatar =
+                user.photo ||
+                user.photoURL ||
+                `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+                    user.name || "User"
+                )}`;
 
 
-        // =========================
-        // Actions
-        // =========================
+            // ==================================================
+            // Role
+            // ==================================================
 
-        let actions = "";
+            let roleClass =
+                "role-user";
+
+            let roleText =
+                "User";
 
 
-        if (role === "superadmin") {
+            if (role === "admin") {
 
-            actions = `
+                roleClass =
+                    "role-admin";
 
-                <button
-                    class="action-btn disabled-btn"
-                    disabled>
+                roleText =
+                    "Reviewer";
 
-                    🔒 ป้องกัน
+            }
 
-                </button>
 
-            `;
+            if (role === "superadmin") {
 
-        }
-        else {
+                roleClass =
+                    "role-superadmin";
 
-            if (role === "user") {
+                roleText =
+                    "Super Admin";
+
+            }
+
+
+            // ==================================================
+            // Actions
+            // ==================================================
+
+            let actions = "";
+
+
+            if (role === "superadmin") {
 
                 actions = `
 
-                    <div class="user-actions">
+                    <button
+                        class="action-btn disabled-btn"
+                        disabled
+                    >
 
-                        <button
-                            class="action-btn promote-btn"
-                            data-action="promote"
-                            data-id="${user.id}">
+                        🔒 ป้องกัน
 
-                            ⬆️ ตั้งเป็น Admin
-
-                        </button>
-
-                    </div>
+                    </button>
 
                 `;
 
             }
             else {
 
-                actions = `
+                // ==================================================
+                // User → Reviewer
+                // ==================================================
 
-                    <div class="user-actions">
+                if (role === "user") {
 
-                        <button
-                            class="action-btn demote-btn"
-                            data-action="demote"
-                            data-id="${user.id}">
+                    actions = `
 
-                            ⬇️ ลดเป็น User
+                        <div class="user-actions">
 
-                        </button>
+                            <button
+                                class="action-btn promote-btn"
+                                data-action="promote"
+                                data-id="${user.id}"
+                            >
+
+                                ⬆️ ตั้งเป็น Reviewer
+
+                            </button>
+
+                        </div>
+
+                    `;
+
+                }
+
+                // ==================================================
+                // Reviewer → User
+                // ==================================================
+
+                else {
+
+                    actions = `
+
+                        <div class="user-actions">
+
+                            <button
+                                class="action-btn demote-btn"
+                                data-action="demote"
+                                data-id="${user.id}"
+                            >
+
+                                ⬇️ ลดเป็น User
+
+                            </button>
+
+                        </div>
+
+                    `;
+                }
+            }
+
+
+            // ==================================================
+            // Row
+            // ==================================================
+
+            row.innerHTML = `
+
+                <td>
+
+                    <div class="user-cell">
+
+                        <img
+                            class="user-avatar"
+                            src="${escapeAttribute(avatar)}"
+                            alt="User"
+                        >
+
+                        <span class="user-name">
+
+                            ${escapeHTML(
+                                user.name || "User"
+                            )}
+
+                        </span>
 
                     </div>
 
-                `;
-
-            }
-
-        }
+                </td>
 
 
-        row.innerHTML = `
+                <td>
 
-            <td>
+                    ${escapeHTML(
+                        user.email || "-"
+                    )}
 
-                <div class="user-cell">
+                </td>
 
-                    <img
-                        class="user-avatar"
-                        src="${avatar}"
-                        alt="User">
 
-                    <span class="user-name">
+                <td>
 
-                        ${escapeHTML(
-                            user.name || "User"
-                        )}
+                    <span
+                        class="user-role ${roleClass}"
+                    >
+
+                        ${roleText}
 
                     </span>
 
-                </div>
-
-            </td>
+                </td>
 
 
-            <td>
+                <td>
 
-                ${escapeHTML(
-                    user.email || "-"
-                )}
+                    ${actions}
 
-            </td>
+                </td>
 
-
-            <td>
-
-                <span
-                    class="user-role ${roleClass}">
-
-                    ${roleText}
-
-                </span>
-
-            </td>
+            `;
 
 
-            <td>
+            // ==================================================
+            // Promote
+            // ==================================================
 
-                ${actions}
+            const promoteBtn =
+                row.querySelector(
+                    '[data-action="promote"]'
+                );
 
-            </td>
+            if (promoteBtn) {
 
-        `;
+                promoteBtn.addEventListener(
+                    "click",
+                    () => {
 
+                        changeRole(
+                            user.id,
+                            "admin"
+                        );
 
-        // =========================
-        // Promote
-        // =========================
-
-        const promoteBtn =
-            row.querySelector(
-                '[data-action="promote"]'
-            );
-
-        if (promoteBtn) {
-
-            promoteBtn.addEventListener(
-                "click",
-                () => {
-
-                    changeRole(
-                        user.id,
-                        "admin"
-                    );
-
-                }
-            );
-
-        }
+                    }
+                );
+            }
 
 
-        // =========================
-        // Demote
-        // =========================
+            // ==================================================
+            // Demote
+            // ==================================================
 
-        const demoteBtn =
-            row.querySelector(
-                '[data-action="demote"]'
-            );
+            const demoteBtn =
+                row.querySelector(
+                    '[data-action="demote"]'
+                );
 
-        if (demoteBtn) {
+            if (demoteBtn) {
 
-            demoteBtn.addEventListener(
-                "click",
-                () => {
+                demoteBtn.addEventListener(
+                    "click",
+                    () => {
 
-                    changeRole(
-                        user.id,
-                        "user"
-                    );
+                        changeRole(
+                            user.id,
+                            "user"
+                        );
 
-                }
-            );
+                    }
+                );
+            }
+
+
+            usersTable.appendChild(row);
 
         }
-
-
-        usersTable.appendChild(row);
-
-    });
-
+    );
 }
 
 
@@ -597,13 +609,17 @@ async function changeRole(
 
     const user =
         usersData.find(
-            item =>
+            (item) =>
                 item.id === userId
         );
 
 
     if (!user) return;
 
+
+    // ==================================================
+    // Protect Super Admin
+    // ==================================================
 
     if (
         user.role === "superadmin"
@@ -614,22 +630,30 @@ async function changeRole(
         );
 
         return;
-
     }
 
 
+    // ==================================================
+    // Confirm
+    // ==================================================
+
     const message =
         newRole === "admin"
-            ? `ตั้ง ${user.name || "ผู้ใช้"} เป็น Admin?`
-            : `ลด ${user.name || "Admin"} เป็น User?`;
+
+            ? `ตั้ง ${user.name || "ผู้ใช้"} เป็น Reviewer?`
+
+            : `ลด ${user.name || "Reviewer"} เป็น User?`;
 
 
     if (!confirm(message)) {
 
         return;
-
     }
 
+
+    // ==================================================
+    // Update Firestore
+    // ==================================================
 
     try {
 
@@ -648,11 +672,15 @@ async function changeRole(
         );
 
 
+        // ==================================================
+        // Toast
+        // ==================================================
+
         showToast(
 
             newRole === "admin"
 
-                ? "✅ ตั้งเป็น Admin แล้ว"
+                ? "✅ ตั้งเป็น Reviewer แล้ว"
 
                 : "✅ ลดสิทธิ์เป็น User แล้ว"
 
@@ -672,7 +700,6 @@ async function changeRole(
         showToast(
             "เปลี่ยนสิทธิ์ไม่สำเร็จ"
         );
-
     }
 
 }
@@ -682,69 +709,77 @@ async function changeRole(
 // Filter Buttons
 // ======================================================
 
-filterButtons.forEach(button => {
+filterButtons.forEach(
+    (button) => {
 
-    button.addEventListener(
-        "click",
-        () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-            currentFilter =
-                button.dataset.filter;
+                currentFilter =
+                    button.dataset.filter;
 
 
-            filterButtons.forEach(btn => {
+                filterButtons.forEach(
+                    (btn) => {
 
-                btn.classList.remove(
+                        btn.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                button.classList.add(
                     "active"
                 );
 
-            });
 
+                applyFilter();
 
-            button.classList.add(
-                "active"
-            );
+            }
+        );
 
-
-            applyFilter();
-
-        }
-    );
-
-});
+    }
+);
 
 
 // ======================================================
 // Summary Cards Filter
 // ======================================================
 
-summaryCards.forEach(card => {
+summaryCards.forEach(
+    (card) => {
 
-    card.addEventListener(
-        "click",
-        () => {
+        card.addEventListener(
+            "click",
+            () => {
 
-            currentFilter =
-                card.dataset.filter;
+                currentFilter =
+                    card.dataset.filter;
 
 
-            filterButtons.forEach(btn => {
+                filterButtons.forEach(
+                    (btn) => {
 
-                btn.classList.toggle(
-                    "active",
-                    btn.dataset.filter ===
-                    currentFilter
+                        btn.classList.toggle(
+                            "active",
+                            btn.dataset.filter ===
+                            currentFilter
+                        );
+
+                    }
                 );
 
-            });
 
+                applyFilter();
 
-            applyFilter();
+            }
+        );
 
-        }
-    );
-
-});
+    }
+);
 
 
 // ======================================================
@@ -835,8 +870,10 @@ function showToast(message) {
 
     if (!toast) return;
 
+
     toast.textContent =
         message;
+
 
     toast.classList.add(
         "show"
@@ -849,13 +886,16 @@ function showToast(message) {
 
 
     window.usersToastTimer =
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            toast.classList.remove(
-                "show"
-            );
+                toast.classList.remove(
+                    "show"
+                );
 
-        }, 2500);
+            },
+            2500
+        );
 
 }
 
@@ -877,59 +917,24 @@ function escapeHTML(value) {
         .replaceAll('"', "&quot;")
 
         .replaceAll("'", "&#039;");
-
 }
+
 
 // ======================================================
-// Dark Mode - Home
+// Escape Attribute
 // ======================================================
 
-const darkBtn =
-    document.getElementById("darkBtn");
+function escapeAttribute(value) {
 
-const savedTheme =
-    localStorage.getItem("theme");
+    return String(value)
 
-if (savedTheme === "light") {
+        .replaceAll("&", "&amp;")
 
-    document.body.classList.add("light");
+        .replaceAll('"', "&quot;")
 
-}
-else {
+        .replaceAll("'", "&#039;")
 
-    document.body.classList.remove("light");
+        .replaceAll("<", "&lt;")
 
-}
-
-
-if (darkBtn) {
-
-    darkBtn.addEventListener(
-        "click",
-        () => {
-
-            document.body.classList.toggle(
-                "light"
-            );
-
-            const isLight =
-                document.body.classList.contains(
-                    "light"
-                );
-
-            localStorage.setItem(
-                "theme",
-                isLight
-                    ? "light"
-                    : "dark"
-            );
-
-            darkBtn.textContent =
-                isLight
-                    ? "☀️"
-                    : "🌙";
-
-        }
-    );
-
+        .replaceAll(">", "&gt;");
 }

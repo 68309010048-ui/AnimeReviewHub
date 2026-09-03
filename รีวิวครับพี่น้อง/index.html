@@ -16,8 +16,13 @@
          CSS
     ========================== -->
 
-   <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/theme.css">
+    <link
+        rel="stylesheet"
+        href="css/style.css">
+
+    <link
+        rel="stylesheet"
+        href="css/theme.css">
 
 
     <!-- =========================
@@ -49,15 +54,9 @@
 
 <div class="top-user">
 
-
-    <!-- =========================
-         User Left
-    ========================== -->
-
     <div class="user-left">
 
-
-        <!-- Profile Image -->
+        <!-- Profile -->
 
         <img
             id="userAvatar"
@@ -65,8 +64,6 @@
             src="https://api.dicebear.com/9.x/initials/svg?seed=User"
             alt="Profile">
 
-
-        <!-- User Name -->
 
         <div class="user-info">
 
@@ -76,13 +73,10 @@
 
         </div>
 
-
     </div>
 
 
-    <!-- =========================
-         User Actions
-    ========================== -->
+    <!-- User Actions -->
 
     <div class="user-actions">
 
@@ -112,9 +106,7 @@
 
         </button>
 
-
     </div>
-
 
 </div>
 
@@ -125,7 +117,6 @@
 ===================================================== -->
 
 <header>
-
 
     <div class="hero">
 
@@ -138,53 +129,51 @@
 
 
             <!-- =========================
-                 Logo
+                 LOGO
             ========================== -->
 
-          <div class="logo">
+            <div class="logo">
 
-    <div class="logo-icon">
+                <div class="logo-icon">
 
-       <img
-    src="logo-icon.png"
-    alt="Anime Review Hub">
+                    <img
+                        src="logo-icon.png"
+                        alt="Anime Review Hub"
+                        onerror="this.style.display='none';">
 
-    </div>
+                </div>
 
-    <div class="logo-text">
 
-        <h1>Anime Review Hub</h1>
+                <div class="logo-text">
 
-        <p>
-            Discover • Review • Favorite
-        </p>
+                    <h1>
+                        Anime Review Hub
+                    </h1>
 
-    </div>
+                    <p>
+                        Discover • Review • Favorite
+                    </p>
 
-</div>
+                </div>
+
+            </div>
 
 
 
             <!-- =========================
-                 Search
+                 SEARCH
             ========================== -->
 
             <div class="hero-search">
+    <i class="fa-solid fa-magnifying-glass"></i>
 
-
-                <i
-                    class="fa-solid fa-magnifying-glass">
-                </i>
-
-
-                <input
-                    type="text"
-                    id="searchAnime"
-                    placeholder="ค้นหาอนิเมะ..."
-                    autocomplete="off">
-
-
-            </div>
+    <input
+        type="text"
+        id="searchAnime"
+        placeholder="ค้นหาอนิเมะ..."
+        autocomplete="off"
+    >
+</div>
 
 
         </div>
@@ -198,40 +187,31 @@
         <div class="menu-btn">
 
 
-            <!-- Favorite -->
-
             <a
                 href="pages/favorite.html"
                 class="nav-btn">
 
                 <span>❤️</span>
-
                 <span>Favorite</span>
 
             </a>
 
-
-            <!-- Bookmark -->
 
             <a
                 href="pages/bookmark.html"
                 class="nav-btn">
 
                 <span>🔖</span>
-
                 <span>Bookmark</span>
 
             </a>
 
-
-            <!-- Profile -->
 
             <a
                 href="pages/profile.html"
                 class="nav-btn">
 
                 <span>👤</span>
-
                 <span>Profile</span>
 
             </a>
@@ -246,18 +226,16 @@
                 style="display:none;">
 
                 <span>⚙️</span>
-
-                <span>Admin</span>
+                <span>reviewer</span>
 
             </a>
-
 
         </div>
 
 
 
         <!-- =================================================
-             SUPER ADMIN MENU
+             SUPER ADMIN
         ================================================= -->
 
         <div
@@ -265,17 +243,14 @@
             class="super-admin-menu"
             style="display:none;">
 
-
             <a
                 href="pages/users.html"
                 class="nav-btn">
 
                 <span>👥</span>
-
                 <span>Users Management</span>
 
             </a>
-
 
         </div>
 
@@ -454,7 +429,6 @@
             🔥 Trending Anime
         </h2>
 
-
         <p>
             ค้นหาอนิเมะที่คุณชื่นชอบและแบ่งปันรีวิวกับทุกคน
         </p>
@@ -473,15 +447,11 @@
     class="anime-container"
     id="animeList">
 
-
-    <!-- Loading -->
-
     <div class="loading">
 
         <div class="loader"></div>
 
     </div>
-
 
 </section>
 
@@ -491,11 +461,23 @@
      JAVASCRIPT
 ===================================================== -->
 
-<script type="module" src="js/theme.js"></script>
-<script type="module" src="js/script.js"></script>
-<script type="module" src="js/user.js"></script>
+<script
+    type="module"
+    src="js/theme.js">
+</script>
+
+<script
+    type="module"
+    src="js/script.js">
+</script>
+
+<script
+    type="module"
+    src="js/user.js">
+</script>
 
 
 </body>
 
 </html>
+
