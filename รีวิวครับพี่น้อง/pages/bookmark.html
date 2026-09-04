@@ -3,105 +3,222 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Bookmark Anime</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="../css/bookmark.css">
-<link rel="stylesheet" href="../css/theme.css">
+    <title>Bookmark - Anime Review Hub</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/bookmark.css">
+    <link rel="stylesheet" href="../css/theme.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
 <body>
 
-<header class="page-header">
+    <!-- ==================================================
+         HEADER
+    ================================================== -->
 
-<a href="../index.html" class="back-btn">
+    <header class="page-header">
 
-<i class="fa-solid fa-arrow-left"></i>
+        <div class="header-inner">
 
-กลับหน้าแรก
+            <a
+                href="../index.html"
+                class="back-btn">
 
-</a>
+                <i class="fa-solid fa-arrow-left"></i>
 
-<h1>🔖 Bookmark</h1>
+                <span>กลับหน้าแรก</span>
 
-<p>รายการอนิเมะที่คุณบันทึกไว้</p>
+            </a>
 
-</header>
 
-<section class="search-section">
+            <div class="page-heading">
 
-<div class="search-box">
+                <div class="heading-icon bookmark-icon">
 
-<i class="fa-solid fa-search"></i>
+                    <i class="fa-solid fa-bookmark"></i>
 
-<input
-type="text"
-id="searchBookmark"
-placeholder="ค้นหา Bookmark...">
+                </div>
 
-</div>
+                <div>
 
-</section>
+                    <h1>
+                        Bookmark
+                    </h1>
 
-<section class="favorite-info">
+                    <p>
+                        รายการอนิเมะที่คุณบันทึกไว้
+                    </p>
 
-<h2>
+                </div>
 
-🔖 ทั้งหมด
+            </div>
 
-<span id="bookmarkCount">
+        </div>
 
-0
+    </header>
 
-</span>
 
-เรื่อง
+    <!-- ==================================================
+         MAIN
+    ================================================== -->
 
-</h2>
+    <main class="page-container">
 
-</section>
 
-<section
-id="bookmarkList"
-class="anime-grid">
+        <!-- ==================================================
+             SEARCH + COUNT
+        ================================================== -->
 
-<div class="loading">
+        <section class="toolbar">
 
-<div class="loader"></div>
+            <div class="search-box">
 
-</div>
+                <i class="fa-solid fa-magnifying-glass"></i>
 
-</section>
+                <input
+                    type="text"
+                    id="searchBookmark"
+                    placeholder="ค้นหาอนิเมะใน Bookmark..."
+                    autocomplete="off">
 
-<div
-id="emptyBox"
-class="empty-box"
-style="display:none;">
+            </div>
 
-<i class="fa-solid fa-bookmark"></i>
 
-<h2>ยังไม่มี Bookmark</h2>
+            <div class="count-box">
 
-<p>กดปุ่ม 🔖 จากหน้ารายละเอียดเพื่อบันทึก</p>
+                <div class="count-icon">
 
-<a href="../index.html" class="home-btn">
+                    <i class="fa-solid fa-bookmark"></i>
 
-เลือกอนิเมะ
+                </div>
 
-</a>
+                <div>
 
-</div>
+                    <span class="count-label">
+                        รายการที่บันทึก
+                    </span>
 
-<script type="module" src="../js/theme.js"></script>
-<script type="module" src="../js/bookmark.js"></script>
+                    <strong id="bookmarkCount">
+                        0
+                    </strong>
+
+                    <span class="count-unit">
+                        เรื่อง
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION TITLE
+        ================================================== -->
+
+        <section class="content-heading">
+
+            <div>
+
+                <h2>
+                    <i class="fa-solid fa-bookmark"></i>
+                    Bookmark ของฉัน
+                </h2>
+
+                <p>
+                    อนิเมะที่คุณบันทึกไว้ดูภายหลัง
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             ANIME LIST
+        ================================================== -->
+
+        <section
+            id="bookmarkList"
+            class="anime-grid">
+
+            <div class="loading">
+
+                <div class="loader"></div>
+
+                <p>
+                    กำลังโหลด Bookmark...
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             EMPTY
+        ================================================== -->
+
+        <section
+            id="emptyBox"
+            class="empty-box"
+            style="display:none;">
+
+            <div class="empty-icon">
+
+                <i class="fa-solid fa-bookmark"></i>
+
+            </div>
+
+            <h2>
+                ยังไม่มี Bookmark
+            </h2>
+
+            <p>
+                กดปุ่ม Bookmark จากหน้ารายละเอียด
+                เพื่อบันทึกอนิเมะไว้ดูภายหลัง
+            </p>
+
+            <a
+                href="../index.html"
+                class="home-btn">
+
+                <i class="fa-solid fa-compass"></i>
+
+                เลือกอนิเมะ
+
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <script
+        type="module"
+        src="../js/theme.js">
+    </script>
+
+    <script
+        type="module"
+        src="../js/bookmark.js">
+    </script>
 
 </body>
+
 </html>

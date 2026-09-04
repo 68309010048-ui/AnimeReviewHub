@@ -1,3 +1,8 @@
+// =====================================================
+// Anime Review Hub
+// favorite.js
+// =====================================================
+
 import { auth, db } from "./firebase.js";
 
 import {
@@ -13,132 +18,418 @@ import {
     doc
 } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
-// =====================================
-// Element
-// =====================================
 
-const favoriteList = document.getElementById("favoriteList");
-const favoriteCount = document.getElementById("favoriteCount");
-const emptyBox = document.getElementById("emptyBox");
-const searchInput = document.getElementById("searchFavorite");
+// =====================================================
+// Elements
+// =====================================================
+
+const favoriteList =
+    document.getElementById("favoriteList");
+
+const favoriteCount =
+    document.getElementById("favoriteCount");
+
+const emptyBox =
+    document.getElementById("emptyBox");
+
+const searchInput =
+    document.getElementById("searchFavorite");
+
+
+// =====================================================
+// Variables
+// =====================================================
 
 let favoriteAnime = [];
+
+let reviewData = [];
+
 let currentUser = null;
 
-// =====================================
-// Login
-// =====================================
 
-onAuthStateChanged(auth, async (user) => {
+// =====================================================
+// Authentication
+// =====================================================
 
-    if (!user) {
+onAuthStateChanged(
+    auth,
+    async (user) => {
 
-        location.href = "../login.html";
-        return;
+        if (!user) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+        }
+
+        currentUser = user;
+
+        await loadData();
+
+    }
+);
+
+
+// =====================================================
+// Load Favorite + Reviews
+// =====================================================
+
+async function loadData() {
+
+    try {
+
+        favoriteAnime = [];
+        reviewData = [];
+
+
+        favoriteList.innerHTML = `
+            <div class="loading">
+
+                <div class="loader"></div>
+
+                <p>
+                    กำลังโหลด Favorite...
+                </p>
+
+            </div>
+        `;
+
+
+        // ==============================================
+        // Load Favorite
+        // ==============================================
+
+        const favoriteQuery =
+            query(
+                collection(db, "favorites"),
+                where(
+                    "uid",
+                    "==",
+                    currentUser.uid
+                )
+            );
+
+
+        const favoriteSnap =
+            await getDocs(
+                favoriteQuery
+            );
+
+
+        favoriteSnap.forEach(
+            (docSnap) => {
+
+                favoriteAnime.push({
+
+                    id: docSnap.id,
+
+                    ...docSnap.data()
+
+                });
+
+            }
+        );
+
+
+        // ==============================================
+        // Load Reviews
+        // ==============================================
+
+        const reviewSnap =
+            await getDocs(
+                collection(
+                    db,
+                    "reviews"
+                )
+            );
+
+
+        reviewSnap.forEach(
+            (docSnap) => {
+
+                reviewData.push({
+
+                    id: docSnap.id,
+
+                    ...docSnap.data()
+
+                });
+
+            }
+        );
+
+
+        showFavorite(
+            favoriteAnime
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Load Favorite Error:",
+            error
+        );
+
+
+        favoriteList.innerHTML = `
+            <div class="loading">
+
+                <p>
+                    โหลดข้อมูลไม่สำเร็จ
+                </p>
+
+            </div>
+        `;
 
     }
 
-    currentUser = user;
+}
 
-    await loadFavorite();
 
-});
+// =====================================================
+// Get Average Review
+// =====================================================
 
-// =====================================
-// Load Favorite
-// =====================================
+function getAverageReview(animeId) {
 
-async function loadFavorite() {
+    const reviews =
+        reviewData.filter(
+            (review) => {
 
-    favoriteAnime = [];
+                return String(
+                    review.animeId
+                ) === String(
+                    animeId
+                );
 
-    favoriteList.innerHTML = `
-    <div class="loading">
-        <div class="loader"></div>
-    </div>
-    `;
+            }
+        );
 
-    const q = query(
 
-        collection(db, "favorites"),
+    if (reviews.length === 0) {
 
-        where("uid", "==", currentUser.uid)
+        return {
 
-    );
+            score: 0,
 
-    const snap = await getDocs(q);
+            count: 0
 
-    snap.forEach(docSnap => {
+        };
 
-        favoriteAnime.push({
+    }
 
-            id: docSnap.id,
 
-            ...docSnap.data()
+    const total =
+        reviews.reduce(
+            (
+                sum,
+                review
+            ) => {
 
-        });
+                return (
+                    sum +
+                    Number(
+                        review.rating || 0
+                    )
+                );
 
-    });
+            },
+            0
+        );
 
-    showFavorite(favoriteAnime);
+
+    return {
+
+        score:
+            total / reviews.length,
+
+        count:
+            reviews.length
+
+    };
 
 }
 
-// =====================================
+
+// =====================================================
+// Category
+// =====================================================
+
+function getCategoryText(category) {
+
+    if (Array.isArray(category)) {
+
+        return category.join(", ");
+
+    }
+
+
+    return category ||
+        "ไม่ระบุหมวดหมู่";
+
+}
+
+
+// =====================================================
 // Show Favorite
-// =====================================
+// =====================================================
 
 function showFavorite(list) {
 
     favoriteList.innerHTML = "";
 
-    favoriteCount.textContent = list.length;
 
-    if (list.length === 0) {
+    if (favoriteCount) {
 
-        favoriteList.style.display = "none";
-        emptyBox.style.display = "block";
-
-        return;
+        favoriteCount.textContent =
+            list.length;
 
     }
 
-    favoriteList.style.display = "grid";
-    emptyBox.style.display = "none";
 
-    list.forEach(item => {
+    // ==============================================
+    // Empty
+    // ==============================================
 
-        favoriteList.innerHTML += `
+    if (list.length === 0) {
 
-        <div class="card">
+        favoriteList.style.display =
+            "none";
 
-            <img src="${item.image}">
+        if (emptyBox) {
 
-            <div class="card-content">
+            emptyBox.style.display =
+                "block";
 
-                <h3>${item.title}</h3>
+        }
 
-                <p class="genre">
-                    ${item.category}
-                </p>
+        return;
+    }
 
-                <p class="rating">
-                    ⭐ ${Number(item.score || 0).toFixed(1)}
-                </p>
 
-                <div class="card-buttons">
+    favoriteList.style.display =
+        "grid";
+
+
+    if (emptyBox) {
+
+        emptyBox.style.display =
+            "none";
+
+    }
+
+
+    // ==============================================
+    // Cards
+    // ==============================================
+
+    list.forEach(
+        (item) => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "card";
+
+
+            const title =
+                item.title ||
+                "ไม่มีชื่อ";
+
+
+            const image =
+                item.image ||
+                "https://via.placeholder.com/400x550?text=No+Image";
+
+
+            const category =
+                getCategoryText(
+                    item.category
+                );
+
+
+            // ==========================================
+            // Review Average
+            // ==========================================
+
+            const review =
+                getAverageReview(
+                    item.animeId
+                );
+
+
+            const score =
+                review.score > 0
+
+                    ? review.score.toFixed(1)
+
+                    : "0.0";
+
+
+            card.innerHTML = `
+
+                <img
+                    src="${escapeAttribute(image)}"
+                    alt="${escapeAttribute(title)}"
+                    class="anime-image"
+                    loading="lazy"
+                >
+
+
+                <div class="card-content">
+
+                    <h3>
+                        ${escapeHTML(title)}
+                    </h3>
+
+
+                    <div class="genre">
+
+                        <span>
+                            ${escapeHTML(category)}
+                        </span>
+
+                    </div>
+
+
+                    <div class="rating">
+
+                        <div class="score">
+
+                            <i class="fa-solid fa-star"></i>
+
+                            ${score}
+
+                        </div>
+
+
+                        <div class="review-count">
+
+                            ${review.count} รีวิว
+
+                        </div>
+
+                    </div>
+
 
                     <button
-                        class="detail-btn"
-                        onclick="showDetail('${item.animeId}')">
+                        type="button"
+                        class="detail-btn">
 
                         ดูรายละเอียด
 
                     </button>
 
+
                     <button
-                        class="remove-btn"
-                        onclick="removeFavorite('${item.id}')">
+                        type="button"
+                        class="remove-btn">
 
                         ❤️ ลบออก
 
@@ -146,93 +437,250 @@ function showFavorite(list) {
 
                 </div>
 
-            </div>
+            `;
 
-        </div>
 
-        `;
+            // ==========================================
+            // Image Error
+            // ==========================================
 
-    });
+            const imageElement =
+                card.querySelector(
+                    ".anime-image"
+                );
+
+
+            if (imageElement) {
+
+                imageElement.addEventListener(
+                    "error",
+                    () => {
+
+                        imageElement.src =
+                            "https://via.placeholder.com/400x550?text=No+Image";
+
+                    }
+                );
+
+            }
+
+
+            // ==========================================
+            // Detail
+            // ==========================================
+
+            const detailButton =
+                card.querySelector(
+                    ".detail-btn"
+                );
+
+
+            detailButton.addEventListener(
+                "click",
+                () => {
+
+                    localStorage.setItem(
+                        "animeId",
+                        item.animeId
+                    );
+
+
+                    window.location.href =
+                        "detail.html";
+
+                }
+            );
+
+
+            // ==========================================
+            // Remove
+            // ==========================================
+
+            const removeButton =
+                card.querySelector(
+                    ".remove-btn"
+                );
+
+
+            removeButton.addEventListener(
+                "click",
+                () => {
+
+                    removeFavorite(
+                        item.id
+                    );
+
+                }
+            );
+
+
+            favoriteList.appendChild(
+                card
+            );
+
+        }
+    );
 
 }
 
-// =====================================
+
+// =====================================================
 // Search
-// =====================================
+// =====================================================
 
-searchInput.addEventListener("keyup", () => {
+if (searchInput) {
 
-    const keyword = searchInput.value
-        .trim()
-        .toLowerCase();
+    searchInput.addEventListener(
+        "input",
+        () => {
 
-    if (keyword === "") {
+            const keyword =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
 
-        showFavorite(favoriteAnime);
-        return;
 
-    }
+            const result =
+                favoriteAnime.filter(
+                    (item) => {
 
-    const result = favoriteAnime.filter(item =>
+                        const title =
+                            String(
+                                item.title || ""
+                            )
+                                .toLowerCase();
 
-        item.title
-            .toLowerCase()
-            .includes(keyword)
 
+                        const category =
+                            getCategoryText(
+                                item.category
+                            )
+                                .toLowerCase();
+
+
+                        return (
+                            title.includes(keyword) ||
+                            category.includes(keyword)
+                        );
+
+                    }
+                );
+
+
+            showFavorite(
+                result
+            );
+
+        }
     );
 
-    showFavorite(result);
+}
 
-});
 
-// =====================================
-// Detail
-// =====================================
-
-window.showDetail = function(id){
-
-    localStorage.setItem("animeId", id);
-
-    location.href = "detail.html";
-
-};
-
-// =====================================
+// =====================================================
 // Remove Favorite
-// =====================================
+// =====================================================
 
-window.removeFavorite = async function(id){
+async function removeFavorite(id) {
 
-    if(!confirm("ลบออกจาก Favorite ?")){
+    if (!id) return;
 
+
+    const confirmDelete =
+        confirm(
+            "ต้องการลบอนิเมะนี้ออกจาก Favorite หรือไม่?"
+        );
+
+
+    if (!confirmDelete) {
         return;
-
     }
 
-    try{
+
+    try {
 
         await deleteDoc(
-
-            doc(db,"favorites",id)
-
+            doc(
+                db,
+                "favorites",
+                id
+            )
         );
 
-        favoriteAnime = favoriteAnime.filter(
 
-            item => item.id !== id
+        favoriteAnime =
+            favoriteAnime.filter(
+                (item) =>
+                    item.id !== id
+            );
 
+
+        showFavorite(
+            favoriteAnime
         );
 
-        showFavorite(favoriteAnime);
+    }
+    catch (error) {
+
+        console.error(
+            "Remove Favorite Error:",
+            error
+        );
+
+
+        alert(
+            "ลบ Favorite ไม่สำเร็จ"
+        );
 
     }
 
-    catch(error){
+}
 
-        console.error(error);
 
-        alert("ลบไม่สำเร็จ");
+// =====================================================
+// Escape HTML
+// =====================================================
 
-    }
+function escapeHTML(value) {
 
-};
+    return String(value)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+// =====================================================
+// Escape Attribute
+// =====================================================
+
+function escapeAttribute(value) {
+
+    return escapeHTML(
+        value
+    );
+
+}

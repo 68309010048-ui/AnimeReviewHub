@@ -9,14 +9,12 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Register - Anime Review Hub</title>
+    <title>สมัครสมาชิก - Anime Review Hub</title>
+
+    <link rel="stylesheet" href="../css/register.css">
 
     <link
-        rel="stylesheet"
-        href="../css/auth.css">
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
     <link
@@ -25,85 +23,505 @@
 
 </head>
 
+
 <body>
 
-<div class="auth-box">
+    <main class="register-page">
 
-    <div
-        class="card"
-        style="max-width:500px;margin:50px auto;">
+        <!-- ==================================================
+             LEFT BRAND
+        ================================================== -->
 
-        <h2 style="text-align:center;">
-            สมัครสมาชิก
-        </h2>
+        <section class="brand-panel">
 
+            <div class="brand-content">
 
-        <!-- Name -->
+                <div class="brand-logo">
 
-        <input
-            type="text"
-            id="name"
-            placeholder="ชื่อ">
+                    <div class="logo-box">
 
+                        <img
+                            src="../logo-icon.png"
+                            alt="Anime Review Hub"
+                            onerror="this.style.display='none';">
 
-        <!-- Email -->
+                    </div>
 
-        <input
-            type="email"
-            id="email"
-            placeholder="Email">
+                    <div>
 
+                        <h1>
+                            Anime Review Hub
+                        </h1>
 
-        <!-- Password -->
+                        <p>
+                            Discover • Review • Favorite
+                        </p>
 
-        <input
-            type="password"
-            id="password"
-            placeholder="Password">
+                    </div>
 
-
-        <!-- Register -->
-
-        <button id="registerBtn">
-
-            <i class="fa-solid fa-user-plus"></i>
-
-            สมัครสมาชิก
-
-        </button>
+                </div>
 
 
-        <!-- Google Register -->
-        <!-- Login -->
+                <div class="welcome-text">
 
-        <p style="text-align:center;">
+                    <span class="welcome-label">
+                        JOIN OUR COMMUNITY
+                    </span>
 
-            มีบัญชีแล้ว ?
+                    <h2>
+                        สร้างบัญชีของคุณ<br>
+                        แล้วเริ่มรีวิวอนิเมะ
+                    </h2>
 
-            <a
-                href="login.html"
-                style="color:#6d28d9;font-weight:bold;">
+                    <p>
+                        สมัครสมาชิกเพื่อให้คุณสามารถ
+                        ให้คะแนน รีวิว Favorite และ Bookmark
+                        อนิเมะที่คุณชื่นชอบได้
+                    </p>
 
-                เข้าสู่ระบบ
-
-            </a>
-
-        </p>
-
-        <p
-            id="message"
-            class="message">
-        </p>
-
-    </div>
-
-</div>
+                </div>
 
 
-<script
-    type="module"
-    src="../js/auth.js">
-</script>
+                <!-- ==================================================
+                     FEATURES
+                ================================================== -->
+
+                <div class="feature-list">
+
+                    <div class="feature-item">
+
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                รีวิวอนิเมะ
+                            </strong>
+
+                            <span>
+                                แสดงความคิดเห็นและให้คะแนน
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature-item">
+
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Favorite
+                            </strong>
+
+                            <span>
+                                เก็บเรื่องโปรดของคุณไว้
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature-item">
+
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-bookmark"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Bookmark
+                            </strong>
+
+                            <span>
+                                บันทึกเรื่องที่อยากดูภายหลัง
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="login.html"
+                    class="back-login">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    กลับหน้าเข้าสู่ระบบ
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             REGISTER PANEL
+        ================================================== -->
+
+        <section class="register-panel">
+
+            <div class="register-card">
+
+
+                <!-- Mobile Logo -->
+
+                <div class="mobile-logo">
+
+                    <div class="mobile-logo-box">
+
+                        <img
+                            src="../logo-icon.png"
+                            alt="Anime Review Hub"
+                            onerror="this.style.display='none';">
+
+                    </div>
+
+                    <div>
+
+                        <h1>
+                            Anime Review Hub
+                        </h1>
+
+                        <p>
+                            Discover • Review • Favorite
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Heading -->
+
+                <div class="register-heading">
+
+                    <div class="register-icon">
+
+                        <i class="fa-solid fa-user-plus"></i>
+
+                    </div>
+
+                    <h2>
+                        สมัครสมาชิก
+                    </h2>
+
+                    <p>
+                        สร้างบัญชีเพื่อเริ่มใช้งาน Anime Review Hub
+                    </p>
+
+                </div>
+
+
+                <!-- ==================================================
+                     NAME
+                ================================================== -->
+
+                <div class="input-group">
+
+                    <label for="name">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        ชื่อผู้ใช้
+
+                    </label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="กรอกชื่อผู้ใช้"
+                            autocomplete="name">
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================================
+                     EMAIL
+                ================================================== -->
+
+                <div class="input-group">
+
+                    <label for="email">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        Email
+
+                    </label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="กรอก Email"
+                            autocomplete="email">
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================================
+                     PASSWORD
+                ================================================== -->
+
+                <div class="input-group">
+
+                    <label for="password">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        Password
+
+                    </label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="อย่างน้อย 6 ตัวอักษร"
+                            autocomplete="new-password">
+
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="password-toggle">
+
+                            <i class="fa-solid fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================================
+                     CONFIRM PASSWORD
+                ================================================== -->
+
+                <div class="input-group">
+
+                    <label for="confirmPassword">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        ยืนยัน Password
+
+                    </label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            placeholder="กรอก Password อีกครั้ง"
+                            autocomplete="new-password">
+
+                        <button
+                            type="button"
+                            id="toggleConfirmPassword"
+                            class="password-toggle">
+
+                            <i class="fa-solid fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================================
+                     PASSWORD INFO
+                ================================================== -->
+
+                <div
+                    id="passwordHint"
+                    class="password-hint">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    Password ต้องมีอย่างน้อย 6 ตัวอักษร
+
+                </div>
+
+
+                <!-- ==================================================
+                     REGISTER BUTTON
+                ================================================== -->
+
+                <button
+                    type="button"
+                    id="registerBtn"
+                    class="register-btn">
+
+                    <i class="fa-solid fa-user-plus"></i>
+
+                    สมัครสมาชิก
+
+                </button>
+
+
+                <!-- ==================================================
+                     LOGIN LINK
+                ================================================== -->
+
+                <div class="login-text">
+
+                    <span>
+                        มีบัญชีอยู่แล้ว?
+                    </span>
+
+                    <a href="login.html">
+                        เข้าสู่ระบบ
+                    </a>
+
+                </div>
+
+
+                <!-- ==================================================
+                     MESSAGE
+                ================================================== -->
+
+                <p
+                    id="message"
+                    class="message">
+                </p>
+
+
+                <div class="register-footer">
+
+                    <span>
+                        © 2026 Anime Review Hub
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ==================================================
+         PASSWORD SCRIPT
+    ================================================== -->
+
+    <script>
+
+        const password =
+            document.getElementById("password");
+
+        const confirmPassword =
+            document.getElementById("confirmPassword");
+
+        const togglePassword =
+            document.getElementById("togglePassword");
+
+        const toggleConfirmPassword =
+            document.getElementById(
+                "toggleConfirmPassword"
+            );
+
+
+        // Password
+        if (
+            password &&
+            togglePassword
+        ) {
+
+            togglePassword.addEventListener(
+                "click",
+                () => {
+
+                    const show =
+                        password.type === "password";
+
+                    password.type =
+                        show
+                            ? "text"
+                            : "password";
+
+                    togglePassword.innerHTML =
+                        show
+
+                            ? '<i class="fa-solid fa-eye-slash"></i>'
+
+                            : '<i class="fa-solid fa-eye"></i>';
+
+                }
+            );
+
+        }
+
+
+        // Confirm Password
+        if (
+            confirmPassword &&
+            toggleConfirmPassword
+        ) {
+
+            toggleConfirmPassword.addEventListener(
+                "click",
+                () => {
+
+                    const show =
+                        confirmPassword.type === "password";
+
+                    confirmPassword.type =
+                        show
+                            ? "text"
+                            : "password";
+
+                    toggleConfirmPassword.innerHTML =
+                        show
+
+                            ? '<i class="fa-solid fa-eye-slash"></i>'
+
+                            : '<i class="fa-solid fa-eye"></i>';
+
+                }
+            );
+
+        }
+
+    </script>
+
+
+    <script
+        type="module"
+        src="../js/auth.js">
+    </script>
 
 </body>
 

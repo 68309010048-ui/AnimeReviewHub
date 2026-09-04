@@ -3,144 +3,221 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Favorite Anime</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="../css/favorite.css">
-<link rel="stylesheet" href="../css/theme.css">
+    <title>Favorite - Anime Review Hub</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/favorite.css">
+    <link rel="stylesheet" href="../css/theme.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
 <body>
 
-<!-- ===========================
-Header
-=========================== -->
+    <!-- ==================================================
+         HEADER
+    ================================================== -->
 
-<header class="page-header">
+    <header class="page-header">
 
-<a href="../index.html" class="back-btn">
+        <div class="header-inner">
 
-<i class="fa-solid fa-arrow-left"></i>
+            <a
+                href="../index.html"
+                class="back-btn">
 
-<span>กลับหน้าแรก</span>
+                <i class="fa-solid fa-arrow-left"></i>
 
-</a>
+                <span>กลับหน้าแรก</span>
 
-<h1>
+            </a>
 
-❤️ Favorite Anime
 
-</h1>
+            <div class="page-heading">
 
-<p>
+                <div class="heading-icon favorite-icon">
 
-อนิเมะที่คุณเพิ่มไว้ในรายการโปรด
+                    <i class="fa-solid fa-heart"></i>
 
-</p>
+                </div>
 
-</header>
+                <div>
 
-<!-- ===========================
-Search
-=========================== -->
+                    <h1>
+                        Favorite
+                    </h1>
 
-<section class="search-section">
+                    <p>
+                        อนิเมะที่คุณเพิ่มไว้ในรายการโปรด
+                    </p>
 
-<div class="search-box">
+                </div>
 
-<i class="fa-solid fa-magnifying-glass"></i>
+            </div>
 
-<input
-type="text"
-id="searchFavorite"
-placeholder="ค้นหา Favorite...">
+        </div>
 
-</div>
+    </header>
 
-</section>
 
-<!-- ===========================
-Favorite Count
-=========================== -->
+    <!-- ==================================================
+         MAIN
+    ================================================== -->
 
-<section class="favorite-info">
+    <main class="page-container">
 
-<h2>
 
-❤️ ทั้งหมด
+        <!-- ==================================================
+             SEARCH + COUNT
+        ================================================== -->
 
-<span id="favoriteCount">
+        <section class="toolbar">
 
-0
+            <div class="search-box">
 
-</span>
+                <i class="fa-solid fa-magnifying-glass"></i>
 
-เรื่อง
+                <input
+                    type="text"
+                    id="searchFavorite"
+                    placeholder="ค้นหาอนิเมะใน Favorite..."
+                    autocomplete="off">
 
-</h2>
+            </div>
 
-</section>
 
-<!-- ===========================
-Anime List
-=========================== -->
+            <div class="count-box">
 
-<section
-class="anime-grid"
-id="favoriteList">
+                <div class="count-icon">
 
-<div class="loading">
+                    <i class="fa-solid fa-heart"></i>
 
-<div class="loader"></div>
+                </div>
 
-</div>
+                <div>
 
-</section>
+                    <span class="count-label">
+                        รายการโปรด
+                    </span>
 
-<!-- ===========================
-Empty
-=========================== -->
+                    <strong id="favoriteCount">
+                        0
+                    </strong>
 
-<div
-class="empty-box"
-id="emptyBox"
-style="display:none;">
+                    <span class="count-unit">
+                        เรื่อง
+                    </span>
 
-<i class="fa-solid fa-heart-crack"></i>
+                </div>
 
-<h2>
+            </div>
 
-ยังไม่มีอนิเมะที่ถูกใจ
+        </section>
 
-</h2>
 
-<p>
+        <!-- ==================================================
+             SECTION TITLE
+        ================================================== -->
 
-กดปุ่ม ❤️ จากหน้ารายละเอียด
-เพื่อเพิ่มรายการโปรด
+        <section class="content-heading">
 
-</p>
+            <div>
 
-<a
-href="../index.html"
-class="home-btn">
+                <h2>
+                    <i class="fa-solid fa-heart"></i>
+                    รายการโปรดของฉัน
+                </h2>
 
-เลือกอนิเมะ
+                <p>
+                    อนิเมะที่คุณชื่นชอบ
+                </p>
 
-</a>
+            </div>
 
-</div>
+        </section>
 
-<script type="module" src="../js/theme.js"></script>
-<script type="module" src="../js/favorite.js"></script>
+
+        <!-- ==================================================
+             ANIME LIST
+        ================================================== -->
+
+        <section
+            id="favoriteList"
+            class="anime-grid">
+
+            <div class="loading">
+
+                <div class="loader"></div>
+
+                <p>
+                    กำลังโหลดรายการโปรด...
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             EMPTY
+        ================================================== -->
+
+        <section
+            id="emptyBox"
+            class="empty-box"
+            style="display:none;">
+
+            <div class="empty-icon">
+
+                <i class="fa-solid fa-heart-crack"></i>
+
+            </div>
+
+            <h2>
+                ยังไม่มีอนิเมะที่ถูกใจ
+            </h2>
+
+            <p>
+                เพิ่มอนิเมะที่คุณชื่นชอบจากหน้ารายละเอียด
+                แล้วจะปรากฏที่นี่
+            </p>
+
+            <a
+                href="../index.html"
+                class="home-btn">
+
+                <i class="fa-solid fa-compass"></i>
+
+                เลือกอนิเมะ
+
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <script
+        type="module"
+        src="../js/theme.js">
+    </script>
+
+    <script
+        type="module"
+        src="../js/favorite.js">
+    </script>
 
 </body>
 

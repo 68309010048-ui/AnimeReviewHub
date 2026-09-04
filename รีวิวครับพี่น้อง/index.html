@@ -265,153 +265,116 @@
      CATEGORY
 ===================================================== -->
 
-<section class="category">
-
+<section class="category-section">
 
     <button
-        type="button"
-        class="active"
-        onclick="filterAnime(event, 'All')">
+        id="categoryToggle"
+        class="category-toggle"
+        type="button">
 
-        🔥 ทั้งหมด
+        <span>
+            <i class="fa-solid fa-layer-group"></i>
+            หมวดหมู่
+        </span>
+
+        <i
+            id="categoryArrow"
+            class="fa-solid fa-chevron-down">
+        </i>
 
     </button>
 
 
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Action')">
+    <div
+        id="categoryContent"
+        class="category-content">
 
-        🟣 Action
+        <div class="category">
 
-    </button>
+            <button
+                class="active"
+                onclick="filterAnime(event, 'All')">
+                🔥 ทั้งหมด
+            </button>
 
+            <button
+                onclick="filterAnime(event, 'Action')">
+                🟣 Action
+            </button>
 
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Adventure')">
+            <button
+                onclick="filterAnime(event, 'Adventure')">
+                🟢 Adventure
+            </button>
 
-        🟢 Adventure
+            <button
+                onclick="filterAnime(event, 'Fantasy')">
+                🟠 Fantasy
+            </button>
 
-    </button>
+            <button
+                onclick="filterAnime(event, 'Comedy')">
+                🟡 Comedy
+            </button>
 
+            <button
+                onclick="filterAnime(event, 'Romance')">
+                ❤️ Romance
+            </button>
 
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Fantasy')">
+            <button
+                onclick="filterAnime(event, 'Sport')">
+                ⚽ Sport
+            </button>
 
-        🟠 Fantasy
+            <button
+                onclick="filterAnime(event, 'Drama')">
+                🎭 Drama
+            </button>
 
-    </button>
+            <button
+                onclick="filterAnime(event, 'Sci-Fi')">
+                🚀 Sci-Fi
+            </button>
 
+            <button
+                onclick="filterAnime(event, 'Mystery')">
+                🕵️ Mystery
+            </button>
 
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Comedy')">
+            <button
+                onclick="filterAnime(event, 'Horror')">
+                🎃 Horror
+            </button>
 
-        🟡 Comedy
+            <button
+                onclick="filterAnime(event, 'School')">
+                🏫 School
+            </button>
 
-    </button>
+            <button
+                onclick="filterAnime(event, 'Slice of Life')">
+                🌸 Slice of Life
+            </button>
 
+            <button
+                onclick="filterAnime(event, 'Supernatural')">
+                ✨ Supernatural
+            </button>
 
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Romance')">
+            <button
+                onclick="filterAnime(event, 'Isekai')">
+                🌍 Isekai
+            </button>
 
-        ❤️ Romance
+            <button
+                onclick="filterAnime(event, 'Music')">
+                🎵 Music
+            </button>
 
-    </button>
+        </div>
 
-
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Sport')">
-
-        ⚽ Sport
-
-    </button>
-
-
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Drama')">
-
-        🎭 Drama
-
-    </button>
-
-
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Sci-Fi')">
-
-        🚀 Sci-Fi
-
-    </button>
-
-
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Mystery')">
-
-        🕵️ Mystery
-
-    </button>
-
-
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Horror')">
-
-        👻 Horror
-
-    </button>
-
-
-    <button
-        type="button"
-        onclick="filterAnime(event, 'School')">
-
-        🏫 School
-
-    </button>
-
-
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Slice of Life')">
-
-        🌸 Slice of Life
-
-    </button>
-
-
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Supernatural')">
-
-        ✨ Supernatural
-
-    </button>
-
-
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Isekai')">
-
-        🌍 Isekai
-
-    </button>
-
-
-    <button
-        type="button"
-        onclick="filterAnime(event, 'Music')">
-
-        🎵 Music
-
-    </button>
-
+    </div>
 
 </section>
 

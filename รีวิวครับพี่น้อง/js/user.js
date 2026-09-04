@@ -35,74 +35,6 @@ const superAdminMenu =
 const logoutBtn =
     document.getElementById("logoutBtn");
 
-const darkBtn =
-    document.getElementById("darkBtn");
-
-
-// ======================================================
-// Theme
-// ======================================================
-
-function loadTheme() {
-
-    const theme =
-        localStorage.getItem("theme") || "dark";
-
-    if (theme === "light") {
-
-        document.body.classList.add("light");
-
-    } else {
-
-        document.body.classList.remove("light");
-
-    }
-
-    updateDarkButton();
-
-}
-
-
-function updateDarkButton() {
-
-    if (!darkBtn) return;
-
-    const isLight =
-        document.body.classList.contains("light");
-
-    darkBtn.textContent =
-        isLight ? "☀️" : "🌙";
-
-}
-
-
-if (darkBtn) {
-
-    darkBtn.addEventListener(
-        "click",
-        () => {
-
-            document.body.classList.toggle(
-                "light"
-            );
-
-            localStorage.setItem(
-                "theme",
-                document.body.classList.contains("light")
-                    ? "light"
-                    : "dark"
-            );
-
-            updateDarkButton();
-
-        }
-    );
-
-}
-
-
-loadTheme();
-
 
 // ======================================================
 // Authentication
@@ -131,12 +63,17 @@ onAuthStateChanged(
 
             }
 
+
             if (userAvatar) {
 
                 userAvatar.src =
                     "https://api.dicebear.com/9.x/initials/svg?seed=User";
 
+                userAvatar.alt =
+                    "User";
+
             }
+
 
             if (adminMenu) {
 
@@ -145,6 +82,7 @@ onAuthStateChanged(
 
             }
 
+
             if (superAdminMenu) {
 
                 superAdminMenu.style.display =
@@ -152,10 +90,38 @@ onAuthStateChanged(
 
             }
 
+
+            // ==================================================
+            // เปลี่ยน Logout → เข้าสู่ระบบ
+            // ==================================================
+
+            if (logoutBtn) {
+
+                logoutBtn.innerHTML =
+                    '<i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ';
+
+                logoutBtn.title =
+                    "เข้าสู่ระบบ";
+
+
+                logoutBtn.onclick = () => {
+
+                    window.location.href =
+                        "pages/login.html";
+
+                };
+
+            }
+
+
             return;
 
         }
 
+
+        // ==================================================
+        // Login แล้ว
+        // ==================================================
 
         try {
 
@@ -210,11 +176,13 @@ onAuthStateChanged(
                     snap.data();
 
 
+                // ใช้ชื่อที่บันทึกใน Firestore
                 userName =
                     data.name ||
                     userName;
 
 
+                // ใช้รูปจาก Firestore ก่อน Google
                 photo =
                     data.photo ||
                     data.photoURL ||
@@ -270,7 +238,7 @@ onAuthStateChanged(
 
 
             // ==================================================
-            // Admin
+            // Admin / Reviewer
             // ==================================================
 
             if (adminMenu) {
@@ -296,6 +264,62 @@ onAuthStateChanged(
                     role === "superadmin"
                         ? "flex"
                         : "none";
+
+            }
+
+
+            // ==================================================
+            // เปลี่ยน เข้าสู่ระบบ → Logout
+            // ==================================================
+
+            if (logoutBtn) {
+
+                logoutBtn.innerHTML =
+                    '<i class="fa-solid fa-right-from-bracket"></i> Logout';
+
+                logoutBtn.title =
+                    "ออกจากระบบ";
+
+
+                logoutBtn.onclick =
+                    async () => {
+
+                        try {
+
+                            logoutBtn.disabled =
+                                true;
+
+
+                            logoutBtn.innerHTML =
+                                '<i class="fa-solid fa-spinner fa-spin"></i> กำลังออกจากระบบ...';
+
+
+                            await signOut(auth);
+
+
+                            // Home อยู่โฟลเดอร์หลัก
+                            window.location.href =
+                                "pages/login.html";
+
+                        }
+                        catch (error) {
+
+                            console.error(
+                                "Logout Error:",
+                                error
+                            );
+
+
+                            logoutBtn.disabled =
+                                false;
+
+
+                            logoutBtn.innerHTML =
+                                '<i class="fa-solid fa-right-from-bracket"></i> Logout';
+
+                        }
+
+                    };
 
             }
 
@@ -327,6 +351,7 @@ onAuthStateChanged(
                 error
             );
 
+
             if (username) {
 
                 username.textContent =
@@ -339,41 +364,43 @@ onAuthStateChanged(
 
             }
 
+
+            // ==================================================
+            // ถ้าโหลด Firestore ไม่ได้
+            // ยังให้ Logout ทำงานได้
+            // ==================================================
+
+            if (logoutBtn) {
+
+                logoutBtn.innerHTML =
+                    '<i class="fa-solid fa-right-from-bracket"></i> Logout';
+
+
+                logoutBtn.onclick =
+                    async () => {
+
+                        try {
+
+                            await signOut(auth);
+
+                            window.location.href =
+                                "pages/login.html";
+
+                        }
+                        catch (logoutError) {
+
+                            console.error(
+                                "Logout Error:",
+                                logoutError
+                            );
+
+                        }
+
+                    };
+
+            }
+
         }
 
     }
 );
-
-
-// ======================================================
-// Logout
-// ======================================================
-
-if (logoutBtn) {
-
-    logoutBtn.addEventListener(
-        "click",
-        async () => {
-
-            try {
-
-                await signOut(auth);
-
-                window.location.href =
-                    "pages/login.html";
-
-            }
-            catch (error) {
-
-                console.error(
-                    "Logout Error:",
-                    error
-                );
-
-            }
-
-        }
-    );
-
-}
-

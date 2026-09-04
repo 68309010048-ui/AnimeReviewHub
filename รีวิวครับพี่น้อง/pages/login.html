@@ -1,101 +1,489 @@
-
 <!DOCTYPE html>
+
 <html lang="th">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
-    <title>Login</title>
+<title>เข้าสู่ระบบ - Anime Review Hub</title>
 
-    <link
-        rel="stylesheet"
-        href="../css/auth.css">
+<link rel="stylesheet" href="../css/login.css">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 
 </head>
 
 <body>
 
-<div class="auth-box">
+<main class="login-page">
 
-    <h2>
-        เข้าสู่ระบบ
-    </h2>
+    <!-- ==================================================
+         LEFT / BRAND
+    ================================================== -->
 
+    <section class="brand-panel">
 
-    <input
-        type="email"
-        id="loginEmail"
-        placeholder="Email">
+        <div class="brand-content">
 
+            <div class="brand-logo">
 
-    <input
-        type="password"
-        id="loginPassword"
-        placeholder="Password">
+                <div class="logo-box">
 
+                    <img
+                        src="../logo-icon.png"
+                        alt="Anime Review Hub"
+                        onerror="this.style.display='none';">
 
-    <!-- Email Login -->
+                </div>
 
-    <button
-        id="loginBtn">
+                <div>
 
-        เข้าสู่ระบบ
+                    <h1>
+                        Anime Review Hub
+                    </h1>
 
-    </button>
+                    <p>
+                        Discover • Review • Favorite
+                    </p>
 
+                </div>
 
-    <!-- Google Login -->
-
-    <button
-        id="googleLoginBtn"
-        type="button"
-        class="google-btn">
-
-        <span class="google-icon">
-            G
-        </span>
-
-        เข้าสู่ระบบด้วย Google
-
-    </button>
+            </div>
 
 
-    <p>
+            <div class="welcome-text">
 
-        ยังไม่มีบัญชี ?
+                <span class="welcome-label">
+                    WELCOME BACK
+                </span>
 
-        <a href="register.html">
+                <h2>
+                    ค้นหาอนิเมะ<br>
+                    ที่ใช่สำหรับคุณ
+                </h2>
 
-            สมัครสมาชิก
+                <p>
+                    เข้าสู่ระบบเพื่อให้คุณสามารถ
+                    รีวิว ให้คะแนน Favorite และ Bookmark
+                    อนิเมะที่ชื่นชอบได้
+                </p>
 
-        </a>
-
-    </p>
-
-
-    <p
-        id="message"
-        class="message">
-    </p>
-
-</div>
+            </div>
 
 
-<script
-    type="module"
-    src="../js/auth.js">
+            <!-- ==================================================
+                 FEATURES
+            ================================================== -->
+
+            <div class="feature-list">
+
+                <div class="feature-item">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            รีวิวและให้คะแนน
+                        </strong>
+
+                        <span>
+                            แสดงความคิดเห็นเกี่ยวกับอนิเมะ
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Favorite
+                        </strong>
+
+                        <span>
+                            เก็บอนิเมะที่คุณชื่นชอบ
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-bookmark"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Bookmark
+                        </strong>
+
+                        <span>
+                            บันทึกเรื่องที่อยากดูภายหลัง
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="../index.html"
+                class="back-home">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                กลับหน้าแรก
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         LOGIN CARD
+    ================================================== -->
+
+    <section class="login-panel">
+
+        <div class="login-card">
+
+
+            <!-- Logo Mobile -->
+
+            <div class="mobile-logo">
+
+                <div class="mobile-logo-box">
+
+                    <img
+                        src="../logo-icon.png"
+                        alt="Anime Review Hub"
+                        onerror="this.style.display='none';">
+
+                </div>
+
+                <div>
+
+                    <h1>
+                        Anime Review Hub
+                    </h1>
+
+                    <p>
+                        Discover • Review • Favorite
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Heading -->
+
+            <div class="login-heading">
+
+                <div class="login-icon">
+
+                    <i class="fa-solid fa-right-to-bracket"></i>
+
+                </div>
+
+                <h2>
+                    เข้าสู่ระบบ
+                </h2>
+
+                <p>
+                    ยินดีต้อนรับกลับสู่ Anime Review Hub
+                </p>
+
+            </div>
+
+
+            <!-- ==================================================
+                 EMAIL
+            ================================================== -->
+
+            <div class="input-group">
+
+                <label for="loginEmail">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                    Email
+
+                </label>
+
+                <div class="input-box">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="กรอก Email"
+                        autocomplete="email">
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 PASSWORD
+            ================================================== -->
+
+            <div class="input-group">
+
+                <label for="loginPassword">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    Password
+
+                </label>
+
+                <div class="input-box">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="กรอก Password"
+                        autocomplete="current-password">
+
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        class="password-toggle"
+                        aria-label="แสดงรหัสผ่าน">
+
+                        <i class="fa-solid fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 OPTIONS
+            ================================================== -->
+
+            <div class="login-options">
+
+                <label class="remember-me">
+
+                    <input
+                        type="checkbox"
+                        id="rememberMe">
+
+                    <span>
+                        จำฉันไว้
+                    </span>
+
+                </label>
+
+                <button
+                    type="button"
+                    id="forgotPassword"
+                    class="forgot-btn">
+
+                    ลืมรหัสผ่าน?
+
+                </button>
+
+            </div>
+
+
+            <!-- ==================================================
+                 LOGIN BUTTON
+            ================================================== -->
+
+            <button
+                type="button"
+                id="loginBtn"
+                class="login-btn">
+
+                <i class="fa-solid fa-right-to-bracket"></i>
+
+                เข้าสู่ระบบ
+
+            </button>
+
+
+            <!-- ==================================================
+                 DIVIDER
+            ================================================== -->
+
+            <div class="divider">
+
+                <span></span>
+
+                <p>หรือ</p>
+
+                <span></span>
+
+            </div>
+
+
+            <!-- ==================================================
+                 GOOGLE
+            ================================================== -->
+
+            <button
+                type="button"
+                id="googleLoginBtn"
+                class="google-btn">
+
+                <span class="google-icon">
+                    G
+                </span>
+
+                <span>
+                    เข้าสู่ระบบด้วย Google
+                </span>
+
+            </button>
+
+
+            <!-- ==================================================
+                 REGISTER
+            ================================================== -->
+
+            <div class="register-text">
+
+                <span>
+                    ยังไม่มีบัญชี?
+                </span>
+
+                <a href="register.html">
+                    สมัครสมาชิก
+                </a>
+
+            </div>
+
+
+            <!-- ==================================================
+                 MESSAGE
+            ================================================== -->
+
+            <p
+                id="message"
+                class="message">
+            </p>
+
+
+            <div class="login-footer">
+
+                <span>
+                    © 2026 Anime Review Hub
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script type="module" src="../js/auth.js"></script>
+
+
+<script>
+
+    const passwordInput =
+        document.getElementById("loginPassword");
+
+    const togglePassword =
+        document.getElementById("togglePassword");
+
+
+    if (
+        passwordInput &&
+        togglePassword
+    ) {
+
+        togglePassword.addEventListener(
+            "click",
+            () => {
+
+                const isPassword =
+                    passwordInput.type === "password";
+
+
+                passwordInput.type =
+                    isPassword
+                        ? "text"
+                        : "password";
+
+
+                togglePassword.innerHTML =
+                    isPassword
+
+                        ? '<i class="fa-solid fa-eye-slash"></i>'
+
+                        : '<i class="fa-solid fa-eye"></i>';
+
+            }
+        );
+
+    }
+
+
+    const forgotPassword =
+        document.getElementById("forgotPassword");
+
+
+    if (forgotPassword) {
+
+        forgotPassword.addEventListener(
+            "click",
+            () => {
+
+                alert(
+                    "ระบบรีเซ็ตรหัสผ่านสามารถเพิ่มได้ในขั้นตอนถัดไป"
+                );
+
+            }
+        );
+
+    }
+
 </script>
+
 
 </body>
 
 </html>
-

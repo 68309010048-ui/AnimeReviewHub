@@ -3,182 +3,578 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Anime Review Hub | Admin</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="../css/admin.css">
-<link rel="stylesheet" href="../css/theme.css">
+    <title>Reviewer Panel - Anime Review Hub</title>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/theme.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
 </head>
 
+
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <!-- Top -->
 
-    <div class="topbar">
+        <!-- ==================================================
+             TOP BAR
+        ================================================== -->
 
-        <h1>
+        <div class="topbar">
 
-            <i class="fa-solid fa-user-shield"></i>
+            <div>
 
-            Reviewer Panel
+                <h1>
 
-        </h1>
+                    <i class="fa-solid fa-user-shield"></i>
 
-        <a href="../index.html" class="homeBtn">
+                    Reviewer Panel
 
-            🏠 กลับหน้าหลัก
+                </h1>
 
-        </a>
+                <p class="panel-description">
 
-    </div>
+                    จัดการอนิเมะและดูรีวิวของอนิเมะที่คุณรับผิดชอบ
 
-    <!-- Dashboard -->
+                </p>
 
-    <div class="dashboard">
+            </div>
 
-        <div class="box">
 
-            <h2 id="animeCount">0</h2>
+            <a
+                href="../index.html"
+                class="homeBtn">
 
-            <p>Anime</p>
+                <i class="fa-solid fa-house"></i>
 
-        </div>
+                กลับหน้าหลัก
 
-        <div class="box">
-
-            <h2 id="userCount">0</h2>
-
-            <p>Users</p>
+            </a>
 
         </div>
 
-        <div class="box">
 
-            <h2 id="reviewCount">0</h2>
+        <!-- ==================================================
+             ROLE INFO
+        ================================================== -->
 
-            <p>Reviews</p>
+        <div
+            id="roleInfo"
+            class="role-info">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <span>
+                กำลังตรวจสอบสิทธิ์...
+            </span>
 
         </div>
 
+
+        <!-- ==================================================
+             DASHBOARD
+        ================================================== -->
+
+        <div class="dashboard">
+
+
+            <!-- Anime ของฉัน -->
+
+            <div class="box">
+
+                <div class="dashboard-icon">
+
+                    <i class="fa-solid fa-film"></i>
+
+                </div>
+
+                <div>
+
+                    <h2 id="animeCount">
+                        0
+                    </h2>
+
+                    <p>
+                        Anime ของฉัน
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ผู้รีวิว -->
+
+            <div class="box">
+
+                <div class="dashboard-icon">
+
+                    <i class="fa-solid fa-users"></i>
+
+                </div>
+
+                <div>
+
+                    <h2 id="reviewerCount">
+                        0
+                    </h2>
+
+                    <p>
+                        ผู้รีวิวของฉัน
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- รีวิวทั้งหมด -->
+
+            <div class="box">
+
+                <div class="dashboard-icon">
+
+                    <i class="fa-solid fa-comments"></i>
+
+                </div>
+
+                <div>
+
+                    <h2 id="reviewCount">
+                        0
+                    </h2>
+
+                    <p>
+                        รีวิวทั้งหมด
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Anime ที่มีคนรีวิว -->
+
+            <div class="box">
+
+                <div class="dashboard-icon">
+
+                    <i class="fa-solid fa-star"></i>
+
+                </div>
+
+                <div>
+
+                    <h2 id="reviewedAnimeCount">
+                        0
+                    </h2>
+
+                    <p>
+                        Anime ที่มีรีวิว
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             REVIEWER INFO
+        ================================================== -->
+
+        <div
+            id="reviewerInfo"
+            class="card reviewer-info-card"
+            style="display:none;">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+
+                        <i class="fa-solid fa-user-check"></i>
+
+                        ผู้ที่มารีวิว Anime ของฉัน
+
+                    </h2>
+
+                    <p>
+                        รายชื่อผู้ใช้ที่เข้ามารีวิวอนิเมะที่คุณดูแล
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="reviewerList"
+                class="reviewer-list">
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             SEARCH
+        ================================================== -->
+
+        <div class="card anime-search-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+
+                        <i class="fa-solid fa-film"></i>
+
+                        รายการ Anime
+
+                    </h2>
+
+                    <p id="animeResultText">
+                        Anime ที่คุณสามารถจัดการได้
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-search">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="searchAnime"
+                    placeholder="ค้นหาชื่อ Anime...">
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             ADD / EDIT ANIME
+        ================================================== -->
+
+        <div class="card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+
+                        <i class="fa-solid fa-pen-to-square"></i>
+
+                        <span id="formTitle">
+                            เพิ่ม Anime
+                        </span>
+
+                    </h2>
+
+                    <p>
+                        เพิ่มหรือแก้ไขข้อมูล Anime
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <input
+                type="text"
+                id="title"
+                placeholder="ชื่ออนิเมะ">
+
+
+            <input
+                type="text"
+                id="image"
+                placeholder="URL รูปภาพ">
+
+
+            <!-- Category -->
+
+            <label class="form-title">
+
+                Category
+
+            </label>
+
+
+            <div class="category-group">
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Action">
+
+                    🟣 Action
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Adventure">
+
+                    🟢 Adventure
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Fantasy">
+
+                    🟠 Fantasy
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Comedy">
+
+                    🟡 Comedy
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Romance">
+
+                    ❤️ Romance
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Sport">
+
+                    ⚽ Sport
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Drama">
+
+                    🎭 Drama
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Sci-Fi">
+
+                    🚀 Sci-Fi
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Mystery">
+
+                    🕵️ Mystery
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Horror">
+
+                    👻 Horror
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="School">
+
+                    🏫 School
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Slice of Life">
+
+                    🌸 Slice of Life
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Supernatural">
+
+                    ✨ Supernatural
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Isekai">
+
+                    🌍 Isekai
+                </label>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        value="Music">
+
+                    🎵 Music
+                </label>
+
+            </div>
+
+
+            <input
+                type="number"
+                id="episodes"
+                placeholder="จำนวนตอน">
+
+
+            <input
+                type="text"
+                id="status"
+                placeholder="สถานะ เช่น กำลังฉาย / จบแล้ว">
+
+
+            <input
+                type="text"
+                id="type"
+                placeholder="ประเภท เช่น TV / Movie">
+
+
+            <input
+                type="text"
+                id="trailer"
+                placeholder="YouTube URL">
+
+
+            <textarea
+                id="description"
+                placeholder="เรื่องย่อ"></textarea>
+
+
+            <div class="btn-group">
+
+                <button
+                    id="addAnime"
+                    type="button">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    เพิ่ม Anime
+
+                </button>
+
+
+                <button
+                    id="cancelEdit"
+                    type="button"
+                    style="display:none;">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                    ยกเลิกการแก้ไข
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             ANIME LIST
+        ================================================== -->
+
+        <div class="card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+
+                        <i class="fa-solid fa-list"></i>
+
+                        Anime ของฉัน
+
+                    </h2>
+
+                    <p>
+                        สามารถแก้ไขได้เฉพาะ Anime ที่คุณมีสิทธิ์
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="animeList"
+                class="admin-anime-list">
+
+            </div>
+
+        </div>
+
+
     </div>
 
-    <!-- Search -->
 
-    <div class="card">
+    <!-- ==================================================
+         TOAST
+    ================================================== -->
 
-    <h2>เพิ่ม / แก้ไข อนิเมะ</h2>
+    <div id="toast"></div>
 
-    <input type="text"
-           id="title"
-           placeholder="ชื่ออนิเมะ">
 
-    <input type="text"
-           id="image"
-           placeholder="URL รูปภาพ">
+    <!-- ==================================================
+         SCRIPTS
+    ================================================== -->
 
-    <!-- Category -->
+    <script
+        type="module"
+        src="../js/theme.js">
+    </script>
 
-    <label class="form-title">
-
-        Category
-
-    </label>
-
-    <div class="category-group">
-
-        <label><input type="checkbox" value="Action"> 🟣 Action</label>
-
-        <label><input type="checkbox" value="Adventure"> 🟢 Adventure</label>
-
-        <label><input type="checkbox" value="Fantasy"> 🟠 Fantasy</label>
-
-        <label><input type="checkbox" value="Comedy"> 🟡 Comedy</label>
-
-        <label><input type="checkbox" value="Romance"> ❤️ Romance</label>
-
-        <label><input type="checkbox" value="Sport"> ⚽ Sport</label>
-
-        <label><input type="checkbox" value="Drama"> 🎭 Drama</label>
-
-        <label><input type="checkbox" value="Sci-Fi"> 🚀 Sci-Fi</label>
-
-        <label><input type="checkbox" value="Mystery"> 🕵️ Mystery</label>
-
-        <label><input type="checkbox" value="Horror"> 👻 Horror</label>
-
-        <label><input type="checkbox" value="School"> 🏫 School</label>
-
-        <label><input type="checkbox" value="Slice of Life"> 🌸 Slice of Life</label>
-
-        <label><input type="checkbox" value="Supernatural"> ✨ Supernatural</label>
-
-        <label><input type="checkbox" value="Isekai"> 🌍 Isekai</label>
-
-        <label><input type="checkbox" value="Music"> 🎵 Music</label>
-
-    </div>
-
-    <input type="number"
-           id="episodes"
-           placeholder="จำนวนตอน">
-
-    <input type="text"
-           id="status"
-           placeholder="สถานะ">
-
-    <input type="text"
-           id="type"
-           placeholder="ประเภท">
-
-    <input type="text"
-           id="trailer"
-           placeholder="YouTube URL">
-
-    <textarea
-        id="description"
-        placeholder="เรื่องย่อ"></textarea>
-
-    <div class="btn-group">
-
-        <button id="addAnime">
-
-            เพิ่มอนิเมะ
-
-        </button>
-
-        <button id="cancelEdit"
-                style="display:none">
-
-            ยกเลิกการแก้ไข
-
-        </button>
-
-    </div>
-
-</div>
-
-    <hr>
-
-    <h2 class="list-title">
-
-        รายการอนิเมะ
-
-    </h2>
-
-    <div id="animeList"></div>
-
-</div>
-
-<script type="module" src="../js/theme.js"></script>
-<script type="module" src="../js/admin.js"></script>
+    <script
+        type="module"
+        src="../js/admin.js">
+    </script>
 
 </body>
 

@@ -1,6 +1,7 @@
 /* ======================================================
    Anime Review Hub
-   Admin Dashboard CSS
+   Reviewer Panel CSS
+   Reviewer + Super Admin
    Light / Dark Mode
 ====================================================== */
 
@@ -20,6 +21,9 @@ html{
 }
 
 body{
+
+    min-height:100vh;
+
     font-family:'Poppins',sans-serif;
 
     background:#f3f4f6;
@@ -28,18 +32,36 @@ body{
 
     overflow-x:hidden;
 
-    min-height:100vh;
-
     transition:
         background .25s ease,
         color .25s ease;
+
 }
 
 button,
 input,
 textarea,
 select{
+
     font-family:'Poppins',sans-serif;
+
+}
+
+
+/* ======================================================
+   CONTAINER
+====================================================== */
+
+.container{
+
+    width:100%;
+
+    max-width:1450px;
+
+    margin:0 auto;
+
+    padding-bottom:50px;
+
 }
 
 
@@ -51,44 +73,70 @@ select{
 
     width:100%;
 
-    background:
-        linear-gradient(
-            135deg,
-            #6d28d9,
-            #7c3aed,
-            #9333ea
-        );
-
-    color:#fff;
-
-    padding:20px 35px;
+    padding:24px 35px;
 
     display:flex;
+
+    align-items:center;
 
     justify-content:space-between;
 
-    align-items:center;
-
     gap:20px;
 
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #24104f,
+            #6d28d9,
+            #4f46e5
+        );
+
     box-shadow:
-        0 8px 25px rgba(0,0,0,.12);
+        0 10px 30px rgba(0,0,0,.12);
 
 }
 
-.topbar h1{
 
-    font-size:28px;
+.topbar h1{
 
     display:flex;
 
     align-items:center;
 
-    gap:12px;
+    gap:11px;
 
     color:#fff;
 
+    font-size:28px;
+
+    font-weight:700;
+
 }
+
+
+.topbar h1 i{
+
+    color:#ddd6fe;
+
+}
+
+
+.panel-description{
+
+    margin-top:5px;
+
+    color:#ddd6fe;
+
+    font-size:12px;
+
+}
+
+
+/* ======================================================
+   HOME BUTTON
+====================================================== */
 
 .homeBtn{
 
@@ -100,27 +148,74 @@ select{
 
     gap:8px;
 
-    background:#fff;
-
-    color:#6d28d9;
-
-    padding:11px 18px;
+    padding:10px 17px;
 
     border-radius:12px;
 
-    font-weight:600;
+    background:rgba(255,255,255,.13);
+
+    border:1px solid rgba(255,255,255,.16);
+
+    color:#fff;
 
     text-decoration:none;
 
-    transition:.3s;
+    font-size:12px;
+
+    font-weight:600;
+
+    transition:.25s;
 
 }
 
+
 .homeBtn:hover{
+
+    background:rgba(255,255,255,.22);
 
     transform:translateY(-2px);
 
-    background:#ede9fe;
+}
+
+
+/* ======================================================
+   ROLE INFO
+====================================================== */
+
+.role-info{
+
+    width:calc(100% - 50px);
+
+    max-width:1400px;
+
+    margin:22px auto 0;
+
+    padding:13px 16px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    border-radius:13px;
+
+    background:#f5f3ff;
+
+    border:1px solid #ddd6fe;
+
+    color:#6d28d9;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+
+.role-info i{
+
+    font-size:15px;
 
 }
 
@@ -131,61 +226,59 @@ select{
 
 .dashboard{
 
-    width:calc(100% - 40px);
+    width:calc(100% - 50px);
 
     max-width:1400px;
 
-    margin:25px auto;
+    margin:20px auto 25px;
 
     display:grid;
 
     grid-template-columns:
-        repeat(3,minmax(0,1fr));
+        repeat(4,minmax(0,1fr));
 
-    gap:20px;
+    gap:18px;
 
 }
 
-.box{
+
+/* ======================================================
+   DASHBOARD BOX
+====================================================== */
+
+.dashboard .box{
 
     position:relative;
 
-    background:#fff;
+    min-height:145px;
 
-    color:#1f2937;
+    padding:22px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    background:#fff;
 
     border:1px solid #e5e7eb;
 
     border-radius:20px;
 
-    padding:25px;
-
-    min-height:150px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:center;
-
-    align-items:center;
-
-    text-align:center;
+    color:#1f2937;
 
     box-shadow:
-        0 10px 30px rgba(0,0,0,.08);
-
-    transition:
-        transform .3s ease,
-        background .25s ease,
-        border-color .25s ease,
-        color .25s ease;
+        0 10px 30px rgba(0,0,0,.07);
 
     overflow:hidden;
 
+    transition:.3s;
+
 }
 
-.box::before{
+
+.dashboard .box::before{
 
     content:"";
 
@@ -197,77 +290,98 @@ select{
 
     width:100%;
 
-    height:5px;
+    height:4px;
 
-    background:#7c3aed;
+    background:
+        linear-gradient(
+            90deg,
+            #7c3aed,
+            #4f46e5
+        );
 
 }
 
-.box:hover{
+
+.dashboard .box:hover{
 
     transform:translateY(-5px);
 
     box-shadow:
-        0 16px 35px rgba(0,0,0,.12);
-
-}
-
-.box-icon{
-
-    width:48px;
-
-    height:48px;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    border-radius:14px;
-
-    background:#ede9fe;
-
-    color:#7c3aed;
-
-    font-size:24px;
-
-    margin-bottom:10px;
-
-}
-
-.box h2{
-
-    font-size:38px;
-
-    line-height:1;
-
-    color:#6d28d9;
-
-    margin-bottom:8px;
-
-}
-
-.box p{
-
-    font-size:15px;
-
-    color:#6b7280;
+        0 16px 35px rgba(0,0,0,.11);
 
 }
 
 
 /* ======================================================
-   CARD FORM
+   DASHBOARD ICON
+====================================================== */
+
+.dashboard-icon{
+
+    width:50px;
+
+    height:50px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:15px;
+
+    background:#ede9fe;
+
+    color:#7c3aed;
+
+    font-size:21px;
+
+}
+
+
+/* ======================================================
+   DASHBOARD TEXT
+====================================================== */
+
+.dashboard .box h2{
+
+    color:#6d28d9;
+
+    font-size:34px;
+
+    line-height:1;
+
+    font-weight:700;
+
+}
+
+
+.dashboard .box p{
+
+    margin-top:6px;
+
+    color:#6b7280;
+
+    font-size:12px;
+
+}
+
+
+/* ======================================================
+   CARDS
 ====================================================== */
 
 .card{
 
-    width:calc(100% - 40px);
+    width:calc(100% - 50px);
 
     max-width:1400px;
 
-    margin:0 auto 25px;
+    margin:0 auto 22px;
+
+    padding:25px;
 
     background:#fff;
 
@@ -277,37 +391,156 @@ select{
 
     border-radius:20px;
 
-    padding:28px;
-
     box-shadow:
-        0 10px 30px rgba(0,0,0,.08);
+        0 10px 30px rgba(0,0,0,.07);
 
 }
 
-.card h2{
 
-    font-size:26px;
+/* ======================================================
+   SECTION HEADING
+====================================================== */
 
-    color:#111827;
+.section-heading{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
 
     margin-bottom:20px;
 
 }
 
 
+.section-heading h2{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    color:#111827;
+
+    font-size:21px;
+
+    font-weight:700;
+
+}
+
+
+.section-heading h2 i{
+
+    color:#7c3aed;
+
+    font-size:18px;
+
+}
+
+
+.section-heading p{
+
+    margin-top:4px;
+
+    color:#6b7280;
+
+    font-size:11px;
+
+}
+
+
 /* ======================================================
-   FORM INPUT
+   ADMIN SEARCH
 ====================================================== */
 
-.card input,
-.card textarea,
-.card select{
+.admin-search{
 
     width:100%;
 
-    padding:14px 16px;
+    height:50px;
 
-    margin-bottom:14px;
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    padding:0 16px;
+
+    background:#f8fafc;
+
+    border:1px solid #d1d5db;
+
+    border-radius:13px;
+
+    transition:.25s;
+
+}
+
+
+.admin-search:focus-within{
+
+    border-color:#7c3aed;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(124,58,237,.10);
+
+}
+
+
+.admin-search i{
+
+    color:#7c3aed;
+
+    font-size:15px;
+
+}
+
+
+.admin-search input{
+
+    width:100%;
+
+    height:100%;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    color:#111827;
+
+    font-size:12px;
+
+}
+
+
+.admin-search input::placeholder{
+
+    color:#9ca3af;
+
+}
+
+
+/* ======================================================
+   FORM
+====================================================== */
+
+.card > input,
+.card > textarea,
+.card > select{
+
+    width:100%;
+
+    padding:13px 15px;
+
+    margin-bottom:13px;
 
     border:1px solid #d1d5db;
 
@@ -317,7 +550,7 @@ select{
 
     color:#111827;
 
-    font-size:15px;
+    font-size:12px;
 
     outline:none;
 
@@ -325,43 +558,44 @@ select{
 
 }
 
-.card textarea{
 
-    min-height:160px;
+.card > textarea{
+
+    min-height:145px;
 
     resize:vertical;
 
 }
 
-.card input:focus,
-.card textarea:focus,
-.card select:focus{
+
+.card > input:focus,
+.card > textarea:focus,
+.card > select:focus{
 
     border-color:#7c3aed;
 
     box-shadow:
         0 0 0 4px
-        rgba(124,58,237,.12);
+        rgba(124,58,237,.10);
 
 }
 
 
 /* ======================================================
-   FORM LABEL
+   FORM TITLE
 ====================================================== */
 
-.form-title,
-.form-group > label{
+.form-title{
 
     display:block;
 
     margin-bottom:10px;
 
-    font-size:15px;
+    color:#374151;
+
+    font-size:13px;
 
     font-weight:600;
-
-    color:#374151;
 
 }
 
@@ -375,55 +609,60 @@ select{
     display:grid;
 
     grid-template-columns:
-        repeat(6,minmax(0,1fr));
+        repeat(5,minmax(0,1fr));
 
-    gap:10px;
+    gap:9px;
 
-    margin-bottom:18px;
+    margin-bottom:17px;
 
 }
 
+
 .category-group label{
 
-    min-height:50px;
+    min-height:46px;
 
     display:flex;
 
     align-items:center;
 
-    gap:8px;
+    gap:7px;
 
-    padding:10px 12px;
+    padding:9px 10px;
+
+    border-radius:11px;
 
     background:#f8fafc;
 
-    color:#374151;
-
     border:1px solid #e5e7eb;
 
-    border-radius:12px;
+    color:#374151;
+
+    font-size:11px;
 
     cursor:pointer;
-
-    font-size:14px;
 
     transition:.25s;
 
 }
 
+
 .category-group label:hover{
 
-    background:#ede9fe;
+    background:#f5f3ff;
 
     border-color:#c4b5fd;
 
+    transform:translateY(-1px);
+
 }
+
 
 .category-group input{
 
-    width:17px !important;
+    width:16px !important;
 
-    height:17px;
+    height:16px;
 
     margin:0 !important;
 
@@ -440,35 +679,37 @@ select{
 
     display:flex;
 
-    gap:12px;
-
     flex-wrap:wrap;
 
-    margin-top:10px;
+    gap:10px;
+
+    margin-top:8px;
 
 }
 
+
 .btn-group button{
 
-    min-width:150px;
+    min-width:160px;
+
+    padding:11px 18px;
 
     border:none;
 
-    border-radius:12px;
-
-    padding:13px 20px;
+    border-radius:11px;
 
     color:#fff;
 
-    font-size:15px;
+    font-size:12px;
 
     font-weight:600;
 
     cursor:pointer;
 
-    transition:.3s;
+    transition:.25s;
 
 }
+
 
 #addAnime{
 
@@ -481,21 +722,23 @@ select{
 
 }
 
+
 #addAnime:hover{
 
     transform:translateY(-2px);
 
     box-shadow:
-        0 8px 20px
-        rgba(124,58,237,.25);
+        0 8px 18px rgba(124,58,237,.25);
 
 }
+
 
 #cancelEdit{
 
     background:#6b7280;
 
 }
+
 
 #cancelEdit:hover{
 
@@ -505,61 +748,287 @@ select{
 
 
 /* ======================================================
-   LIST TITLE
+   REVIEWER INFO CARD
 ====================================================== */
 
-.list-title{
+.reviewer-info-card{
 
-    width:calc(100% - 40px);
-
-    max-width:1400px;
-
-    margin:35px auto 20px;
-
-    font-size:28px;
-
-    color:#111827;
+    margin-bottom:22px;
 
 }
 
 
 /* ======================================================
-   SEARCH
+   REVIEWER LIST
 ====================================================== */
 
-#searchAnime{
+.reviewer-list{
 
-    width:calc(100% - 40px);
+    display:grid;
 
-    max-width:1400px;
-
-    margin:0 auto 25px;
-
-    display:block;
-
-    padding:14px 18px;
-
-    background:#fff;
-
-    color:#111827;
-
-    border:1px solid #d1d5db;
-
-    border-radius:14px;
-
-    font-size:15px;
-
-    outline:none;
+    gap:12px;
 
 }
 
-#searchAnime:focus{
 
-    border-color:#7c3aed;
+/* ======================================================
+   REVIEWER ITEM
+====================================================== */
+
+.reviewer-item{
+
+    overflow:hidden;
+
+    background:#f8fafc;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:15px;
+
+    transition:.25s;
+
+}
+
+
+.reviewer-item:hover{
+
+    border-color:#c4b5fd;
 
     box-shadow:
-        0 0 0 4px
-        rgba(124,58,237,.12);
+        0 8px 20px rgba(0,0,0,.06);
+
+}
+
+
+/* ======================================================
+   REVIEWER HEADER
+====================================================== */
+
+.reviewer-header{
+
+    display:grid;
+
+    grid-template-columns:auto minmax(0,1fr) auto auto;
+
+    align-items:center;
+
+    gap:13px;
+
+    padding:14px 15px;
+
+}
+
+
+/* ======================================================
+   REVIEWER AVATAR
+====================================================== */
+
+.reviewer-avatar{
+
+    width:46px;
+
+    height:46px;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    border:2px solid #8b5cf6;
+
+    background:#ede9fe;
+
+}
+
+
+/* ======================================================
+   REVIEWER MAIN
+====================================================== */
+
+.reviewer-main{
+
+    min-width:0;
+
+}
+
+
+.reviewer-main h3{
+
+    color:#111827;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+
+.reviewer-main p{
+
+    margin-top:3px;
+
+    color:#64748b;
+
+    font-size:9px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+
+/* ======================================================
+   REVIEWER STATS
+====================================================== */
+
+.reviewer-stats{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+}
+
+
+.reviewer-stats span{
+
+    padding:6px 9px;
+
+    border-radius:999px;
+
+    background:#ede9fe;
+
+    color:#6d28d9;
+
+    font-size:9px;
+
+    font-weight:600;
+
+}
+
+
+/* ======================================================
+   VIEW REVIEW BUTTON
+====================================================== */
+
+.reviewer-view-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:6px;
+
+    padding:8px 11px;
+
+    border:none;
+
+    border-radius:9px;
+
+    background:#7c3aed;
+
+    color:#fff;
+
+    font-size:9px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+
+.reviewer-view-btn:hover{
+
+    background:#6d28d9;
+
+    transform:translateY(-1px);
+
+}
+
+
+/* ======================================================
+   REVIEWS
+====================================================== */
+
+.reviewer-reviews{
+
+    padding:0 15px 15px;
+
+}
+
+
+.review-item{
+
+    margin-top:8px;
+
+    padding:12px;
+
+    border-radius:11px;
+
+    background:#fff;
+
+    border:1px solid #e5e7eb;
+
+}
+
+
+.review-item-top{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+}
+
+
+.review-item-top strong{
+
+    color:#111827;
+
+    font-size:11px;
+
+}
+
+
+.review-rating{
+
+    color:#f59e0b;
+
+    font-size:10px;
+
+    font-weight:600;
+
+}
+
+
+.review-comment{
+
+    margin-top:6px;
+
+    color:#64748b;
+
+    font-size:10px;
+
+    line-height:1.6;
 
 }
 
@@ -568,20 +1037,19 @@ select{
    ANIME LIST
 ====================================================== */
 
-#animeList{
+.admin-anime-list{
 
-    width:calc(100% - 40px);
-
-    max-width:1400px;
-
-    margin:0 auto 50px;
+    width:100%;
 
     display:grid;
 
     grid-template-columns:
-        repeat(4,minmax(0,1fr));
+        repeat(
+            auto-fill,
+            minmax(240px,1fr)
+        );
 
-    gap:20px;
+    gap:18px;
 
 }
 
@@ -592,81 +1060,114 @@ select{
 
 .anime-card{
 
-    background:#fff;
-
-    color:#1f2937;
-
-    border:1px solid #e5e7eb;
-
-    border-radius:18px;
-
     overflow:hidden;
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.08);
-
-    transition:.3s;
 
     display:flex;
 
     flex-direction:column;
 
+    background:#fff;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:17px;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.07);
+
+    transition:.3s;
+
 }
+
 
 .anime-card:hover{
 
     transform:translateY(-5px);
 
+    border-color:#c4b5fd;
+
     box-shadow:
-        0 15px 30px rgba(0,0,0,.12);
+        0 16px 30px rgba(0,0,0,.12);
 
 }
+
+
+/* ======================================================
+   POSTER
+====================================================== */
 
 .anime-card > img{
 
     width:100%;
 
-    height:320px;
+    height:300px;
+
+    display:block;
 
     object-fit:cover;
 
+    background:#e5e7eb;
+
 }
+
+
+/* ======================================================
+   ANIME INFO
+====================================================== */
 
 .anime-info{
 
-    padding:18px;
-
     flex:1;
 
+    padding:15px;
+
 }
+
 
 .anime-info h3{
 
-    font-size:19px;
-
-    line-height:1.5;
-
-    margin-bottom:10px;
+    margin-bottom:9px;
 
     color:#111827;
 
+    font-size:16px;
+
+    line-height:1.4;
+
 }
+
 
 .anime-info p{
 
-    margin-bottom:8px;
-
-    font-size:14px;
+    margin-bottom:7px;
 
     color:#6b7280;
 
-    line-height:1.6;
+    font-size:10px;
+
+    line-height:1.55;
 
 }
+
 
 .anime-info p b{
 
     color:#374151;
+
+}
+
+
+.anime-info .description{
+
+    margin-top:10px;
+
+    display:-webkit-box;
+
+    -webkit-box-orient:vertical;
+
+    -webkit-line-clamp:3;
+
+    overflow:hidden;
 
 }
 
@@ -679,26 +1180,27 @@ select{
 
     display:flex;
 
-    gap:10px;
+    gap:8px;
 
-    padding:0 18px 18px;
+    padding:0 15px 15px;
 
 }
+
 
 .editBtn,
 .deleteBtn{
 
     flex:1;
 
+    padding:9px;
+
     border:none;
 
-    border-radius:10px;
-
-    padding:11px;
+    border-radius:9px;
 
     color:#fff;
 
-    font-size:14px;
+    font-size:10px;
 
     font-weight:600;
 
@@ -708,11 +1210,13 @@ select{
 
 }
 
+
 .editBtn{
 
     background:#2563eb;
 
 }
+
 
 .editBtn:hover{
 
@@ -720,34 +1224,142 @@ select{
 
 }
 
+
 .deleteBtn{
+
+    background:#ef4444;
+
+}
+
+
+.deleteBtn:hover{
 
     background:#dc2626;
 
 }
 
-.deleteBtn:hover{
 
-    background:#b91c1c;
+.no-permission{
+
+    width:100%;
+
+    display:block;
+
+    padding:9px;
+
+    border-radius:9px;
+
+    background:#f3f4f6;
+
+    color:#6b7280;
+
+    text-align:center;
+
+    font-size:10px;
+
+    font-weight:600;
 
 }
 
 
 /* ======================================================
-   HR
+   EMPTY BOX
 ====================================================== */
 
-hr{
+.empty-box{
 
-    width:calc(100% - 40px);
+    padding:35px 20px;
 
-    max-width:1400px;
+    text-align:center;
 
-    margin:30px auto;
+    border-radius:16px;
 
-    border:none;
+    background:#f8fafc;
 
-    border-top:1px solid #e5e7eb;
+    border:1px dashed #d1d5db;
+
+}
+
+
+.empty-box i{
+
+    color:#8b5cf6;
+
+    font-size:30px;
+
+    margin-bottom:10px;
+
+}
+
+
+.empty-box h3{
+
+    color:#374151;
+
+    font-size:16px;
+
+}
+
+
+.empty-box p{
+
+    margin-top:5px;
+
+    color:#6b7280;
+
+    font-size:10px;
+
+}
+
+
+/* ======================================================
+   LOADING
+====================================================== */
+
+.loading{
+
+    width:100%;
+
+    min-height:220px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    color:#6b7280;
+
+}
+
+
+.loader{
+
+    width:38px;
+
+    height:38px;
+
+    border:4px solid #ede9fe;
+
+    border-top-color:#7c3aed;
+
+    border-radius:50%;
+
+    animation:
+        spin .8s linear infinite;
+
+}
+
+
+@keyframes spin{
+
+    to{
+        transform:rotate(360deg);
+    }
 
 }
 
@@ -765,18 +1377,22 @@ body.dark{
 }
 
 
-/* Top */
+/* Role Info */
 
-body.dark .topbar{
+body.dark .role-info{
 
-    color:#fff;
+    background:#17132d;
+
+    border-color:#3b2a6e;
+
+    color:#c4b5fd;
 
 }
 
 
 /* Dashboard */
 
-body.dark .box{
+body.dark .dashboard .box{
 
     background:#11162a !important;
 
@@ -790,28 +1406,31 @@ body.dark .box{
 
 }
 
-body.dark .box h2{
 
-    color:#c4b5fd !important;
+body.dark .dashboard-icon{
 
-}
+    background:#272044;
 
-body.dark .box p{
-
-    color:#cbd5e1 !important;
-
-}
-
-body.dark .box-icon{
-
-    background:#272044 !important;
-
-    color:#c4b5fd !important;
+    color:#c4b5fd;
 
 }
 
 
-/* Main Form */
+body.dark .dashboard .box h2{
+
+    color:#c4b5fd;
+
+}
+
+
+body.dark .dashboard .box p{
+
+    color:#cbd5e1;
+
+}
+
+
+/* Cards */
 
 body.dark .card{
 
@@ -827,29 +1446,46 @@ body.dark .card{
 
 }
 
-body.dark .card h2{
 
-    color:#fff !important;
+/* Section Heading */
 
-}
+body.dark .section-heading h2{
 
-
-/* Labels */
-
-body.dark .form-title,
-body.dark .form-group > label{
-
-    color:#e5e7eb !important;
+    color:#fff;
 
 }
 
 
-/* Inputs */
+body.dark .section-heading p{
 
-body.dark .card input,
-body.dark .card textarea,
-body.dark .card select,
-body.dark #searchAnime{
+    color:#94a3b8;
+
+}
+
+
+/* Search */
+
+body.dark .admin-search{
+
+    background:#0f172a;
+
+    border-color:#374151;
+
+}
+
+
+body.dark .admin-search input{
+
+    color:#fff;
+
+}
+
+
+/* Form */
+
+body.dark .card > input,
+body.dark .card > textarea,
+body.dark .card > select{
 
     background:#0f172a !important;
 
@@ -859,11 +1495,18 @@ body.dark #searchAnime{
 
 }
 
-body.dark .card input::placeholder,
-body.dark .card textarea::placeholder,
-body.dark #searchAnime::placeholder{
 
-    color:#94a3b8 !important;
+body.dark .card > input::placeholder,
+body.dark .card > textarea::placeholder{
+
+    color:#64748b;
+
+}
+
+
+body.dark .form-title{
+
+    color:#e5e7eb;
 
 }
 
@@ -872,72 +1515,172 @@ body.dark #searchAnime::placeholder{
 
 body.dark .category-group label{
 
-    background:#171a2d !important;
+    background:#171a2d;
 
-    color:#e5e7eb !important;
+    color:#e5e7eb;
 
-    border-color:#374151 !important;
+    border-color:#374151;
 
 }
+
 
 body.dark .category-group label:hover{
 
-    background:#272044 !important;
+    background:#272044;
 
-    border-color:#7c3aed !important;
-
-}
-
-
-/* List */
-
-body.dark .list-title{
-
-    color:#fff !important;
+    border-color:#7c3aed;
 
 }
 
 
-/* Anime Cards */
+/* Reviewer */
+
+body.dark .reviewer-item{
+
+    background:#171a2d;
+
+    border-color:#374151;
+
+}
+
+
+body.dark .reviewer-item:hover{
+
+    border-color:#7c3aed;
+
+}
+
+
+body.dark .reviewer-main h3{
+
+    color:#fff;
+
+}
+
+
+body.dark .reviewer-main p{
+
+    color:#94a3b8;
+
+}
+
+
+body.dark .reviewer-stats span{
+
+    background:#272044;
+
+    color:#c4b5fd;
+
+}
+
+
+body.dark .reviewer-reviews{
+
+    background:transparent;
+
+}
+
+
+body.dark .review-item{
+
+    background:#11162a;
+
+    border-color:#374151;
+
+}
+
+
+body.dark .review-item-top strong{
+
+    color:#fff;
+
+}
+
+
+body.dark .review-comment{
+
+    color:#cbd5e1;
+
+}
+
+
+/* Anime */
 
 body.dark .anime-card{
 
-    background:#11162a !important;
+    background:#11162a;
 
-    color:#fff !important;
+    color:#fff;
 
     border-color:
-        rgba(255,255,255,.08) !important;
+        rgba(255,255,255,.08);
 
     box-shadow:
         0 10px 30px rgba(0,0,0,.3);
 
 }
 
+
 body.dark .anime-info h3{
 
-    color:#fff !important;
+    color:#fff;
 
 }
+
 
 body.dark .anime-info p{
 
-    color:#cbd5e1 !important;
+    color:#cbd5e1;
 
 }
+
 
 body.dark .anime-info p b{
 
-    color:#e5e7eb !important;
+    color:#e5e7eb;
 
 }
 
 
-/* HR */
+body.dark .no-permission{
 
-body.dark hr{
+    background:#1f2937;
 
-    border-top-color:#374151 !important;
+    color:#94a3b8;
+
+}
+
+
+/* Empty */
+
+body.dark .empty-box{
+
+    background:#171a2d;
+
+    border-color:#374151;
+
+}
+
+
+body.dark .empty-box h3{
+
+    color:#fff;
+
+}
+
+
+body.dark .empty-box p{
+
+    color:#94a3b8;
+
+}
+
+
+/* Loading */
+
+body.dark .loading{
+
+    color:#94a3b8;
 
 }
 
@@ -956,12 +1699,28 @@ body.light{
 
 
 /* ======================================================
-   RESPONSIVE - TABLET
+   RESPONSIVE 1200
 ====================================================== */
 
 @media(max-width:1200px){
 
-    #animeList{
+    .dashboard{
+
+        grid-template-columns:
+            repeat(4,minmax(0,1fr));
+
+    }
+
+
+    .category-group{
+
+        grid-template-columns:
+            repeat(4,minmax(0,1fr));
+
+    }
+
+
+    .admin-anime-list{
 
         grid-template-columns:
             repeat(3,minmax(0,1fr));
@@ -972,19 +1731,25 @@ body.light{
 
 
 /* ======================================================
-   RESPONSIVE - 900
+   RESPONSIVE 900
 ====================================================== */
 
 @media(max-width:900px){
 
+    .topbar{
+
+        padding:20px;
+
+    }
+
+
     .dashboard{
 
         grid-template-columns:
-            repeat(3,minmax(0,1fr));
-
-        gap:12px;
+            repeat(2,minmax(0,1fr));
 
     }
+
 
     .category-group{
 
@@ -993,10 +1758,35 @@ body.light{
 
     }
 
-    #animeList{
+
+    .admin-anime-list{
 
         grid-template-columns:
             repeat(2,minmax(0,1fr));
+
+    }
+
+
+    .reviewer-header{
+
+        grid-template-columns:
+            auto minmax(0,1fr);
+
+    }
+
+
+    .reviewer-stats{
+
+        grid-column:2;
+
+    }
+
+
+    .reviewer-view-btn{
+
+        grid-column:2;
+
+        width:max-content;
 
     }
 
@@ -1004,26 +1794,44 @@ body.light{
 
 
 /* ======================================================
-   RESPONSIVE - MOBILE
+   RESPONSIVE 600
 ====================================================== */
 
 @media(max-width:600px){
 
-    .topbar{
+    .container{
 
-        padding:18px;
+        padding-bottom:30px;
+
+    }
+
+
+    .topbar{
 
         flex-direction:column;
 
         align-items:flex-start;
 
+        gap:15px;
+
+        padding:18px 15px;
+
     }
+
 
     .topbar h1{
 
-        font-size:22px;
+        font-size:21px;
 
     }
+
+
+    .panel-description{
+
+        font-size:10px;
+
+    }
+
 
     .homeBtn{
 
@@ -1032,59 +1840,110 @@ body.light{
     }
 
 
-    .dashboard{
+    .role-info{
 
-        width:calc(100% - 20px);
+        width:calc(100% - 24px);
 
-        grid-template-columns:
-            repeat(3,minmax(0,1fr));
+        margin-top:12px;
 
-        gap:8px;
-
-    }
-
-    .box{
-
-        min-height:110px;
-
-        padding:12px 6px;
-
-    }
-
-    .box h2{
-
-        font-size:26px;
-
-    }
-
-    .box p{
+        padding:10px 12px;
 
         font-size:10px;
 
     }
 
-    .box-icon{
 
-        width:38px;
+    .dashboard{
 
-        height:38px;
+        width:calc(100% - 24px);
 
-        font-size:18px;
+        margin:15px auto 18px;
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+        gap:10px;
+
+    }
+
+
+    .dashboard .box{
+
+        min-height:105px;
+
+        padding:14px 10px;
+
+        gap:9px;
+
+        border-radius:15px;
+
+    }
+
+
+    .dashboard-icon{
+
+        width:36px;
+
+        height:36px;
+
+        border-radius:10px;
+
+        font-size:15px;
+
+    }
+
+
+    .dashboard .box h2{
+
+        font-size:25px;
+
+    }
+
+
+    .dashboard .box p{
+
+        font-size:9px;
 
     }
 
 
     .card{
 
-        width:calc(100% - 20px);
+        width:calc(100% - 24px);
 
-        padding:18px;
+        padding:17px;
+
+        margin-bottom:15px;
+
+        border-radius:16px;
 
     }
 
-    .card h2{
 
-        font-size:21px;
+    .section-heading{
+
+        align-items:flex-start;
+
+    }
+
+
+    .section-heading h2{
+
+        font-size:17px;
+
+    }
+
+
+    .section-heading p{
+
+        font-size:9px;
+
+    }
+
+
+    .admin-search{
+
+        height:45px;
 
     }
 
@@ -1094,100 +1953,18 @@ body.light{
         grid-template-columns:
             repeat(2,minmax(0,1fr));
 
-        gap:8px;
+        gap:7px;
 
     }
+
 
     .category-group label{
 
-        min-height:46px;
+        min-height:43px;
 
         padding:8px;
 
-        font-size:11px;
-
-    }
-
-
-    #searchAnime{
-
-        width:calc(100% - 20px);
-
-    }
-
-
-    #animeList{
-
-        width:calc(100% - 20px);
-
-        grid-template-columns:
-            repeat(2,minmax(0,1fr));
-
-        gap:12px;
-
-    }
-
-
-    .anime-card > img{
-
-        height:220px;
-
-    }
-
-
-    .anime-info{
-
-        padding:10px;
-
-    }
-
-
-    .anime-info h3{
-
-        font-size:14px;
-
-    }
-
-
-    .anime-info p{
-
-        font-size:10px;
-
-    }
-
-
-    .action{
-
-        padding:
-            0 10px 10px;
-
-        gap:6px;
-
-    }
-
-
-    .editBtn,
-    .deleteBtn{
-
-        padding:8px 5px;
-
-        font-size:10px;
-
-    }
-
-
-    .list-title{
-
-        width:calc(100% - 20px);
-
-        font-size:22px;
-
-    }
-
-
-    hr{
-
-        width:calc(100% - 20px);
+        font-size:9px;
 
     }
 
@@ -1203,40 +1980,230 @@ body.light{
 
         width:100%;
 
+        min-width:0;
+
+    }
+
+
+    .admin-anime-list{
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+        gap:10px;
+
+    }
+
+
+    .anime-card{
+
+        border-radius:13px;
+
+    }
+
+
+    .anime-card > img{
+
+        height:auto;
+
+        aspect-ratio:3/4;
+
+    }
+
+
+    .anime-info{
+
+        padding:9px;
+
+    }
+
+
+    .anime-info h3{
+
+        font-size:12px;
+
+    }
+
+
+    .anime-info p{
+
+        font-size:8px;
+
+    }
+
+
+    .action{
+
+        padding:0 9px 9px;
+
+        gap:5px;
+
+    }
+
+
+    .editBtn,
+    .deleteBtn{
+
+        padding:7px 4px;
+
+        font-size:8px;
+
+    }
+
+
+    .reviewer-header{
+
+        grid-template-columns:
+            auto minmax(0,1fr);
+
+        padding:11px;
+
+        gap:9px;
+
+    }
+
+
+    .reviewer-avatar{
+
+        width:40px;
+
+        height:40px;
+
+    }
+
+
+    .reviewer-main h3{
+
+        font-size:11px;
+
+    }
+
+
+    .reviewer-main p{
+
+        font-size:8px;
+
+    }
+
+
+    .reviewer-stats{
+
+        grid-column:
+            2;
+
+        display:flex;
+
+        flex-wrap:wrap;
+
+    }
+
+
+    .reviewer-stats span{
+
+        padding:5px 7px;
+
+        font-size:8px;
+
+    }
+
+
+    .reviewer-view-btn{
+
+        grid-column:2;
+
+        justify-self:start;
+
+        padding:7px 9px;
+
+        font-size:8px;
+
+    }
+
+
+    .reviewer-reviews{
+
+        padding:
+            0 10px 10px;
+
+    }
+
+
+    .review-item{
+
+        padding:9px;
+
+    }
+
+
+    .review-item-top strong{
+
+        font-size:9px;
+
+    }
+
+
+    .review-rating{
+
+        font-size:8px;
+
+    }
+
+
+    .review-comment{
+
+        font-size:8px;
+
     }
 
 }
 
 
 /* ======================================================
-   VERY SMALL MOBILE
+   VERY SMALL
 ====================================================== */
 
 @media(max-width:400px){
 
     .dashboard{
 
-        gap:6px;
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+        gap:7px;
 
     }
 
-    .box{
 
-        min-height:100px;
+    .dashboard .box{
 
-        padding:8px 4px;
+        min-height:95px;
+
+        padding:10px 7px;
 
     }
 
-    .box h2{
+
+    .dashboard-icon{
+
+        width:32px;
+
+        height:32px;
+
+        font-size:13px;
+
+    }
+
+
+    .dashboard .box h2{
 
         font-size:22px;
 
     }
 
-    .box p{
 
-        font-size:9px;
+    .dashboard .box p{
+
+        font-size:8px;
 
     }
 
@@ -1248,9 +2215,10 @@ body.light{
     }
 
 
-    #animeList{
+    .admin-anime-list{
 
-        grid-template-columns:1fr;
+        grid-template-columns:
+            1fr;
 
     }
 
@@ -1262,4 +2230,3 @@ body.light{
     }
 
 }
-

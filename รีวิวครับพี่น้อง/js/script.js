@@ -1,6 +1,7 @@
 // =====================================================
 // Anime Review Hub
 // script.js
+// HOME
 // =====================================================
 
 import { db } from "./firebase.js";
@@ -15,9 +16,17 @@ import {
 // Elements
 // =====================================================
 
-const animeList = document.getElementById("animeList");
+const animeList =
+    document.getElementById("animeList");
 
-const searchBox = document.getElementById("searchAnime");
+const searchBox =
+    document.getElementById("searchAnime");
+
+const categoryToggle =
+    document.getElementById("categoryToggle");
+
+const categorySection =
+    document.querySelector(".category-section");
 
 
 // =====================================================
@@ -39,6 +48,7 @@ async function loadData() {
 
     console.log("เริ่มโหลดข้อมูล Anime...");
 
+
     if (!animeList) {
 
         console.error(
@@ -49,14 +59,25 @@ async function loadData() {
     }
 
 
+    // Loading
     animeList.innerHTML = `
         <div class="loading">
+
             <div class="loader"></div>
+
+            <p>
+                กำลังโหลดข้อมูล Anime...
+            </p>
+
         </div>
     `;
 
 
     try {
+
+        // =================================================
+        // Load Anime
+        // =================================================
 
         const animeSnap =
             await getDocs(
@@ -67,6 +88,10 @@ async function loadData() {
             );
 
 
+        // =================================================
+        // Load Reviews
+        // =================================================
+
         const reviewSnap =
             await getDocs(
                 collection(
@@ -76,13 +101,13 @@ async function loadData() {
             );
 
 
-        // =========================
-        // Anime
-        // =========================
+        // =================================================
+        // Anime Data
+        // =================================================
 
         animeData =
             animeSnap.docs.map(
-                docSnap => ({
+                (docSnap) => ({
 
                     id: docSnap.id,
 
@@ -92,13 +117,13 @@ async function loadData() {
             );
 
 
-        // =========================
-        // Reviews
-        // =========================
+        // =================================================
+        // Review Data
+        // =================================================
 
         reviewData =
             reviewSnap.docs.map(
-                docSnap => ({
+                (docSnap) => ({
 
                     id: docSnap.id,
 
@@ -113,11 +138,16 @@ async function loadData() {
             animeData.length
         );
 
+
         console.log(
             "Review จำนวน =",
             reviewData.length
         );
 
+
+        // =================================================
+        // Render
+        // =================================================
 
         renderAnime(
             animeData
@@ -133,6 +163,7 @@ async function loadData() {
 
 
         animeList.innerHTML = `
+
             <div class="empty">
 
                 <i class="fa-solid fa-circle-xmark"></i>
@@ -148,8 +179,8 @@ async function loadData() {
                 </p>
 
             </div>
-        `;
 
+        `;
     }
 
 }
@@ -163,26 +194,35 @@ function getAverageScore(animeId) {
 
     const reviews =
         reviewData.filter(
-            review =>
-                String(
+            (review) => {
+
+                return String(
                     review.animeId
                 ) === String(
                     animeId
-                )
+                );
+
+            }
         );
 
 
-    if (
-        reviews.length === 0
-    ) {
+    // ไม่มีรีวิว
+    if (reviews.length === 0) {
 
         return {
+
             score: 0,
+
             count: 0
+
         };
 
     }
 
+
+    // =================================================
+    // รวมคะแนน
+    // =================================================
 
     const total =
         reviews.reduce(
@@ -218,16 +258,53 @@ function getAverageScore(animeId) {
 
 
 // =====================================================
+// Normalize Categories
+// =====================================================
+
+function getCategories(item) {
+
+    if (
+        Array.isArray(
+            item.category
+        )
+    ) {
+
+        return item.category;
+
+    }
+
+
+    if (item.category) {
+
+        return [
+            item.category
+        ];
+
+    }
+
+
+    return [];
+
+}
+
+
+// =====================================================
 // Render Anime
 // =====================================================
 
 function renderAnime(list) {
 
-    if (!animeList) return;
+    if (!animeList) {
+        return;
+    }
 
 
     animeList.innerHTML = "";
 
+
+    // =================================================
+    // No Result
+    // =================================================
 
     if (
         !Array.isArray(list) ||
@@ -235,6 +312,7 @@ function renderAnime(list) {
     ) {
 
         animeList.innerHTML = `
+
             <div class="empty">
 
                 <i class="fa-solid fa-film"></i>
@@ -244,18 +322,28 @@ function renderAnime(list) {
                 </h2>
 
                 <p>
-                    ลองเลือกหมวดหมู่ใหม่
+                    ลองค้นหาหรือเลือกหมวดหมู่อื่น
                 </p>
 
             </div>
+
         `;
 
         return;
+
     }
 
 
+    // =================================================
+    // Render Each Anime
+    // =================================================
+
     list.forEach(
-        item => {
+        (item) => {
+
+            // -----------------------------------------
+            // Rating
+            // -----------------------------------------
 
             const result =
                 getAverageScore(
@@ -263,44 +351,26 @@ function renderAnime(list) {
                 );
 
 
-            // =========================
-            // Category
-            // =========================
+            // -----------------------------------------
+            // Categories
+            // -----------------------------------------
 
-            let categories = [];
-
-
-            if (
-                Array.isArray(
-                    item.category
-                )
-            ) {
-
-                categories =
-                    item.category;
-
-            }
-            else if (
-                item.category
-            ) {
-
-                categories = [
-                    item.category
-                ];
-
-            }
+            const categories =
+                getCategories(item);
 
 
             let categoryHTML = "";
 
 
             categories.forEach(
-                cat => {
+                (cat) => {
 
                     categoryHTML += `
+
                         <span>
                             ${escapeHTML(cat)}
                         </span>
+
                     `;
 
                 }
@@ -310,33 +380,37 @@ function renderAnime(list) {
             if (!categoryHTML) {
 
                 categoryHTML = `
-                    <span>-</span>
+
+                    <span>
+                        -
+                    </span>
+
                 `;
 
             }
 
 
-            // =========================
+            // -----------------------------------------
             // Image
-            // =========================
+            // -----------------------------------------
 
             const image =
                 item.image ||
                 "https://via.placeholder.com/400x550?text=No+Image";
 
 
-            // =========================
+            // -----------------------------------------
             // Title
-            // =========================
+            // -----------------------------------------
 
             const title =
                 item.title ||
                 "ไม่มีชื่อ";
 
 
-            // =========================
-            // Card
-            // =========================
+            // -----------------------------------------
+            // Create Card
+            // -----------------------------------------
 
             const card =
                 document.createElement(
@@ -350,6 +424,8 @@ function renderAnime(list) {
 
             card.innerHTML = `
 
+                <!-- Poster -->
+
                 <img
                     src="${escapeAttribute(image)}"
                     alt="${escapeAttribute(title)}"
@@ -358,6 +434,8 @@ function renderAnime(list) {
                 >
 
 
+                <!-- Content -->
+
                 <div class="card-content">
 
                     <h3>
@@ -365,12 +443,16 @@ function renderAnime(list) {
                     </h3>
 
 
+                    <!-- Categories -->
+
                     <div class="genre">
 
                         ${categoryHTML}
 
                     </div>
 
+
+                    <!-- Rating -->
 
                     <div class="rating">
 
@@ -396,6 +478,8 @@ function renderAnime(list) {
                     </div>
 
 
+                    <!-- Detail Button -->
+
                     <button
                         type="button"
                         class="detail-btn">
@@ -404,15 +488,14 @@ function renderAnime(list) {
 
                     </button>
 
-
                 </div>
 
             `;
 
 
-            // =========================
+            // =================================================
             // Image Error
-            // =========================
+            // =================================================
 
             const imageElement =
                 card.querySelector(
@@ -435,9 +518,9 @@ function renderAnime(list) {
             }
 
 
-            // =========================
-            // Detail
-            // =========================
+            // =================================================
+            // Detail Button
+            // =================================================
 
             const detailButton =
                 card.querySelector(
@@ -451,20 +534,19 @@ function renderAnime(list) {
                     "click",
                     () => {
 
-                        localStorage.setItem(
-                            "animeId",
+                        showDetail(
                             item.id
                         );
-
-
-                        window.location.href =
-                            "pages/detail.html";
 
                     }
                 );
 
             }
 
+
+            // =================================================
+            // Add Card
+            // =================================================
 
             animeList.appendChild(
                 card
@@ -489,16 +571,16 @@ function filterAnime(
         category || "All";
 
 
-    // =========================
-    // Active
-    // =========================
+    // =================================================
+    // Remove Active
+    // =================================================
 
     document
         .querySelectorAll(
             ".category button"
         )
         .forEach(
-            button => {
+            (button) => {
 
                 button.classList.remove(
                     "active"
@@ -507,6 +589,10 @@ function filterAnime(
             }
         );
 
+
+    // =================================================
+    // Add Active
+    // =================================================
 
     if (
         event &&
@@ -541,17 +627,17 @@ function applyFilter() {
 
     const result =
         animeData.filter(
-            item => {
+            (item) => {
 
-
-                // =========================
+                // =====================================
                 // Search
-                // =========================
+                // =====================================
 
                 const title =
                     String(
                         item.title || ""
                     )
+                        .trim()
                         .toLowerCase();
 
 
@@ -561,9 +647,9 @@ function applyFilter() {
                     );
 
 
-                // =========================
+                // =====================================
                 // Category
-                // =========================
+                // =====================================
 
                 let matchCategory =
                     true;
@@ -575,31 +661,27 @@ function applyFilter() {
                 ) {
 
                     const categories =
-                        Array.isArray(
-                            item.category
-                        )
-                            ? item.category
-                            : item.category
-                                ? [item.category]
-                                : [];
+                        getCategories(item);
 
 
                     matchCategory =
                         categories.some(
-                            cat => {
+                            (cat) => {
 
                                 return (
-                                    String(
-                                        cat
-                                    )
+
+                                    String(cat)
                                         .trim()
                                         .toLowerCase()
+
                                     ===
+
                                     String(
                                         currentCategory
                                     )
                                         .trim()
                                         .toLowerCase()
+
                                 );
 
                             }
@@ -643,7 +725,30 @@ if (searchBox) {
 
 
 // =====================================================
-// Make Filter Available To HTML
+// Category Open / Close
+// =====================================================
+
+if (
+    categoryToggle &&
+    categorySection
+) {
+
+    categoryToggle.addEventListener(
+        "click",
+        () => {
+
+            categorySection.classList.toggle(
+                "open"
+            );
+
+        }
+    );
+
+}
+
+
+// =====================================================
+// Make Filter Available to HTML
 // =====================================================
 
 window.filterAnime =
@@ -655,7 +760,7 @@ window.filterAnime =
 // =====================================================
 
 window.clearSearch =
-    function() {
+    function () {
 
         if (searchBox) {
 
@@ -673,7 +778,7 @@ window.clearSearch =
                 ".category button"
             )
             .forEach(
-                button => {
+                (button) => {
 
                     button.classList.remove(
                         "active"
@@ -711,7 +816,9 @@ window.clearSearch =
 
 function showDetail(id) {
 
-    if (!id) return;
+    if (!id) {
+        return;
+    }
 
 
     localStorage.setItem(
@@ -731,29 +838,15 @@ window.showDetail =
 
 
 // =====================================================
-// Reload
+// Reload Anime
 // =====================================================
 
 window.reloadAnime =
-    async function() {
+    async function () {
 
         await loadData();
 
     };
-
-
-// =====================================================
-// Start
-// =====================================================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        loadData();
-
-    }
-);
 
 
 // =====================================================
@@ -792,6 +885,10 @@ function escapeHTML(value) {
 }
 
 
+// =====================================================
+// Escape Attribute
+// =====================================================
+
 function escapeAttribute(value) {
 
     return escapeHTML(
@@ -800,3 +897,9 @@ function escapeAttribute(value) {
 
 }
 
+
+// =====================================================
+// Start
+// =====================================================
+
+loadData();
