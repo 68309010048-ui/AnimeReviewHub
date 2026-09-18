@@ -2,7 +2,7 @@
 // Anime Review Hub
 // admin.js
 // Reviewer + Super Admin
-// Anime Management + Review Viewer
+// REAL-TIME ANIME + REVIEWS
 // ======================================================
 
 import { auth, db } from "./firebase.js";
@@ -19,55 +19,87 @@ import {
     getDocs,
     updateDoc,
     deleteDoc,
+    query,
+    where,
+    onSnapshot,
+    writeBatch,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
 
 // ======================================================
-// ELEMENTS
+// Elements
 // ======================================================
 
 const addBtn =
-    document.getElementById("addAnime");
+    document.getElementById(
+        "addAnime"
+    );
 
 const cancelBtn =
-    document.getElementById("cancelEdit");
+    document.getElementById(
+        "cancelEdit"
+    );
 
 const titleInput =
-    document.getElementById("title");
+    document.getElementById(
+        "title"
+    );
 
 const imageInput =
-    document.getElementById("image");
+    document.getElementById(
+        "image"
+    );
 
 const trailerInput =
-    document.getElementById("trailer");
+    document.getElementById(
+        "trailer"
+    );
 
 const descriptionInput =
-    document.getElementById("description");
+    document.getElementById(
+        "description"
+    );
 
 const episodesInput =
-    document.getElementById("episodes");
+    document.getElementById(
+        "episodes"
+    );
 
 const statusInput =
-    document.getElementById("status");
+    document.getElementById(
+        "status"
+    );
 
 const typeInput =
-    document.getElementById("type");
+    document.getElementById(
+        "type"
+    );
 
 const animeList =
-    document.getElementById("animeList");
+    document.getElementById(
+        "animeList"
+    );
 
 const searchBox =
-    document.getElementById("searchAnime");
+    document.getElementById(
+        "searchAnime"
+    );
 
 const animeCount =
-    document.getElementById("animeCount");
+    document.getElementById(
+        "animeCount"
+    );
 
 const reviewerCount =
-    document.getElementById("reviewerCount");
+    document.getElementById(
+        "reviewerCount"
+    );
 
 const reviewCount =
-    document.getElementById("reviewCount");
+    document.getElementById(
+        "reviewCount"
+    );
 
 const reviewedAnimeCount =
     document.getElementById(
@@ -119,9 +151,14 @@ const closeReview =
         "closeReview"
     );
 
+const formTitle =
+    document.getElementById(
+        "formTitle"
+    );
+
 
 // ======================================================
-// VARIABLES
+// Variables
 // ======================================================
 
 let currentUser = null;
@@ -134,6 +171,12 @@ let animeData = [];
 
 let reviewData = [];
 
+let searchText = "";
+
+let unsubscribeAnime = null;
+
+let unsubscribeReviews = null;
+
 
 // ======================================================
 // AUTHENTICATION
@@ -142,6 +185,9 @@ let reviewData = [];
 onAuthStateChanged(
     auth,
     async (user) => {
+
+        cleanupRealtime();
+
 
         if (!user) {
 
@@ -192,10 +238,6 @@ onAuthStateChanged(
                 "user";
 
 
-            // ==========================================
-            // Role
-            // ==========================================
-
             if (
                 currentRole !== "admin" &&
                 currentRole !== "superadmin"
@@ -215,8 +257,9 @@ onAuthStateChanged(
 
             updateRoleUI();
 
+            startAnimeRealtime();
 
-            await loadData();
+            startReviewRealtime();
 
         }
         catch (error) {
@@ -253,26 +296,22 @@ function updateRoleUI() {
     ) {
 
         roleInfo.innerHTML = `
-
             <i class="fa-solid fa-crown"></i>
 
             <span>
-                Super Admin — จัดการ Anime และรีวิวทั้งหมด
+                Super Admin — จัดการ Anime และรีวิวได้ทั้งหมด
             </span>
-
         `;
 
     }
     else {
 
         roleInfo.innerHTML = `
-
             <i class="fa-solid fa-user-shield"></i>
 
             <span>
                 Reviewer — จัดการเฉพาะ Anime ที่คุณเพิ่ม
             </span>
-
         `;
 
     }
@@ -281,167 +320,156 @@ function updateRoleUI() {
 
 
 // ======================================================
-// LOAD DATA
+// ANIME REALTIME
 // ======================================================
 
-async function loadData() {
+function startAnimeRealtime() {
 
-    await loadAnime();
+    unsubscribeAnime =
+        onSnapshot(
+            collection(
+                db,
+                "anime"
+            ),
+            (snapshot) => {
 
-    await loadReviews();
+                const allAnime =
+                    snapshot.docs.map(
+                        docSnap => ({
 
-    updateDashboard();
+                            id:
+                                docSnap.id,
 
-    renderAnime();
+                            ...docSnap.data()
 
-}
-
-
-// ======================================================
-// LOAD ANIME
-// ======================================================
-
-async function loadAnime() {
-
-    try {
-
-        const snapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "anime"
-                )
-            );
-
-
-        const allAnime =
-            snapshot.docs.map(
-                (docSnap) => ({
-
-                    id:
-                        docSnap.id,
-
-                    ...docSnap.data()
-
-                })
-            );
-
-
-        // ==========================================
-        // Reviewer
-        // ==========================================
-
-        if (
-            currentRole ===
-            "admin"
-        ) {
-
-            animeData =
-                allAnime.filter(
-                    (anime) => {
-
-                        return (
-                            anime.createdBy ===
-                            currentUser.uid
-                        );
-
-                    }
-                );
-
-        }
-
-
-        // ==========================================
-        // Super Admin
-        // ==========================================
-
-        else {
-
-            animeData =
-                allAnime;
-
-        }
-
-    }
-    catch (error) {
-
-        console.error(
-            "Load Anime Error:",
-            error
-        );
-
-        animeData = [];
-
-    }
-
-}
-
-
-// ======================================================
-// LOAD REVIEWS
-// ======================================================
-
-async function loadReviews() {
-
-    try {
-
-        const snapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "reviews"
-                )
-            );
-
-
-        const allReviews =
-            snapshot.docs.map(
-                (docSnap) => ({
-
-                    id:
-                        docSnap.id,
-
-                    ...docSnap.data()
-
-                })
-            );
-
-
-        const allowedAnime =
-            new Set(
-                animeData.map(
-                    (anime) =>
-                        String(
-                            anime.id
-                        )
-                )
-            );
-
-
-        reviewData =
-            allReviews.filter(
-                (review) => {
-
-                    return allowedAnime.has(
-                        String(
-                            review.animeId
-                        )
+                        })
                     );
 
+
+                if (
+                    currentRole ===
+                    "admin"
+                ) {
+
+                    animeData =
+                        allAnime.filter(
+                            anime =>
+                                anime.createdBy ===
+                                currentUser.uid
+                        );
+
                 }
-            );
+                else {
 
-    }
-    catch (error) {
+                    animeData =
+                        allAnime;
 
-        console.error(
-            "Load Reviews Error:",
-            error
+                }
+
+
+                updateDashboard();
+
+                renderAnime();
+
+            },
+
+            (error) => {
+
+                console.error(
+                    "Anime realtime error:",
+                    error
+                );
+
+            }
         );
 
-        reviewData = [];
+}
 
-    }
+
+// ======================================================
+// REVIEW REALTIME
+// ======================================================
+
+function startReviewRealtime() {
+
+    unsubscribeReviews =
+        onSnapshot(
+            collection(
+                db,
+                "reviews"
+            ),
+            (snapshot) => {
+
+                reviewData =
+                    snapshot.docs.map(
+                        docSnap => ({
+
+                            id:
+                                docSnap.id,
+
+                            ...docSnap.data()
+
+                        })
+                    );
+
+
+                updateDashboard();
+
+                renderAnime();
+
+
+                // ถ้าเปิดรีวิวอยู่
+                // ให้รีเฟรชเฉพาะ Anime ที่เลือก
+
+                if (
+                    reviewSection &&
+                    reviewSection.style.display !==
+                        "none"
+                ) {
+
+                    const selectedId =
+                        selectedAnime
+                            ?.dataset
+                            ?.animeId;
+
+
+                    if (selectedId) {
+
+                        const anime =
+                            animeData.find(
+                                item =>
+                                    String(
+                                        item.id
+                                    ) ===
+                                    String(
+                                        selectedId
+                                    )
+                            );
+
+
+                        if (anime) {
+
+                            openReviewSection(
+                                anime
+                            );
+
+                        }
+
+                    }
+
+                }
+
+            },
+
+            (error) => {
+
+                console.error(
+                    "Review realtime error:",
+                    error
+                );
+
+            }
+        );
 
 }
 
@@ -452,6 +480,29 @@ async function loadReviews() {
 
 function updateDashboard() {
 
+    const shownAnimeIds =
+        new Set(
+            animeData.map(
+                anime =>
+                    String(
+                        anime.id
+                    )
+            )
+        );
+
+
+    const shownReviews =
+        reviewData.filter(
+            review =>
+                shownAnimeIds.has(
+                    String(
+                        review.animeId
+                    )
+                )
+        );
+
+
+    // Anime
     if (animeCount) {
 
         animeCount.textContent =
@@ -460,24 +511,22 @@ function updateDashboard() {
     }
 
 
+    // Reviews
     if (reviewCount) {
 
         reviewCount.textContent =
-            reviewData.length;
+            shownReviews.length;
 
     }
 
 
-    // ==========================================
     // Unique reviewers
-    // ==========================================
-
     const reviewerSet =
         new Set();
 
 
-    reviewData.forEach(
-        (review) => {
+    shownReviews.forEach(
+        review => {
 
             const key =
                 review.uid ||
@@ -505,20 +554,19 @@ function updateDashboard() {
     }
 
 
-    // ==========================================
-    // Reviewed anime
-    // ==========================================
-
-    const reviewedAnimeSet =
+    // Anime with reviews
+    const reviewedSet =
         new Set();
 
 
-    reviewData.forEach(
-        (review) => {
+    shownReviews.forEach(
+        review => {
 
-            if (review.animeId) {
+            if (
+                review.animeId
+            ) {
 
-                reviewedAnimeSet.add(
+                reviewedSet.add(
                     String(
                         review.animeId
                     )
@@ -533,54 +581,7 @@ function updateDashboard() {
     if (reviewedAnimeCount) {
 
         reviewedAnimeCount.textContent =
-            reviewedAnimeSet.size;
-
-    }
-
-
-    // ==========================================
-    // Labels
-    // ==========================================
-
-    const boxes =
-        document.querySelectorAll(
-            ".dashboard .box"
-        );
-
-
-    if (boxes.length >= 4) {
-
-        const animeLabel =
-            boxes[0].querySelector("p");
-
-        const reviewerLabel =
-            boxes[1].querySelector("p");
-
-
-        if (animeLabel) {
-
-            animeLabel.textContent =
-                currentRole ===
-                    "superadmin"
-
-                    ? "Anime ทั้งหมด"
-
-                    : "Anime ของฉัน";
-
-        }
-
-
-        if (reviewerLabel) {
-
-            reviewerLabel.textContent =
-                currentRole ===
-                    "superadmin"
-
-                    ? "ผู้รีวิวทั้งหมด"
-
-                    : "ผู้รีวิวของฉัน";
-
-        }
+            reviewedSet.size;
 
     }
 
@@ -588,24 +589,663 @@ function updateDashboard() {
 
 
 // ======================================================
-// GET REVIEWS FOR ANIME
+// RENDER ANIME
 // ======================================================
 
-function getAnimeReviews(
+function renderAnime() {
+
+    if (!animeList) {
+        return;
+    }
+
+
+    const keyword =
+        searchText
+            .trim()
+            .toLowerCase();
+
+
+    const filtered =
+        animeData.filter(
+            anime => {
+
+                if (!keyword) {
+                    return true;
+                }
+
+
+                const title =
+                    String(
+                        anime.title ||
+                        ""
+                    )
+                    .toLowerCase();
+
+
+                const category =
+                    normalizeCategories(
+                        anime.category
+                    )
+                    .join(" ")
+                    .toLowerCase();
+
+
+                return (
+                    title.includes(
+                        keyword
+                    ) ||
+                    category.includes(
+                        keyword
+                    )
+                );
+
+            }
+        );
+
+
+    if (animeResultText) {
+
+        animeResultText.textContent =
+            `${filtered.length} รายการ`;
+
+    }
+
+
+    animeList.innerHTML =
+        "";
+
+
+    if (
+        filtered.length ===
+        0
+    ) {
+
+        animeList.innerHTML = `
+            <div class="empty-box">
+
+                <i class="fa-solid fa-film"></i>
+
+                <h3>
+                    ไม่พบ Anime
+                </h3>
+
+                <p>
+                    ลองเปลี่ยนคำค้นหา
+                </p>
+
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    filtered.forEach(
+        anime => {
+
+            animeList.innerHTML +=
+                createAnimeCard(
+                    anime
+                );
+
+        }
+    );
+
+
+    bindAnimeButtons();
+
+}
+
+
+// ======================================================
+// CREATE CARD
+// ======================================================
+
+function createAnimeCard(
+    anime
+) {
+
+    const reviews =
+        getAnimeReviews(
+            anime.id
+        );
+
+
+    const average =
+        getAverageRating(
+            reviews
+        );
+
+
+    const categories =
+        normalizeCategories(
+            anime.category
+        );
+
+
+    const image =
+        anime.image ||
+        anime.imageURL ||
+        "";
+
+
+    const canEdit =
+        currentRole ===
+            "superadmin" ||
+        anime.createdBy ===
+            currentUser.uid;
+
+
+    return `
+        <div
+            class="anime-card"
+            data-anime-id="${escapeAttribute(
+                anime.id
+            )}"
+        >
+
+            <img
+                src="${escapeAttribute(
+                    image
+                )}"
+                alt="${escapeAttribute(
+                    anime.title ||
+                    "Anime"
+                )}"
+                onerror="this.src='https://placehold.co/600x800?text=No+Image';"
+            >
+
+
+            <div class="anime-info">
+
+                <h3>
+                    ${escapeHTML(
+                        anime.title ||
+                        "ไม่มีชื่อ"
+                    )}
+                </h3>
+
+
+                <p class="anime-category">
+
+                    <i class="fa-solid fa-tags"></i>
+
+                    ${
+                        categories.length
+                            ? categories
+                                .map(
+                                    item =>
+                                        escapeHTML(
+                                            item
+                                        )
+                                )
+                                .join(", ")
+                            : "Anime"
+                    }
+
+                </p>
+
+
+                <div class="anime-score-row">
+
+                    <div class="anime-score">
+
+                        <i class="fa-solid fa-star"></i>
+
+                        ${average.toFixed(1)}
+
+                    </div>
+
+
+                    <span class="review-count">
+
+                        ${reviews.length}
+                        รีวิว
+
+                    </span>
+
+                </div>
+
+
+                ${
+                    anime.createdBy
+                        ? `
+                            <p class="owner-row">
+
+                                <i class="fa-solid fa-user"></i>
+
+                                ผู้เพิ่ม:
+                                <strong>
+                                    ${escapeHTML(
+                                        anime.createdBy
+                                    )}
+                                </strong>
+
+                            </p>
+                        `
+                        : ""
+                }
+
+
+                ${
+                    anime.description
+                        ? `
+                            <p class="description">
+                                ${escapeHTML(
+                                    anime.description
+                                )}
+                            </p>
+                        `
+                        : ""
+                }
+
+            </div>
+
+
+            <div class="action">
+
+                <button
+                    type="button"
+                    class="reviewBtn"
+                    data-action="review"
+                    data-id="${escapeAttribute(
+                        anime.id
+                    )}"
+                >
+
+                    <i class="fa-solid fa-comments"></i>
+
+                    ดูรีวิว
+
+                </button>
+
+
+                ${
+                    canEdit
+                        ? `
+                            <button
+                                type="button"
+                                class="editBtn"
+                                data-action="edit"
+                                data-id="${escapeAttribute(
+                                    anime.id
+                                )}"
+                            >
+
+                                <i class="fa-solid fa-pen"></i>
+
+                                แก้ไข
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="deleteBtn"
+                                data-action="delete"
+                                data-id="${escapeAttribute(
+                                    anime.id
+                                )}"
+                            >
+
+                                <i class="fa-solid fa-trash"></i>
+
+                                ลบ
+
+                            </button>
+                        `
+                        : `
+                            <div class="no-permission">
+
+                                <i class="fa-solid fa-lock"></i>
+
+                                ไม่มีสิทธิ์แก้ไข
+
+                            </div>
+                        `
+                }
+
+            </div>
+
+        </div>
+    `;
+
+}
+
+
+// ======================================================
+// BUTTON EVENTS
+// ======================================================
+
+function bindAnimeButtons() {
+
+    animeList
+        .querySelectorAll(
+            "[data-action='review']"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        const anime =
+                            animeData.find(
+                                item =>
+                                    String(
+                                        item.id
+                                    ) ===
+                                    String(
+                                        button.dataset.id
+                                    )
+                            );
+
+
+                        if (anime) {
+
+                            openReviewSection(
+                                anime
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+    animeList
+        .querySelectorAll(
+            "[data-action='edit']"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        startEdit(
+                            button.dataset.id
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    animeList
+        .querySelectorAll(
+            "[data-action='delete']"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        deleteAnime(
+                            button.dataset.id
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+// ======================================================
+// REVIEW SECTION
+// ======================================================
+
+function openReviewSection(
+    anime
+) {
+
+    if (!reviewSection) {
+        return;
+    }
+
+
+    reviewSection.style.display =
+        "block";
+
+
+    if (selectedAnime) {
+
+        selectedAnime.dataset.animeId =
+            anime.id;
+
+    }
+
+
+    if (selectedAnimeText) {
+
+        const reviews =
+            getAnimeReviews(
+                anime.id
+            );
+
+
+        selectedAnimeText.textContent =
+            `${anime.title || "Anime"} — ${reviews.length} รีวิว`;
+
+    }
+
+
+    if (selectedAnime) {
+
+        const reviews =
+            getAnimeReviews(
+                anime.id
+            );
+
+
+        const average =
+            getAverageRating(
+                reviews
+            );
+
+
+        const image =
+            anime.image ||
+            anime.imageURL ||
+            "";
+
+
+        selectedAnime.innerHTML = `
+            <img
+                class="selected-anime-image"
+                src="${escapeAttribute(
+                    image
+                )}"
+                alt="${escapeAttribute(
+                    anime.title ||
+                    "Anime"
+                )}"
+            >
+
+
+            <div class="selected-anime-info">
+
+                <h3>
+                    ${escapeHTML(
+                        anime.title ||
+                        "ไม่มีชื่อ"
+                    )}
+                </h3>
+
+
+                <div class="selected-anime-rating">
+
+                    <span>
+                        ⭐
+                        ${average.toFixed(1)}
+                    </span>
+
+                    <small>
+                        ${reviews.length}
+                        รีวิว
+                    </small>
+
+                </div>
+
+            </div>
+        `;
+
+    }
+
+
+    renderSelectedReviews(
+        anime.id
+    );
+
+
+    reviewSection.scrollIntoView(
+        {
+            behavior: "smooth",
+            block: "start"
+        }
+    );
+
+}
+
+
+// ======================================================
+// SELECTED REVIEWS
+// ======================================================
+
+function renderSelectedReviews(
     animeId
 ) {
 
-    return reviewData.filter(
-        (review) => {
+    if (!selectedReviewList) {
+        return;
+    }
 
-            return (
-                String(
-                    review.animeId
-                ) ===
-                String(
-                    animeId
-                )
-            );
+
+    const reviews =
+        getAnimeReviews(
+            animeId
+        );
+
+
+    selectedReviewList.innerHTML =
+        "";
+
+
+    if (
+        reviews.length ===
+        0
+    ) {
+
+        selectedReviewList.innerHTML = `
+            <div class="review-empty">
+
+                <div class="review-empty-icon">
+
+                    <i class="fa-solid fa-comments"></i>
+
+                </div>
+
+                <h3>
+                    ยังไม่มีรีวิว
+                </h3>
+
+                <p>
+                    Anime นี้ยังไม่มีคนรีวิว
+                </p>
+
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    reviews.forEach(
+        review => {
+
+            const avatar =
+                review.photoURL ||
+                `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+                    review.username ||
+                    "User"
+                )}`;
+
+
+            selectedReviewList.innerHTML += `
+                <div class="selected-review-item">
+
+                    <div class="selected-review-head">
+
+                        <img
+                            class="selected-review-avatar"
+                            src="${escapeAttribute(
+                                avatar
+                            )}"
+                            alt="${escapeAttribute(
+                                review.username ||
+                                "User"
+                            )}"
+                        >
+
+
+                        <div class="selected-review-user">
+
+                            <strong>
+                                ${escapeHTML(
+                                    review.username ||
+                                    "User"
+                                )}
+                            </strong>
+
+                            <small>
+                                ${escapeHTML(
+                                    review.email ||
+                                    ""
+                                )}
+                            </small>
+
+                        </div>
+
+
+                        <div class="selected-review-stars">
+
+                            ${createStars(
+                                Number(
+                                    review.rating ||
+                                    0
+                                )
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="selected-review-comment">
+
+                        ${escapeHTML(
+                            review.comment ||
+                            ""
+                        )}
+
+                    </div>
+
+                </div>
+            `;
 
         }
     );
@@ -614,8 +1254,765 @@ function getAnimeReviews(
 
 
 // ======================================================
-// AVERAGE RATING
+// CLOSE REVIEW
 // ======================================================
+
+if (closeReview) {
+
+    closeReview.addEventListener(
+        "click",
+        () => {
+
+            reviewSection.style.display =
+                "none";
+
+        }
+    );
+
+}
+
+
+// ======================================================
+// TOGGLE ANIME SECTION
+// ======================================================
+
+if (animeToggle) {
+
+    animeToggle.addEventListener(
+        "click",
+        () => {
+
+            if (!animeSection) {
+                return;
+            }
+
+
+            animeSection.classList.toggle(
+                "open"
+            );
+
+
+            const open =
+                animeSection.classList.contains(
+                    "open"
+                );
+
+
+            animeToggle.innerHTML =
+                open
+                    ? `
+                        <span>
+                            ซ่อนรายการ
+                        </span>
+
+                        <i class="fa-solid fa-chevron-up"></i>
+                    `
+                    : `
+                        <span>
+                            แสดงรายการ
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down"></i>
+                    `;
+
+        }
+    );
+
+}
+
+
+// ======================================================
+// SEARCH
+// ======================================================
+
+if (searchBox) {
+
+    searchBox.addEventListener(
+        "input",
+        () => {
+
+            searchText =
+                searchBox.value;
+
+            renderAnime();
+
+        }
+    );
+
+}
+
+
+// ======================================================
+// ADD / UPDATE ANIME
+// ======================================================
+
+if (addBtn) {
+
+    addBtn.addEventListener(
+        "click",
+        saveAnime
+    );
+
+}
+
+
+async function saveAnime() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    const title =
+        titleInput?.value.trim() ||
+        "";
+
+    const image =
+        imageInput?.value.trim() ||
+        "";
+
+    const trailer =
+        trailerInput?.value.trim() ||
+        "";
+
+    const description =
+        descriptionInput?.value.trim() ||
+        "";
+
+    const episodes =
+        parseInt(
+            episodesInput?.value || "0",
+            10
+        ) || 0;
+
+    const status =
+        statusInput?.value.trim() ||
+        "";
+
+    const type =
+        typeInput?.value.trim() ||
+        "";
+
+
+    const categories =
+        [];
+
+
+    document
+        .querySelectorAll(
+            ".category-group input:checked"
+        )
+        .forEach(
+            input => {
+
+                categories.push(
+                    input.value
+                );
+
+            }
+        );
+
+
+    if (
+        !title ||
+        !image ||
+        categories.length === 0 ||
+        !description ||
+        !status ||
+        !type
+    ) {
+
+        alert(
+            "กรุณากรอกข้อมูลให้ครบ"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        if (editId) {
+
+            const oldAnime =
+                animeData.find(
+                    item =>
+                        item.id ===
+                        editId
+                );
+
+
+            if (
+                !oldAnime ||
+                (
+                    currentRole !==
+                        "superadmin" &&
+                    oldAnime.createdBy !==
+                        currentUser.uid
+                )
+            ) {
+
+                alert(
+                    "คุณไม่มีสิทธิ์แก้ไข Anime นี้"
+                );
+
+                return;
+
+            }
+
+
+            await updateDoc(
+                doc(
+                    db,
+                    "anime",
+                    editId
+                ),
+                {
+
+                    title,
+
+                    image,
+
+                    category:
+                        categories,
+
+                    episodes,
+
+                    status,
+
+                    type,
+
+                    trailer,
+
+                    description
+
+                }
+            );
+
+
+            alert(
+                "แก้ไข Anime สำเร็จ"
+            );
+
+        }
+        else {
+
+            await addDoc(
+                collection(
+                    db,
+                    "anime"
+                ),
+                {
+
+                    title,
+
+                    image,
+
+                    category:
+                        categories,
+
+                    episodes,
+
+                    status,
+
+                    type,
+
+                    trailer,
+
+                    description,
+
+                    score:
+                        0,
+
+                    createdBy:
+                        currentUser.uid,
+
+                    createdAt:
+                        serverTimestamp()
+
+                }
+            );
+
+
+            alert(
+                "เพิ่ม Anime สำเร็จ"
+            );
+
+        }
+
+
+        clearForm();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Save Anime Error:",
+            error
+        );
+
+        alert(
+            "บันทึก Anime ไม่สำเร็จ"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// EDIT
+// ======================================================
+
+function startEdit(
+    id
+) {
+
+    const anime =
+        animeData.find(
+            item =>
+                item.id ===
+                id
+        );
+
+
+    if (!anime) {
+        return;
+    }
+
+
+    if (
+        currentRole !==
+            "superadmin" &&
+        anime.createdBy !==
+            currentUser.uid
+    ) {
+
+        alert(
+            "คุณไม่มีสิทธิ์แก้ไข Anime นี้"
+        );
+
+        return;
+
+    }
+
+
+    editId =
+        id;
+
+
+    if (formTitle) {
+
+        formTitle.textContent =
+            "แก้ไข Anime";
+
+    }
+
+
+    if (titleInput) {
+
+        titleInput.value =
+            anime.title ||
+            "";
+
+    }
+
+
+    if (imageInput) {
+
+        imageInput.value =
+            anime.image ||
+            "";
+
+    }
+
+
+    if (trailerInput) {
+
+        trailerInput.value =
+            anime.trailer ||
+            "";
+
+    }
+
+
+    if (descriptionInput) {
+
+        descriptionInput.value =
+            anime.description ||
+            "";
+
+    }
+
+
+    if (episodesInput) {
+
+        episodesInput.value =
+            anime.episodes ||
+            0;
+
+    }
+
+
+    if (statusInput) {
+
+        statusInput.value =
+            anime.status ||
+            "";
+
+    }
+
+
+    if (typeInput) {
+
+        typeInput.value =
+            anime.type ||
+            "";
+
+    }
+
+
+    document
+        .querySelectorAll(
+            ".category-group input"
+        )
+        .forEach(
+            input => {
+
+                input.checked =
+                    normalizeCategories(
+                        anime.category
+                    ).includes(
+                        input.value
+                    );
+
+            }
+        );
+
+
+    if (addBtn) {
+
+        addBtn.textContent =
+            "บันทึกการแก้ไข";
+
+    }
+
+
+    if (cancelBtn) {
+
+        cancelBtn.style.display =
+            "";
+
+    }
+
+
+    document
+        .querySelector(
+            ".form-card"
+        )
+        ?.scrollIntoView(
+            {
+                behavior: "smooth"
+            }
+        );
+
+}
+
+
+// ======================================================
+// CANCEL EDIT
+// ======================================================
+
+if (cancelBtn) {
+
+    cancelBtn.addEventListener(
+        "click",
+        clearForm
+    );
+
+}
+
+
+function clearForm() {
+
+    editId =
+        null;
+
+
+    if (formTitle) {
+
+        formTitle.textContent =
+            "เพิ่ม Anime";
+
+    }
+
+
+    if (titleInput) {
+        titleInput.value = "";
+    }
+
+    if (imageInput) {
+        imageInput.value = "";
+    }
+
+    if (trailerInput) {
+        trailerInput.value = "";
+    }
+
+    if (descriptionInput) {
+        descriptionInput.value = "";
+    }
+
+    if (episodesInput) {
+        episodesInput.value = "";
+    }
+
+    if (statusInput) {
+        statusInput.value = "";
+    }
+
+    if (typeInput) {
+        typeInput.value = "";
+    }
+
+
+    document
+        .querySelectorAll(
+            ".category-group input"
+        )
+        .forEach(
+            input => {
+
+                input.checked =
+                    false;
+
+            }
+        );
+
+
+    if (addBtn) {
+
+        addBtn.innerHTML =
+            '<i class="fa-solid fa-plus"></i> เพิ่ม Anime';
+
+    }
+
+
+    if (cancelBtn) {
+
+        cancelBtn.style.display =
+            "none";
+
+    }
+
+}
+
+
+// ======================================================
+// DELETE
+// ======================================================
+
+async function deleteAnime(
+    id
+) {
+
+    const anime =
+        animeData.find(
+            item =>
+                item.id ===
+                id
+        );
+
+
+    if (!anime) {
+        return;
+    }
+
+
+    if (
+        currentRole !==
+            "superadmin" &&
+        anime.createdBy !==
+            currentUser.uid
+    ) {
+
+        alert(
+            "คุณไม่มีสิทธิ์ลบ Anime นี้"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !confirm(
+            `ต้องการลบ "${anime.title || "Anime"}" ใช่หรือไม่?\nข้อมูล Review / Favorite / Bookmark ของเรื่องนี้จะถูกลบด้วย`
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const batch =
+            writeBatch(db);
+
+
+        // ==========================================
+        // Reviews
+        // ==========================================
+
+        const reviewSnap =
+            await getDocs(
+                query(
+                    collection(
+                        db,
+                        "reviews"
+                    ),
+                    where(
+                        "animeId",
+                        "==",
+                        id
+                    )
+                )
+            );
+
+
+        reviewSnap.forEach(
+            item =>
+                batch.delete(
+                    item.ref
+                )
+        );
+
+
+        // ==========================================
+        // Favorites
+        // ==========================================
+
+        const favoriteSnap =
+            await getDocs(
+                query(
+                    collection(
+                        db,
+                        "favorites"
+                    ),
+                    where(
+                        "animeId",
+                        "==",
+                        id
+                    )
+                )
+            );
+
+
+        favoriteSnap.forEach(
+            item =>
+                batch.delete(
+                    item.ref
+                )
+        );
+
+
+        // ==========================================
+        // Bookmarks
+        // ==========================================
+
+        const bookmarkSnap =
+            await getDocs(
+                query(
+                    collection(
+                        db,
+                        "bookmarks"
+                    ),
+                    where(
+                        "animeId",
+                        "==",
+                        id
+                    )
+                )
+            );
+
+
+        bookmarkSnap.forEach(
+            item =>
+                batch.delete(
+                    item.ref
+                )
+        );
+
+
+        // ==========================================
+        // Anime
+        // ==========================================
+
+        batch.delete(
+            doc(
+                db,
+                "anime",
+                id
+            )
+        );
+
+
+        await batch.commit();
+
+
+        alert(
+            "ลบ Anime สำเร็จ"
+        );
+
+
+        if (
+            reviewSection &&
+            selectedAnime?.dataset?.animeId === id
+        ) {
+
+            reviewSection.style.display =
+                "none";
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "Delete Anime Error:",
+            error
+        );
+
+        alert(
+            "ลบ Anime ไม่สำเร็จ"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// HELPERS
+// ======================================================
+
+function getAnimeReviews(
+    id
+) {
+
+    return reviewData.filter(
+        review =>
+            String(
+                review.animeId
+            ) ===
+            String(id)
+    );
+
+}
+
 
 function getAverageRating(
     reviews
@@ -659,780 +2056,24 @@ function getAverageRating(
 }
 
 
-// ======================================================
-// RENDER ANIME
-// ======================================================
-
-function renderAnime() {
-
-    if (!animeList) {
-        return;
-    }
-
-
-    const keyword =
-        searchBox
-            ? searchBox.value
-                .trim()
-                .toLowerCase()
-            : "";
-
-
-    let list =
-        [...animeData];
-
-
-    // ==========================================
-    // Search
-    // ==========================================
-
-    if (keyword) {
-
-        list =
-            list.filter(
-                (anime) => {
-
-                    const title =
-                        String(
-                            anime.title ||
-                            ""
-                        ).toLowerCase();
-
-
-                    const category =
-                        Array.isArray(
-                            anime.category
-                        )
-
-                            ? anime.category
-                                .join(" ")
-                                .toLowerCase()
-
-                            : String(
-                                anime.category ||
-                                ""
-                            ).toLowerCase();
-
-
-                    return (
-                        title.includes(
-                            keyword
-                        ) ||
-                        category.includes(
-                            keyword
-                        )
-                    );
-
-                }
-            );
-
-    }
-
-
-    animeList.innerHTML =
-        "";
-
-
-    if (animeResultText) {
-
-        animeResultText.textContent =
-            `${list.length} Anime`;
-
-    }
-
-
-    if (
-        list.length === 0
-    ) {
-
-        animeList.innerHTML = `
-
-            <div class="empty-box">
-
-                <i class="fa-solid fa-film"></i>
-
-                <h3>
-                    ไม่พบ Anime
-                </h3>
-
-                <p>
-                    ${
-                        keyword
-                            ? "ลองเปลี่ยนคำค้นหา"
-                            : "ยังไม่มี Anime"
-                    }
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    const fragment =
-        document.createDocumentFragment();
-
-
-    list.forEach(
-        (anime) => {
-
-            fragment.appendChild(
-                createAnimeCard(
-                    anime
-                )
-            );
-
-        }
-    );
-
-
-    animeList.appendChild(
-        fragment
-    );
-
-}
-
-
-// ======================================================
-// CREATE ANIME CARD
-// ======================================================
-
-function createAnimeCard(
-    anime
-) {
-
-    const card =
-        document.createElement(
-            "article"
-        );
-
-
-    card.className =
-        "anime-card";
-
-
-    const reviews =
-        getAnimeReviews(
-            anime.id
-        );
-
-
-    const average =
-        getAverageRating(
-            reviews
-        );
-
-
-    const categories =
-        Array.isArray(
-            anime.category
-        )
-
-            ? anime.category.join(
-                ", "
-            )
-
-            : anime.category ||
-                "-";
-
-
-    const image =
-        anime.image ||
-        "https://via.placeholder.com/400x550?text=No+Image";
-
-
-    const title =
-        anime.title ||
-        "ไม่มีชื่อ";
-
-
-    const isOwner =
-        anime.createdBy ===
-        currentUser.uid;
-
-
-    const canManage =
-        currentRole ===
-            "superadmin" ||
-        isOwner;
-
-
-    card.innerHTML = `
-
-        <img
-            src="${escapeAttribute(image)}"
-            alt="${escapeAttribute(title)}"
-            class="anime-image"
-            loading="lazy"
-        >
-
-
-        <div class="anime-info">
-
-            <h3>
-                ${escapeHTML(title)}
-            </h3>
-
-
-            <p class="anime-category">
-
-                <i class="fa-solid fa-layer-group"></i>
-
-                ${escapeHTML(categories)}
-
-            </p>
-
-
-            <div class="anime-score-row">
-
-                <div class="anime-score">
-
-                    <i class="fa-solid fa-star"></i>
-
-                    ${
-                        average > 0
-                            ? average.toFixed(1)
-                            : "0.0"
-                    }
-
-                </div>
-
-
-                <span class="review-count">
-
-                    ${reviews.length} รีวิว
-
-                </span>
-
-            </div>
-
-
-            <p class="owner-row">
-
-                <i class="fa-solid fa-user"></i>
-
-                ผู้สร้าง:
-
-                <strong>
-                    ${
-                        isOwner
-                            ? "ฉัน"
-                            : "Reviewer อื่น"
-                    }
-                </strong>
-
-            </p>
-
-
-            <p class="description">
-
-                ${escapeHTML(
-                    anime.description ||
-                    "ไม่มีเรื่องย่อ"
-                )}
-
-            </p>
-
-        </div>
-
-
-        <div class="action">
-
-
-            ${
-                canManage
-
-                    ? `
-
-                        <button
-                            type="button"
-                            class="editBtn">
-
-                            <i class="fa-solid fa-pen"></i>
-
-                            แก้ไข
-
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="deleteBtn">
-
-                            <i class="fa-solid fa-trash"></i>
-
-                            ลบ
-
-                        </button>
-
-                    `
-
-                    : `
-
-                        <span class="no-permission">
-
-                            <i class="fa-solid fa-lock"></i>
-
-                            ดูอย่างเดียว
-
-                        </span>
-
-                    `
-            }
-
-
-            <button
-                type="button"
-                class="reviewBtn">
-
-                <i class="fa-solid fa-comments"></i>
-
-                ดูรีวิว
-
-                ${
-                    reviews.length
-                        ? `(${reviews.length})`
-                        : ""
-                }
-
-            </button>
-
-
-        </div>
-
-    `;
-
-
-    // ==================================================
-    // IMAGE ERROR
-    // ==================================================
-
-    const imageElement =
-        card.querySelector(
-            ".anime-image"
-        );
-
-
-    if (imageElement) {
-
-        imageElement.addEventListener(
-            "error",
-            () => {
-
-                imageElement.src =
-                    "https://via.placeholder.com/400x550?text=No+Image";
-
-            }
-        );
-
-    }
-
-
-    // ==================================================
-    // EDIT
-    // ==================================================
-
-    const editButton =
-        card.querySelector(
-            ".editBtn"
-        );
-
-
-    if (editButton) {
-
-        editButton.addEventListener(
-            "click",
-            () => {
-
-                editAnime(
-                    anime.id
-                );
-
-            }
-        );
-
-    }
-
-
-    // ==================================================
-    // DELETE
-    // ==================================================
-
-    const deleteButton =
-        card.querySelector(
-            ".deleteBtn"
-        );
-
-
-    if (deleteButton) {
-
-        deleteButton.addEventListener(
-            "click",
-            () => {
-
-                deleteAnime(
-                    anime.id
-                );
-
-            }
-        );
-
-    }
-
-
-    // ==================================================
-    // REVIEWS
-    // ==================================================
-
-    const reviewButton =
-        card.querySelector(
-            ".reviewBtn"
-        );
-
-
-    if (reviewButton) {
-
-        reviewButton.addEventListener(
-            "click",
-            () => {
-
-                openReviewSection(
-                    anime
-                );
-
-            }
-        );
-
-    }
-
-
-    return card;
-
-}
-
-
-// ======================================================
-// OPEN REVIEW SECTION
-// ======================================================
-
-function openReviewSection(
-    anime
-) {
-
-    if (!reviewSection) {
-        return;
-    }
-
-
-    const reviews =
-        getAnimeReviews(
-            anime.id
-        );
-
-
-    const average =
-        getAverageRating(
-            reviews
-        );
-
-
-    reviewSection.style.display =
-        "block";
-
-
-    // ==========================================
-    // Title
-    // ==========================================
-
-    if (selectedAnimeText) {
-
-        selectedAnimeText.textContent =
-            `รีวิวของ ${anime.title || "Anime"}`;
-
-    }
-
-
-    // ==========================================
-    // Anime Summary
-    // ==========================================
-
-    if (selectedAnime) {
-
-        const image =
-            anime.image ||
-            "https://via.placeholder.com/100x140?text=No+Image";
-
-
-        selectedAnime.innerHTML = `
-
-            <img
-                src="${escapeAttribute(image)}"
-                alt="${escapeAttribute(
-                    anime.title || "Anime"
-                )}"
-                class="selected-anime-image"
-            >
-
-
-            <div class="selected-anime-info">
-
-                <h3>
-
-                    ${escapeHTML(
-                        anime.title ||
-                        "Anime"
-                    )}
-
-                </h3>
-
-
-                <div class="selected-anime-rating">
-
-                    <span>
-
-                        <i class="fa-solid fa-star"></i>
-
-                        ${
-                            average > 0
-                                ? average.toFixed(1)
-                                : "0.0"
-                        }
-
-                    </span>
-
-
-                    <small>
-
-                        ${reviews.length}
-                        รีวิว
-
-                    </small>
-
-                </div>
-
-            </div>
-
-        `;
-
-    }
-
-
-    renderSelectedReviews(
-        reviews
-    );
-
-
-    // ==========================================
-    // Scroll
-    // ==========================================
-
-    setTimeout(
-        () => {
-
-            reviewSection.scrollIntoView({
-                behavior:"smooth",
-                block:"start"
-            });
-
-        },
-        50
-    );
-
-}
-
-
-// ======================================================
-// RENDER SELECTED REVIEWS
-// ======================================================
-
-function renderSelectedReviews(
-    reviews
-) {
-
-    if (!selectedReviewList) {
-        return;
-    }
-
-
-    selectedReviewList.innerHTML =
-        "";
-
-
-    // ==========================================
-    // No Reviews
-    // ==========================================
-
-    if (
-        !reviews ||
-        reviews.length === 0
-    ) {
-
-        selectedReviewList.innerHTML = `
-
-            <div class="review-empty">
-
-                <div class="review-empty-icon">
-
-                    <i class="fa-regular fa-comment-dots"></i>
-
-                </div>
-
-
-                <h3>
-                    ยังไม่มีรีวิว
-                </h3>
-
-
-                <p>
-                    Anime นี้ยังไม่มีผู้ใช้มารีวิว
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    // ==========================================
-    // Reviews
-    // ==========================================
-
-    reviews.forEach(
-        (review) => {
-
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-
-            item.className =
-                "selected-review-item";
-
-
-            const username =
-                review.username ||
-                review.name ||
-                "ผู้ใช้";
-
-
-            const photo =
-                review.photoURL ||
-                `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
-                    username
-                )}`;
-
-
-            const rating =
-                Number(
-                    review.rating || 0
-                );
-
-
-            item.innerHTML = `
-
-                <div class="selected-review-head">
-
-
-                    <img
-                        src="${escapeAttribute(photo)}"
-                        alt="${escapeAttribute(username)}"
-                        class="selected-review-avatar"
-                    >
-
-
-                    <div class="selected-review-user">
-
-                        <strong>
-                            ${escapeHTML(username)}
-                        </strong>
-
-
-                        <small>
-
-                            ${escapeHTML(
-                                review.email ||
-                                ""
-                            )}
-
-                        </small>
-
-                    </div>
-
-
-                    <div class="selected-review-stars">
-
-                        ${createStars(
-                            rating
-                        )}
-
-                    </div>
-
-                </div>
-
-
-                <div class="selected-review-comment">
-
-                    ${
-                        review.comment
-                            ? escapeHTML(
-                                review.comment
-                            )
-                            : "ไม่มีข้อความรีวิว"
-                    }
-
-                </div>
-
-            `;
-
-
-            selectedReviewList.appendChild(
-                item
-            );
-
-        }
-    );
-
-}
-
-
-// ======================================================
-// CREATE STARS
-// ======================================================
-
 function createStars(
     rating
 ) {
 
-    let html = "";
+    let html =
+        "";
 
 
     for (
         let i = 1;
-        i <= 5;
+        i <= 10;
         i++
     ) {
 
-        if (i <= rating) {
-
-            html += `
-                <i class="fa-solid fa-star"></i>
-            `;
-
-        }
-        else {
-
-            html += `
-                <i class="fa-regular fa-star"></i>
-            `;
-
-        }
+        html +=
+            i <= rating
+                ? '<i class="fa-solid fa-star"></i>'
+                : '<i class="fa-regular fa-star"></i>';
 
     }
 
@@ -1442,884 +2083,62 @@ function createStars(
 }
 
 
-// ======================================================
-// CLOSE REVIEW
-// ======================================================
-
-if (closeReview) {
-
-    closeReview.addEventListener(
-        "click",
-        () => {
-
-            reviewSection.style.display =
-                "none";
-
-
-            if (selectedAnime) {
-
-                selectedAnime.innerHTML =
-                    "";
-
-            }
-
-
-            if (selectedReviewList) {
-
-                selectedReviewList.innerHTML =
-                    "";
-
-            }
-
-        }
-    );
-
-}
-
-
-// ======================================================
-// ANIME TOGGLE
-// ======================================================
-
-if (
-    animeToggle &&
-    animeSection
+function normalizeCategories(
+    value
 ) {
 
-    animeToggle.addEventListener(
-        "click",
-        () => {
-
-            const isOpen =
-                animeSection.classList.toggle(
-                    "open"
-                );
-
-
-            if (isOpen) {
-
-                animeToggle.innerHTML = `
-
-                    <span>
-                        ซ่อนรายการ
-                    </span>
-
-                    <i class="fa-solid fa-chevron-up"></i>
-
-                `;
-
-            }
-            else {
-
-                animeToggle.innerHTML = `
-
-                    <span>
-                        แสดงรายการ
-                    </span>
-
-                    <i class="fa-solid fa-chevron-down"></i>
-
-                `;
-
-            }
-
-        }
-    );
-
-}
-
-
-// ======================================================
-// ADD / UPDATE
-// ======================================================
-
-if (addBtn) {
-
-    addBtn.addEventListener(
-        "click",
-        async () => {
-
-            if (!currentUser) {
-                return;
-            }
-
-
-            const data =
-                getFormData();
-
-
-            if (!validateAnime(data)) {
-                return;
-            }
-
-
-            addBtn.disabled =
-                true;
-
-
-            try {
-
-                // ======================================
-                // UPDATE
-                // ======================================
-
-                if (editId) {
-
-                    const animeRef =
-                        doc(
-                            db,
-                            "anime",
-                            editId
-                        );
-
-
-                    const snap =
-                        await getDoc(
-                            animeRef
-                        );
-
-
-                    if (!snap.exists()) {
-
-                        alert(
-                            "ไม่พบ Anime นี้"
-                        );
-
-                        return;
-
-                    }
-
-
-                    const oldData =
-                        snap.data();
-
-
-                    const canEdit =
-                        currentRole ===
-                            "superadmin" ||
-                        oldData.createdBy ===
-                            currentUser.uid;
-
-
-                    if (!canEdit) {
-
-                        alert(
-                            "คุณไม่มีสิทธิ์แก้ไข Anime นี้"
-                        );
-
-                        return;
-
-                    }
-
-
-                    await updateDoc(
-                        animeRef,
-                        data
-                    );
-
-
-                    alert(
-                        "แก้ไข Anime สำเร็จ"
-                    );
-
-                }
-
-
-                // ======================================
-                // ADD
-                // ======================================
-
-                else {
-
-                    await addDoc(
-                        collection(
-                            db,
-                            "anime"
-                        ),
-                        {
-
-                            ...data,
-
-                            createdBy:
-                                currentUser.uid,
-
-                            createdAt:
-                                serverTimestamp()
-
-                        }
-                    );
-
-
-                    alert(
-                        "เพิ่ม Anime สำเร็จ"
-                    );
-
-                }
-
-
-                clearForm();
-
-                await loadData();
-
-            }
-            catch (error) {
-
-                console.error(
-                    "Save Anime Error:",
-                    error
-                );
-
-
-                alert(
-                    "บันทึกข้อมูลไม่สำเร็จ\n" +
-                    error.message
-                );
-
-            }
-            finally {
-
-                addBtn.disabled =
-                    false;
-
-            }
-
-        }
-    );
-
-}
-
-
-// ======================================================
-// GET FORM DATA
-// ======================================================
-
-function getFormData() {
-
-    return {
-
-        title:
-            titleInput.value.trim(),
-
-        image:
-            imageInput.value.trim(),
-
-        category:
-            getSelectedCategories(),
-
-        episodes:
-            parseInt(
-                episodesInput.value,
-                10
-            ) || 0,
-
-        status:
-            statusInput.value.trim(),
-
-        type:
-            typeInput.value.trim(),
-
-        trailer:
-            trailerInput.value.trim(),
-
-        description:
-            descriptionInput.value.trim()
-
-    };
-
-}
-
-
-// ======================================================
-// VALIDATE
-// ======================================================
-
-function validateAnime(
-    data
-) {
-
-    if (!data.title) {
-
-        alert(
-            "กรุณากรอกชื่อ Anime"
-        );
-
-        return false;
+    if (Array.isArray(value)) {
+
+        return value
+            .filter(Boolean)
+            .map(String);
 
     }
 
 
-    if (!data.image) {
+    if (!value) {
 
-        alert(
-            "กรุณากรอก URL รูปภาพ"
-        );
-
-        return false;
+        return [];
 
     }
 
 
-    if (
-        data.category.length === 0
-    ) {
-
-        alert(
-            "กรุณาเลือกหมวดหมู่อย่างน้อย 1 หมวด"
-        );
-
-        return false;
-
-    }
-
-
-    if (!data.description) {
-
-        alert(
-            "กรุณากรอกเรื่องย่อ"
-        );
-
-        return false;
-
-    }
-
-
-    return true;
-
-}
-
-
-// ======================================================
-// CATEGORIES
-// ======================================================
-
-function getSelectedCategories() {
-
-    return Array.from(
-        document.querySelectorAll(
-            ".category-group input:checked"
+    return String(value)
+        .split(",")
+        .map(
+            item =>
+                item.trim()
         )
-    ).map(
-        (input) =>
-            input.value
-    );
+        .filter(Boolean);
 
 }
 
-
-function setSelectedCategories(
-    categories
-) {
-
-    const selected =
-        Array.isArray(categories)
-            ? categories
-            : categories
-                ? [categories]
-                : [];
-
-
-    document
-        .querySelectorAll(
-            ".category-group input"
-        )
-        .forEach(
-            (input) => {
-
-                input.checked =
-                    selected.includes(
-                        input.value
-                    );
-
-            }
-        );
-
-}
-
-
-// ======================================================
-// EDIT
-// ======================================================
-
-async function editAnime(
-    id
-) {
-
-    try {
-
-        const ref =
-            doc(
-                db,
-                "anime",
-                id
-            );
-
-
-        const snap =
-            await getDoc(
-                ref
-            );
-
-
-        if (!snap.exists()) {
-
-            alert(
-                "ไม่พบ Anime"
-            );
-
-            return;
-
-        }
-
-
-        const data =
-            snap.data();
-
-
-        const canEdit =
-            currentRole ===
-                "superadmin" ||
-            data.createdBy ===
-                currentUser.uid;
-
-
-        if (!canEdit) {
-
-            alert(
-                "คุณไม่มีสิทธิ์แก้ไข Anime นี้"
-            );
-
-            return;
-
-        }
-
-
-        titleInput.value =
-            data.title || "";
-
-
-        imageInput.value =
-            data.image || "";
-
-
-        trailerInput.value =
-            data.trailer || "";
-
-
-        descriptionInput.value =
-            data.description || "";
-
-
-        episodesInput.value =
-            data.episodes ?? "";
-
-
-        statusInput.value =
-            data.status || "";
-
-
-        typeInput.value =
-            data.type || "";
-
-
-        setSelectedCategories(
-            data.category
-        );
-
-
-        editId =
-            id;
-
-
-        addBtn.innerHTML = `
-
-            <i class="fa-solid fa-floppy-disk"></i>
-
-            บันทึกการแก้ไข
-
-        `;
-
-
-        cancelBtn.style.display =
-            "inline-flex";
-
-
-        window.scrollTo({
-
-            top:0,
-
-            behavior:"smooth"
-
-        });
-
-    }
-    catch (error) {
-
-        console.error(
-            "Edit Error:",
-            error
-        );
-
-
-        alert(
-            "ไม่สามารถโหลด Anime ได้"
-        );
-
-    }
-
-}
-
-
-// ======================================================
-// DELETE ANIME
-// ======================================================
-
-async function deleteAnime(
-    id
-) {
-
-    try {
-
-        const animeRef =
-            doc(
-                db,
-                "anime",
-                id
-            );
-
-
-        const snap =
-            await getDoc(
-                animeRef
-            );
-
-
-        if (!snap.exists()) {
-
-            alert(
-                "ไม่พบ Anime นี้"
-            );
-
-            return;
-
-        }
-
-
-        const anime =
-            snap.data();
-
-
-        const canDelete =
-            currentRole ===
-                "superadmin" ||
-            anime.createdBy ===
-                currentUser.uid;
-
-
-        if (!canDelete) {
-
-            alert(
-                "คุณไม่มีสิทธิ์ลบ Anime นี้"
-            );
-
-            return;
-
-        }
-
-
-        const confirmed =
-            confirm(
-                `ต้องการลบ "${anime.title || "Anime"}" หรือไม่?`
-            );
-
-
-        if (!confirmed) {
-            return;
-        }
-
-
-        // ==========================================
-        // Reviews
-        // ==========================================
-
-        const reviewSnap =
-            await getDocs(
-                collection(
-                    db,
-                    "reviews"
-                )
-            );
-
-
-        for (
-            const item
-            of reviewSnap.docs
-        ) {
-
-            const data =
-                item.data();
-
-
-            if (
-                String(
-                    data.animeId
-                ) ===
-                String(id)
-            ) {
-
-                await deleteDoc(
-                    item.ref
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // Favorites
-        // ==========================================
-
-        const favoriteSnap =
-            await getDocs(
-                collection(
-                    db,
-                    "favorites"
-                )
-            );
-
-
-        for (
-            const item
-            of favoriteSnap.docs
-        ) {
-
-            const data =
-                item.data();
-
-
-            if (
-                String(
-                    data.animeId
-                ) ===
-                String(id)
-            ) {
-
-                await deleteDoc(
-                    item.ref
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // Bookmarks
-        // ==========================================
-
-        const bookmarkSnap =
-            await getDocs(
-                collection(
-                    db,
-                    "bookmarks"
-                )
-            );
-
-
-        for (
-            const item
-            of bookmarkSnap.docs
-        ) {
-
-            const data =
-                item.data();
-
-
-            if (
-                String(
-                    data.animeId
-                ) ===
-                String(id)
-            ) {
-
-                await deleteDoc(
-                    item.ref
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // Anime
-        // ==========================================
-
-        await deleteDoc(
-            animeRef
-        );
-
-
-        if (editId === id) {
-
-            clearForm();
-
-        }
-
-
-        if (
-            reviewSection &&
-            selectedAnime
-        ) {
-
-            reviewSection.style.display =
-                "none";
-
-            selectedAnime.innerHTML =
-                "";
-
-            selectedReviewList.innerHTML =
-                "";
-
-        }
-
-
-        alert(
-            "ลบ Anime เรียบร้อย"
-        );
-
-
-        await loadData();
-
-    }
-    catch (error) {
-
-        console.error(
-            "Delete Error:",
-            error
-        );
-
-
-        alert(
-            "ลบ Anime ไม่สำเร็จ\n" +
-            error.message
-        );
-
-    }
-
-}
-
-
-// ======================================================
-// CLEAR FORM
-// ======================================================
-
-function clearForm() {
-
-    titleInput.value =
-        "";
-
-    imageInput.value =
-        "";
-
-    trailerInput.value =
-        "";
-
-    descriptionInput.value =
-        "";
-
-    episodesInput.value =
-        "";
-
-    statusInput.value =
-        "";
-
-    typeInput.value =
-        "";
-
-
-    setSelectedCategories([]);
-
-
-    editId =
-        null;
-
-
-    addBtn.innerHTML = `
-
-        <i class="fa-solid fa-plus"></i>
-
-        เพิ่ม Anime
-
-    `;
-
-
-    cancelBtn.style.display =
-        "none";
-
-}
-
-
-// ======================================================
-// CANCEL EDIT
-// ======================================================
-
-if (cancelBtn) {
-
-    cancelBtn.addEventListener(
-        "click",
-        clearForm
-    );
-
-}
-
-
-// ======================================================
-// SEARCH
-// ======================================================
-
-if (searchBox) {
-
-    searchBox.addEventListener(
-        "input",
-        renderAnime
-    );
-
-}
-
-
-// ======================================================
-// ESCAPE HTML
-// ======================================================
 
 function escapeHTML(
     value
 ) {
 
-    return String(value)
-
-        .replaceAll(
-            "&",
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
             "&amp;"
         )
-
-        .replaceAll(
-            "<",
+        .replace(
+            /</g,
             "&lt;"
         )
-
-        .replaceAll(
-            ">",
+        .replace(
+            />/g,
             "&gt;"
         )
-
-        .replaceAll(
-            '"',
+        .replace(
+            /"/g,
             "&quot;"
         )
-
-        .replaceAll(
-            "'",
+        .replace(
+            /'/g,
             "&#039;"
         );
 
@@ -2333,5 +2152,29 @@ function escapeAttribute(
     return escapeHTML(
         value
     );
+
+}
+
+
+// ======================================================
+// CLEANUP
+// ======================================================
+
+function cleanupRealtime() {
+
+    if (unsubscribeAnime) {
+
+        unsubscribeAnime();
+        unsubscribeAnime = null;
+
+    }
+
+
+    if (unsubscribeReviews) {
+
+        unsubscribeReviews();
+        unsubscribeReviews = null;
+
+    }
 
 }

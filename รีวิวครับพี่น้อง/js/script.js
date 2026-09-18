@@ -1,14 +1,14 @@
 // =====================================================
 // Anime Review Hub
 // script.js
-// HOME
+// HOME REAL-TIME
 // =====================================================
 
 import { db } from "./firebase.js";
 
 import {
     collection,
-    getDocs
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
 
@@ -22,12 +22,6 @@ const animeList =
 const searchBox =
     document.getElementById("searchAnime");
 
-const categoryToggle =
-    document.getElementById("categoryToggle");
-
-const categorySection =
-    document.querySelector(".category-section");
-
 
 // =====================================================
 // Variables
@@ -39,149 +33,387 @@ let reviewData = [];
 
 let currentCategory = "All";
 
+let searchText = "";
+
+let unsubscribeAnime = null;
+
+let unsubscribeReviews = null;
+
 
 // =====================================================
-// Load Data
+// REAL-TIME START
 // =====================================================
 
-async function loadData() {
+function startRealtime() {
 
-    console.log("เริ่มโหลดข้อมูล Anime...");
+    // ================================================
+    // Anime
+    // ================================================
+
+    unsubscribeAnime =
+        onSnapshot(
+            collection(
+                db,
+                "anime"
+            ),
+            (snapshot) => {
+
+                animeData =
+                    snapshot.docs.map(
+                        docSnap => ({
+
+                            id:
+                                docSnap.id,
+
+                            ...docSnap.data()
+
+                        })
+                    );
 
 
-    if (!animeList) {
+                renderCurrent();
 
-        console.error(
-            "ไม่พบ #animeList"
+            },
+
+            (error) => {
+
+                console.error(
+                    "Anime realtime error:",
+                    error
+                );
+
+                showError(
+                    "โหลด Anime ไม่สำเร็จ"
+                );
+
+            }
         );
 
+
+    // ================================================
+    // Reviews
+    // ================================================
+
+    unsubscribeReviews =
+        onSnapshot(
+            collection(
+                db,
+                "reviews"
+            ),
+            (snapshot) => {
+
+                reviewData =
+                    snapshot.docs.map(
+                        docSnap => ({
+
+                            id:
+                                docSnap.id,
+
+                            ...docSnap.data()
+
+                        })
+                    );
+
+
+                renderCurrent();
+
+            },
+
+            (error) => {
+
+                console.error(
+                    "Review realtime error:",
+                    error
+                );
+
+                renderCurrent();
+
+            }
+        );
+
+}
+
+
+// =====================================================
+// Filter
+// =====================================================
+
+function getFilteredAnime() {
+
+    let list =
+        [...animeData];
+
+
+    // ================================================
+    // Category
+    // ================================================
+
+    if (
+        currentCategory &&
+        currentCategory !== "All"
+    ) {
+
+        list =
+            list.filter(
+                anime => {
+
+                    const categories =
+                        normalizeCategories(
+                            anime.category
+                        );
+
+
+                    return categories.some(
+                        category =>
+                            String(category)
+                                .toLowerCase() ===
+                            String(
+                                currentCategory
+                            ).toLowerCase()
+                    );
+
+                }
+            );
+
+    }
+
+
+    // ================================================
+    // Search
+    // ================================================
+
+    const keyword =
+        searchText
+            .trim()
+            .toLowerCase();
+
+
+    if (keyword) {
+
+        list =
+            list.filter(
+                anime => {
+
+                    const title =
+                        String(
+                            anime.title || ""
+                        ).toLowerCase();
+
+
+                    const categories =
+                        normalizeCategories(
+                            anime.category
+                        )
+                        .join(" ")
+                        .toLowerCase();
+
+
+                    return (
+                        title.includes(keyword) ||
+                        categories.includes(keyword)
+                    );
+
+                }
+            );
+
+    }
+
+
+    return list;
+
+}
+
+
+// =====================================================
+// Apply Current
+// =====================================================
+
+function renderCurrent() {
+
+    const list =
+        getFilteredAnime();
+
+
+    renderAnime(list);
+
+}
+
+
+// =====================================================
+// Render Anime
+// =====================================================
+
+function renderAnime(list) {
+
+    if (!animeList) {
         return;
     }
 
 
-    // Loading
-    animeList.innerHTML = `
-        <div class="loading">
-
-            <div class="loader"></div>
-
-            <p>
-                กำลังโหลดข้อมูล Anime...
-            </p>
-
-        </div>
-    `;
+    animeList.innerHTML =
+        "";
 
 
-    try {
-
-        // =================================================
-        // Load Anime
-        // =================================================
-
-        const animeSnap =
-            await getDocs(
-                collection(
-                    db,
-                    "anime"
-                )
-            );
-
-
-        // =================================================
-        // Load Reviews
-        // =================================================
-
-        const reviewSnap =
-            await getDocs(
-                collection(
-                    db,
-                    "reviews"
-                )
-            );
-
-
-        // =================================================
-        // Anime Data
-        // =================================================
-
-        animeData =
-            animeSnap.docs.map(
-                (docSnap) => ({
-
-                    id: docSnap.id,
-
-                    ...docSnap.data()
-
-                })
-            );
-
-
-        // =================================================
-        // Review Data
-        // =================================================
-
-        reviewData =
-            reviewSnap.docs.map(
-                (docSnap) => ({
-
-                    id: docSnap.id,
-
-                    ...docSnap.data()
-
-                })
-            );
-
-
-        console.log(
-            "Anime จำนวน =",
-            animeData.length
-        );
-
-
-        console.log(
-            "Review จำนวน =",
-            reviewData.length
-        );
-
-
-        // =================================================
-        // Render
-        // =================================================
-
-        renderAnime(
-            animeData
-        );
-
-    }
-    catch (error) {
-
-        console.error(
-            "Firestore Error:",
-            error
-        );
-
+    if (
+        !Array.isArray(list) ||
+        list.length === 0
+    ) {
 
         animeList.innerHTML = `
-
             <div class="empty">
-
-                <i class="fa-solid fa-circle-xmark"></i>
+                <i class="fa-solid fa-film"></i>
 
                 <h2>
-                    โหลดข้อมูลไม่สำเร็จ
+                    ไม่พบ Anime
                 </h2>
 
                 <p>
-                    ${escapeHTML(
-                        error.message
-                    )}
+                    ลองเปลี่ยนคำค้นหาหรือหมวดหมู่
                 </p>
-
             </div>
-
         `;
+
+        return;
+
     }
+
+
+    list.forEach(
+        anime => {
+
+            const rating =
+                getAverageScore(
+                    anime.id
+                );
+
+
+            const categories =
+                normalizeCategories(
+                    anime.category
+                );
+
+
+            const categoryHTML =
+                categories
+                    .slice(0, 3)
+                    .map(
+                        category => `
+                            <span>
+                                ${escapeHTML(
+                                    category
+                                )}
+                            </span>
+                        `
+                    )
+                    .join("");
+
+
+            const image =
+                anime.image ||
+                anime.imageURL ||
+                anime.photo ||
+                "";
+
+
+            const title =
+                anime.title ||
+                "ไม่มีชื่อ";
+
+
+            animeList.innerHTML += `
+                <div class="card">
+
+                    <img
+                        src="${escapeAttribute(image)}"
+                        alt="${escapeAttribute(title)}"
+                        onerror="this.src='https://placehold.co/600x800?text=No+Image';"
+                    >
+
+                    <div class="card-content">
+
+                        <h3>
+                            ${escapeHTML(title)}
+                        </h3>
+
+
+                        <div class="genre">
+
+                            ${
+                                categoryHTML ||
+                                "<span>Anime</span>"
+                            }
+
+                        </div>
+
+
+                        <div class="rating">
+
+                            <div class="score">
+
+                                <i class="fa-solid fa-star"></i>
+
+                                ${rating.score.toFixed(1)}
+
+                            </div>
+
+
+                            <div class="review-count">
+
+                                ${rating.count}
+                                รีวิว
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            data-id="${escapeAttribute(
+                                anime.id
+                            )}"
+                            class="detail-btn"
+                        >
+
+                            ดูรายละเอียด
+
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+        }
+    );
+
+
+    // ================================================
+    // Detail Buttons
+    // ================================================
+
+    animeList
+        .querySelectorAll(
+            ".detail-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        const id =
+                            button.dataset.id;
+
+
+                        showDetail(id);
+
+                    }
+                );
+
+            }
+        );
 
 }
 
@@ -190,39 +422,31 @@ async function loadData() {
 // Average Score
 // =====================================================
 
-function getAverageScore(animeId) {
+function getAverageScore(
+    animeId
+) {
 
     const reviews =
         reviewData.filter(
-            (review) => {
-
-                return String(
+            review =>
+                String(
                     review.animeId
-                ) === String(
-                    animeId
-                );
-
-            }
+                ) ===
+                String(animeId)
         );
 
 
-    // ไม่มีรีวิว
-    if (reviews.length === 0) {
+    if (
+        reviews.length === 0
+    ) {
 
         return {
-
             score: 0,
-
             count: 0
-
         };
 
     }
 
-
-    // =================================================
-    // รวมคะแนน
-    // =================================================
 
     const total =
         reviews.reduce(
@@ -258,452 +482,107 @@ function getAverageScore(animeId) {
 
 
 // =====================================================
-// Normalize Categories
+// Category
+// Support:
+// filterAnime("Action")
+// filterAnime(event, "Action")
 // =====================================================
 
-function getCategories(item) {
-
-    if (
-        Array.isArray(
-            item.category
-        )
+window.filterAnime =
+    function (
+        eventOrCategory,
+        categoryValue
     ) {
 
-        return item.category;
+        let category;
 
-    }
 
+        if (
+            typeof eventOrCategory ===
+            "string"
+        ) {
 
-    if (item.category) {
+            category =
+                eventOrCategory;
 
-        return [
-            item.category
-        ];
+        }
+        else {
 
-    }
+            category =
+                categoryValue;
 
+        }
 
-    return [];
 
-}
+        currentCategory =
+            category || "All";
 
 
-// =====================================================
-// Render Anime
-// =====================================================
+        // ============================================
+        // Update Active Button
+        // ============================================
 
-function renderAnime(list) {
+        let event =
+            eventOrCategory;
 
-    if (!animeList) {
-        return;
-    }
 
+        if (
+            event &&
+            event.currentTarget
+        ) {
 
-    animeList.innerHTML = "";
+            document
+                .querySelectorAll(
+                    ".category button"
+                )
+                .forEach(
+                    button => {
 
-
-    // =================================================
-    // No Result
-    // =================================================
-
-    if (
-        !Array.isArray(list) ||
-        list.length === 0
-    ) {
-
-        animeList.innerHTML = `
-
-            <div class="empty">
-
-                <i class="fa-solid fa-film"></i>
-
-                <h2>
-                    ไม่พบอนิเมะ
-                </h2>
-
-                <p>
-                    ลองค้นหาหรือเลือกหมวดหมู่อื่น
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    // =================================================
-    // Render Each Anime
-    // =================================================
-
-    list.forEach(
-        (item) => {
-
-            // -----------------------------------------
-            // Rating
-            // -----------------------------------------
-
-            const result =
-                getAverageScore(
-                    item.id
-                );
-
-
-            // -----------------------------------------
-            // Categories
-            // -----------------------------------------
-
-            const categories =
-                getCategories(item);
-
-
-            let categoryHTML = "";
-
-
-            categories.forEach(
-                (cat) => {
-
-                    categoryHTML += `
-
-                        <span>
-                            ${escapeHTML(cat)}
-                        </span>
-
-                    `;
-
-                }
-            );
-
-
-            if (!categoryHTML) {
-
-                categoryHTML = `
-
-                    <span>
-                        -
-                    </span>
-
-                `;
-
-            }
-
-
-            // -----------------------------------------
-            // Image
-            // -----------------------------------------
-
-            const image =
-                item.image ||
-                "https://via.placeholder.com/400x550?text=No+Image";
-
-
-            // -----------------------------------------
-            // Title
-            // -----------------------------------------
-
-            const title =
-                item.title ||
-                "ไม่มีชื่อ";
-
-
-            // -----------------------------------------
-            // Create Card
-            // -----------------------------------------
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "card";
-
-
-            card.innerHTML = `
-
-                <!-- Poster -->
-
-                <img
-                    src="${escapeAttribute(image)}"
-                    alt="${escapeAttribute(title)}"
-                    class="anime-image"
-                    loading="lazy"
-                >
-
-
-                <!-- Content -->
-
-                <div class="card-content">
-
-                    <h3>
-                        ${escapeHTML(title)}
-                    </h3>
-
-
-                    <!-- Categories -->
-
-                    <div class="genre">
-
-                        ${categoryHTML}
-
-                    </div>
-
-
-                    <!-- Rating -->
-
-                    <div class="rating">
-
-                        <div class="score">
-
-                            <i class="fa-solid fa-star"></i>
-
-                            ${
-                                result.score > 0
-                                    ? result.score.toFixed(1)
-                                    : "0.0"
-                            }
-
-                        </div>
-
-
-                        <div class="review-count">
-
-                            ${result.count} รีวิว
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- Detail Button -->
-
-                    <button
-                        type="button"
-                        class="detail-btn">
-
-                        ดูรายละเอียด
-
-                    </button>
-
-                </div>
-
-            `;
-
-
-            // =================================================
-            // Image Error
-            // =================================================
-
-            const imageElement =
-                card.querySelector(
-                    ".anime-image"
-                );
-
-
-            if (imageElement) {
-
-                imageElement.addEventListener(
-                    "error",
-                    () => {
-
-                        imageElement.src =
-                            "https://via.placeholder.com/400x550?text=No+Image";
-
-                    }
-                );
-
-            }
-
-
-            // =================================================
-            // Detail Button
-            // =================================================
-
-            const detailButton =
-                card.querySelector(
-                    ".detail-btn"
-                );
-
-
-            if (detailButton) {
-
-                detailButton.addEventListener(
-                    "click",
-                    () => {
-
-                        showDetail(
-                            item.id
+                        button.classList.remove(
+                            "active"
                         );
 
                     }
                 );
 
-            }
 
-
-            // =================================================
-            // Add Card
-            // =================================================
-
-            animeList.appendChild(
-                card
+            event.currentTarget.classList.add(
+                "active"
             );
 
         }
-    );
+        else {
 
-}
+            document
+                .querySelectorAll(
+                    ".category button"
+                )
+                .forEach(
+                    button => {
 
-
-// =====================================================
-// Category Filter
-// =====================================================
-
-function filterAnime(
-    event,
-    category
-) {
-
-    currentCategory =
-        category || "All";
+                        const text =
+                            button.textContent
+                                .trim()
+                                .toLowerCase();
 
 
-    // =================================================
-    // Remove Active
-    // =================================================
-
-    document
-        .querySelectorAll(
-            ".category button"
-        )
-        .forEach(
-            (button) => {
-
-                button.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-
-    // =================================================
-    // Add Active
-    // =================================================
-
-    if (
-        event &&
-        event.currentTarget
-    ) {
-
-        event.currentTarget.classList.add(
-            "active"
-        );
-
-    }
-
-
-    applyFilter();
-
-}
-
-
-// =====================================================
-// Apply Filter
-// =====================================================
-
-function applyFilter() {
-
-    const keyword =
-        searchBox
-            ? searchBox.value
-                .trim()
-                .toLowerCase()
-            : "";
-
-
-    const result =
-        animeData.filter(
-            (item) => {
-
-                // =====================================
-                // Search
-                // =====================================
-
-                const title =
-                    String(
-                        item.title || ""
-                    )
-                        .trim()
-                        .toLowerCase();
-
-
-                const matchKeyword =
-                    title.includes(
-                        keyword
-                    );
-
-
-                // =====================================
-                // Category
-                // =====================================
-
-                let matchCategory =
-                    true;
-
-
-                if (
-                    currentCategory !==
-                    "All"
-                ) {
-
-                    const categories =
-                        getCategories(item);
-
-
-                    matchCategory =
-                        categories.some(
-                            (cat) => {
-
-                                return (
-
-                                    String(cat)
-                                        .trim()
-                                        .toLowerCase()
-
-                                    ===
-
-                                    String(
-                                        currentCategory
-                                    )
-                                        .trim()
-                                        .toLowerCase()
-
-                                );
-
-                            }
+                        button.classList.toggle(
+                            "active",
+                            text ===
+                                String(
+                                    currentCategory
+                                ).toLowerCase()
                         );
 
-                }
-
-
-                return (
-                    matchKeyword &&
-                    matchCategory
+                    }
                 );
 
-            }
-        );
+        }
 
 
-    renderAnime(
-        result
-    );
+        renderCurrent();
 
-}
+    };
 
 
 // =====================================================
@@ -716,98 +595,15 @@ if (searchBox) {
         "input",
         () => {
 
-            applyFilter();
+            searchText =
+                searchBox.value;
+
+            renderCurrent();
 
         }
     );
 
 }
-
-
-// =====================================================
-// Category Open / Close
-// =====================================================
-
-if (
-    categoryToggle &&
-    categorySection
-) {
-
-    categoryToggle.addEventListener(
-        "click",
-        () => {
-
-            categorySection.classList.toggle(
-                "open"
-            );
-
-        }
-    );
-
-}
-
-
-// =====================================================
-// Make Filter Available to HTML
-// =====================================================
-
-window.filterAnime =
-    filterAnime;
-
-
-// =====================================================
-// Clear Search
-// =====================================================
-
-window.clearSearch =
-    function () {
-
-        if (searchBox) {
-
-            searchBox.value = "";
-
-        }
-
-
-        currentCategory =
-            "All";
-
-
-        document
-            .querySelectorAll(
-                ".category button"
-            )
-            .forEach(
-                (button) => {
-
-                    button.classList.remove(
-                        "active"
-                    );
-
-                }
-            );
-
-
-        const firstButton =
-            document.querySelector(
-                ".category button"
-            );
-
-
-        if (firstButton) {
-
-            firstButton.classList.add(
-                "active"
-            );
-
-        }
-
-
-        renderAnime(
-            animeData
-        );
-
-    };
 
 
 // =====================================================
@@ -833,67 +629,115 @@ function showDetail(id) {
 }
 
 
-window.showDetail =
-    showDetail;
+// =====================================================
+// Categories
+// =====================================================
+
+function normalizeCategories(
+    category
+) {
+
+    if (Array.isArray(category)) {
+
+        return category
+            .filter(Boolean)
+            .map(
+                item =>
+                    String(item)
+            );
+
+    }
+
+
+    if (
+        category === null ||
+        category === undefined
+    ) {
+
+        return [];
+
+    }
+
+
+    return String(category)
+        .split(",")
+        .map(
+            item =>
+                item.trim()
+        )
+        .filter(Boolean);
+
+}
 
 
 // =====================================================
-// Reload Anime
-// =====================================================
-
-window.reloadAnime =
-    async function () {
-
-        await loadData();
-
-    };
-
-
-// =====================================================
-// Escape HTML
+// Escape
 // =====================================================
 
 function escapeHTML(value) {
 
-    return String(value)
-
-        .replaceAll(
-            "&",
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
             "&amp;"
         )
-
-        .replaceAll(
-            "<",
+        .replace(
+            /</g,
             "&lt;"
         )
-
-        .replaceAll(
-            ">",
+        .replace(
+            />/g,
             "&gt;"
         )
-
-        .replaceAll(
-            '"',
+        .replace(
+            /"/g,
             "&quot;"
         )
-
-        .replaceAll(
-            "'",
+        .replace(
+            /'/g,
             "&#039;"
         );
 
 }
 
 
-// =====================================================
-// Escape Attribute
-// =====================================================
-
 function escapeAttribute(value) {
 
     return escapeHTML(
         value
-    );
+    )
+        .replace(
+            /`/g,
+            "&#096;"
+        );
+
+}
+
+
+// =====================================================
+// Error
+// =====================================================
+
+function showError(message) {
+
+    if (!animeList) {
+        return;
+    }
+
+
+    animeList.innerHTML = `
+        <div class="empty">
+
+            <i class="fa-solid fa-circle-xmark"></i>
+
+            <h2>
+                ${escapeHTML(message)}
+            </h2>
+
+        </div>
+    `;
 
 }
 
@@ -902,4 +746,4 @@ function escapeAttribute(value) {
 // Start
 // =====================================================
 
-loadData();
+startRealtime();

@@ -1,6 +1,7 @@
 // =====================================================
 // Anime Review Hub
 // bookmark.js
+// REAL-TIME BOOKMARK
 // =====================================================
 
 import { auth, db } from "./firebase.js";
@@ -13,8 +14,7 @@ import {
     collection,
     query,
     where,
-    getDocs,
-    deleteDoc,
+    onSnapshot,
     doc
 } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
@@ -23,37 +23,57 @@ import {
 // Elements
 // =====================================================
 
-const bookmarkList =
-    document.getElementById("bookmarkList");
+const list =
+    document.getElementById(
+        "bookmarkList"
+    );
 
-const bookmarkCount =
-    document.getElementById("bookmarkCount");
+const count =
+    document.getElementById(
+        "bookmarkCount"
+    );
+
+const search =
+    document.getElementById(
+        "searchBookmark"
+    );
 
 const emptyBox =
-    document.getElementById("emptyBox");
-
-const searchInput =
-    document.getElementById("searchBookmark");
+    document.getElementById(
+        "emptyBox"
+    );
 
 
 // =====================================================
 // Variables
 // =====================================================
 
-let bookmarkAnime = [];
-
-let reviewData = [];
-
 let currentUser = null;
+
+let bookmarks = [];
+
+let animeCache = new Map();
+
+let animeListeners = new Map();
+
+let unsubscribeBookmarks = null;
+
+let searchText = "";
 
 
 // =====================================================
-// Authentication
+// AUTH
 // =====================================================
 
 onAuthStateChanged(
     auth,
-    async (user) => {
+    (user) => {
+
+        cleanup();
+
+        currentUser =
+            user;
+
 
         if (!user) {
 
@@ -61,258 +81,269 @@ onAuthStateChanged(
                 "login.html";
 
             return;
+
         }
 
 
-        currentUser = user;
-
-        await loadData();
+        startBookmarkRealtime();
 
     }
 );
 
 
 // =====================================================
-// Load Bookmark + Reviews
+// BOOKMARK REALTIME
 // =====================================================
 
-async function loadData() {
+function startBookmarkRealtime() {
 
-    try {
-
-        bookmarkAnime = [];
-        reviewData = [];
-
-
-        bookmarkList.innerHTML = `
-            <div class="loading">
-
-                <div class="loader"></div>
-
-                <p>
-                    กำลังโหลด Bookmark...
-                </p>
-
-            </div>
-        `;
-
-
-        // ==============================================
-        // Load Bookmark
-        // ==============================================
-
-        const bookmarkQuery =
-            query(
-                collection(db, "bookmarks"),
-                where(
-                    "uid",
-                    "==",
-                    currentUser.uid
-                )
-            );
-
-
-        const bookmarkSnap =
-            await getDocs(
-                bookmarkQuery
-            );
-
-
-        bookmarkSnap.forEach(
-            (docSnap) => {
-
-                bookmarkAnime.push({
-
-                    id: docSnap.id,
-
-                    ...docSnap.data()
-
-                });
-
-            }
+    const q =
+        query(
+            collection(
+                db,
+                "bookmarks"
+            ),
+            where(
+                "uid",
+                "==",
+                currentUser.uid
+            )
         );
 
 
-        // ==============================================
-        // Load Reviews
-        // ==============================================
+    unsubscribeBookmarks =
+        onSnapshot(
+            q,
+            async (snapshot) => {
 
-        const reviewSnap =
-            await getDocs(
-                collection(
-                    db,
-                    "reviews"
-                )
-            );
+                bookmarks =
+                    snapshot.docs.map(
+                        docSnap => ({
 
+                            id:
+                                docSnap.id,
 
-        reviewSnap.forEach(
-            (docSnap) => {
+                            ...docSnap.data()
 
-                reviewData.push({
-
-                    id: docSnap.id,
-
-                    ...docSnap.data()
-
-                });
-
-            }
-        );
+                        })
+                    );
 
 
-        showBookmark(
-            bookmarkAnime
-        );
-
-    }
-    catch (error) {
-
-        console.error(
-            "Load Bookmark Error:",
-            error
-        );
+                updateCount();
 
 
-        bookmarkList.innerHTML = `
-            <div class="loading">
-
-                <p>
-                    โหลดข้อมูลไม่สำเร็จ
-                </p>
-
-            </div>
-        `;
-
-    }
-
-}
+                await syncAnimeListeners();
 
 
-// =====================================================
-// Get Average Review
-// =====================================================
-
-function getAverageReview(animeId) {
-
-    const reviews =
-        reviewData.filter(
-            (review) => {
-
-                return String(
-                    review.animeId
-                ) === String(
-                    animeId
-                );
-
-            }
-        );
-
-
-    if (reviews.length === 0) {
-
-        return {
-
-            score: 0,
-
-            count: 0
-
-        };
-
-    }
-
-
-    const total =
-        reviews.reduce(
-            (
-                sum,
-                review
-            ) => {
-
-                return (
-                    sum +
-                    Number(
-                        review.rating || 0
-                    )
-                );
+                render();
 
             },
-            0
+
+            (error) => {
+
+                console.error(
+                    "Bookmark realtime error:",
+                    error
+                );
+
+            }
+        );
+
+}
+
+
+// =====================================================
+// ANIME LISTENERS
+// =====================================================
+
+async function syncAnimeListeners() {
+
+    const animeIds =
+        new Set(
+            bookmarks
+                .map(
+                    item =>
+                        String(
+                            item.animeId
+                        )
+                )
+                .filter(Boolean)
         );
 
 
-    return {
+    for (
+        const [animeId, unsubscribe]
+        of animeListeners
+    ) {
 
-        score:
-            total / reviews.length,
+        if (!animeIds.has(animeId)) {
 
-        count:
-            reviews.length
+            unsubscribe();
 
-    };
+            animeListeners.delete(
+                animeId
+            );
 
-}
-
-
-// =====================================================
-// Category
-// =====================================================
-
-function getCategoryText(category) {
-
-    if (Array.isArray(category)) {
-
-        return category.join(", ");
-
-    }
-
-
-    return category ||
-        "ไม่ระบุหมวดหมู่";
-
-}
-
-
-// =====================================================
-// Show Bookmark
-// =====================================================
-
-function showBookmark(list) {
-
-    bookmarkList.innerHTML = "";
-
-
-    if (bookmarkCount) {
-
-        bookmarkCount.textContent =
-            list.length;
-
-    }
-
-
-    // ==============================================
-    // Empty
-    // ==============================================
-
-    if (list.length === 0) {
-
-        bookmarkList.style.display =
-            "none";
-
-
-        if (emptyBox) {
-
-            emptyBox.style.display =
-                "block";
+            animeCache.delete(
+                animeId
+            );
 
         }
 
+    }
+
+
+    for (
+        const animeId
+        of animeIds
+    ) {
+
+        if (
+            animeListeners.has(
+                animeId
+            )
+        ) {
+
+            continue;
+
+        }
+
+
+        const unsubscribe =
+            onSnapshot(
+                doc(
+                    db,
+                    "anime",
+                    animeId
+                ),
+                (snap) => {
+
+                    if (!snap.exists()) {
+
+                        animeCache.delete(
+                            animeId
+                        );
+
+                    }
+                    else {
+
+                        animeCache.set(
+                            animeId,
+                            {
+                                id:
+                                    snap.id,
+
+                                ...snap.data()
+                            }
+                        );
+
+                    }
+
+
+                    render();
+
+                }
+            );
+
+
+        animeListeners.set(
+            animeId,
+            unsubscribe
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// RENDER
+// =====================================================
+
+function render() {
+
+    if (!list) {
         return;
     }
 
 
-    bookmarkList.style.display =
-        "grid";
+    list.innerHTML =
+        "";
+
+
+    const keyword =
+        searchText
+            .trim()
+            .toLowerCase();
+
+
+    const visible =
+        bookmarks.filter(
+            bookmark => {
+
+                const anime =
+                    animeCache.get(
+                        String(
+                            bookmark.animeId
+                        )
+                    );
+
+
+                if (!anime) {
+                    return false;
+                }
+
+
+                if (!keyword) {
+                    return true;
+                }
+
+
+                return String(
+                    anime.title ||
+                    ""
+                )
+                    .toLowerCase()
+                    .includes(
+                        keyword
+                    );
+
+            }
+        );
+
+
+    if (visible.length === 0) {
+
+        if (emptyBox) {
+
+            emptyBox.style.display =
+                "";
+
+            emptyBox.innerHTML = `
+                <i class="fa-solid fa-bookmark"></i>
+
+                <h2>
+                    ${
+                        bookmarks.length
+                            ? "ไม่พบ Anime"
+                            : "ยังไม่มี Bookmark"
+                    }
+                </h2>
+
+                <p>
+                    ${
+                        bookmarks.length
+                            ? "ลองค้นหาชื่อ Anime อื่น"
+                            : "Anime ที่บันทึกไว้จะแสดงที่นี่"
+                    }
+                </p>
+            `;
+
+        }
+
+        return;
+
+    }
 
 
     if (emptyBox) {
@@ -323,255 +354,136 @@ function showBookmark(list) {
     }
 
 
-    // ==============================================
-    // Cards
-    // ==============================================
+    visible.forEach(
+        bookmark => {
 
-    list.forEach(
-        (item) => {
-
-            const card =
-                document.createElement(
-                    "div"
+            const anime =
+                animeCache.get(
+                    String(
+                        bookmark.animeId
+                    )
                 );
-
-
-            card.className =
-                "card";
-
-
-            const title =
-                item.title ||
-                "ไม่มีชื่อ";
 
 
             const image =
-                item.image ||
-                "https://via.placeholder.com/400x550?text=No+Image";
+                anime.image ||
+                anime.imageURL ||
+                "";
 
 
-            const category =
-                getCategoryText(
-                    item.category
+            const categories =
+                normalizeCategories(
+                    anime.category
                 );
 
 
-            // ==========================================
-            // Review Average
-            // ==========================================
+            list.innerHTML += `
+                <div class="card">
 
-            const review =
-                getAverageReview(
-                    item.animeId
-                );
+                    <img
+                        src="${escapeAttribute(
+                            image
+                        )}"
+                        alt="${escapeAttribute(
+                            anime.title ||
+                            "Anime"
+                        )}"
+                        onerror="this.src='https://placehold.co/600x800?text=No+Image';"
+                    >
 
+                    <div class="card-content">
 
-            const score =
-                review.score > 0
-
-                    ? review.score.toFixed(1)
-
-                    : "0.0";
-
-
-            card.innerHTML = `
-
-                <img
-                    src="${escapeAttribute(image)}"
-                    alt="${escapeAttribute(title)}"
-                    class="anime-image"
-                    loading="lazy"
-                >
+                        <h3>
+                            ${escapeHTML(
+                                anime.title ||
+                                "ไม่มีชื่อ"
+                            )}
+                        </h3>
 
 
-                <div class="card-content">
+                        <div class="genre">
 
-                    <h3>
-                        ${escapeHTML(title)}
-                    </h3>
-
-
-                    <div class="genre">
-
-                        <span>
-                            ${escapeHTML(category)}
-                        </span>
-
-                    </div>
-
-
-                    <div class="rating">
-
-                        <div class="score">
-
-                            <i class="fa-solid fa-star"></i>
-
-                            ${score}
+                            ${
+                                categories
+                                    .slice(0, 3)
+                                    .map(
+                                        item =>
+                                            `
+                                            <span>
+                                                ${escapeHTML(
+                                                    item
+                                                )}
+                                            </span>
+                                            `
+                                    )
+                                    .join("")
+                            }
 
                         </div>
 
 
-                        <div class="review-count">
-
-                            ${review.count} รีวิว
-
-                        </div>
+                        <button
+                            type="button"
+                            data-id="${escapeAttribute(
+                                bookmark.animeId
+                            )}"
+                            class="detail-btn"
+                        >
+                            ดูรายละเอียด
+                        </button>
 
                     </div>
-
-
-                    <button
-                        type="button"
-                        class="detail-btn">
-
-                        ดูรายละเอียด
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="remove-btn">
-
-                        🔖 ลบออก
-
-                    </button>
 
                 </div>
-
             `;
 
-
-            // ==========================================
-            // Image Error
-            // ==========================================
-
-            const imageElement =
-                card.querySelector(
-                    ".anime-image"
-                );
+        }
+    );
 
 
-            if (imageElement) {
+    list
+        .querySelectorAll(
+            ".detail-btn"
+        )
+        .forEach(
+            button => {
 
-                imageElement.addEventListener(
-                    "error",
+                button.addEventListener(
+                    "click",
                     () => {
 
-                        imageElement.src =
-                            "https://via.placeholder.com/400x550?text=No+Image";
+                        localStorage.setItem(
+                            "animeId",
+                            button.dataset.id
+                        );
+
+
+                        window.location.href =
+                            "detail.html";
 
                     }
                 );
 
             }
-
-
-            // ==========================================
-            // Detail
-            // ==========================================
-
-            const detailButton =
-                card.querySelector(
-                    ".detail-btn"
-                );
-
-
-            detailButton.addEventListener(
-                "click",
-                () => {
-
-                    localStorage.setItem(
-                        "animeId",
-                        item.animeId
-                    );
-
-
-                    window.location.href =
-                        "detail.html";
-
-                }
-            );
-
-
-            // ==========================================
-            // Remove
-            // ==========================================
-
-            const removeButton =
-                card.querySelector(
-                    ".remove-btn"
-                );
-
-
-            removeButton.addEventListener(
-                "click",
-                () => {
-
-                    removeBookmark(
-                        item.id
-                    );
-
-                }
-            );
-
-
-            bookmarkList.appendChild(
-                card
-            );
-
-        }
-    );
+        );
 
 }
 
 
 // =====================================================
-// Search
+// SEARCH
 // =====================================================
 
-if (searchInput) {
+if (search) {
 
-    searchInput.addEventListener(
+    search.addEventListener(
         "input",
         () => {
 
-            const keyword =
-                searchInput.value
-                    .trim()
-                    .toLowerCase();
+            searchText =
+                search.value;
 
-
-            const result =
-                bookmarkAnime.filter(
-                    (item) => {
-
-                        const title =
-                            String(
-                                item.title || ""
-                            )
-                                .toLowerCase();
-
-
-                        const category =
-                            getCategoryText(
-                                item.category
-                            )
-                                .toLowerCase();
-
-
-                        return (
-                            title.includes(keyword) ||
-                            category.includes(keyword)
-                        );
-
-                    }
-                );
-
-
-            showBookmark(
-                result
-            );
+            render();
 
         }
     );
@@ -580,59 +492,15 @@ if (searchInput) {
 
 
 // =====================================================
-// Remove Bookmark
+// COUNT
 // =====================================================
 
-async function removeBookmark(id) {
+function updateCount() {
 
-    if (!id) return;
+    if (count) {
 
-
-    const confirmDelete =
-        confirm(
-            "ต้องการลบอนิเมะนี้ออกจาก Bookmark หรือไม่?"
-        );
-
-
-    if (!confirmDelete) {
-        return;
-    }
-
-
-    try {
-
-        await deleteDoc(
-            doc(
-                db,
-                "bookmarks",
-                id
-            )
-        );
-
-
-        bookmarkAnime =
-            bookmarkAnime.filter(
-                (item) =>
-                    item.id !== id
-            );
-
-
-        showBookmark(
-            bookmarkAnime
-        );
-
-    }
-    catch (error) {
-
-        console.error(
-            "Remove Bookmark Error:",
-            error
-        );
-
-
-        alert(
-            "ลบ Bookmark ไม่สำเร็จ"
-        );
+        count.textContent =
+            bookmarks.length;
 
     }
 
@@ -640,46 +508,102 @@ async function removeBookmark(id) {
 
 
 // =====================================================
-// Escape HTML
+// CLEANUP
 // =====================================================
 
-function escapeHTML(value) {
+function cleanup() {
+
+    if (unsubscribeBookmarks) {
+
+        unsubscribeBookmarks();
+        unsubscribeBookmarks = null;
+
+    }
+
+
+    animeListeners
+        .forEach(
+            unsubscribe =>
+                unsubscribe()
+        );
+
+
+    animeListeners.clear();
+
+    animeCache.clear();
+
+}
+
+
+// =====================================================
+// HELPERS
+// =====================================================
+
+function normalizeCategories(
+    value
+) {
+
+    if (Array.isArray(value)) {
+
+        return value
+            .filter(Boolean)
+            .map(String);
+
+    }
+
+
+    if (!value) {
+
+        return [];
+
+    }
+
 
     return String(value)
+        .split(",")
+        .map(
+            item =>
+                item.trim()
+        )
+        .filter(Boolean);
 
-        .replaceAll(
-            "&",
+}
+
+
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
             "&amp;"
         )
-
-        .replaceAll(
-            "<",
+        .replace(
+            /</g,
             "&lt;"
         )
-
-        .replaceAll(
-            ">",
+        .replace(
+            />/g,
             "&gt;"
         )
-
-        .replaceAll(
-            '"',
+        .replace(
+            /"/g,
             "&quot;"
         )
-
-        .replaceAll(
-            "'",
+        .replace(
+            /'/g,
             "&#039;"
         );
 
 }
 
 
-// =====================================================
-// Escape Attribute
-// =====================================================
-
-function escapeAttribute(value) {
+function escapeAttribute(
+    value
+) {
 
     return escapeHTML(
         value

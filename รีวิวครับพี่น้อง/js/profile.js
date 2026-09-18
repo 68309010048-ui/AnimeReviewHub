@@ -1,6 +1,7 @@
 // ======================================================
 // Anime Review Hub
 // profile.js
+// Real-time Profile
 // ======================================================
 
 import { auth, db } from "./firebase.js";
@@ -12,12 +13,11 @@ import {
 
 import {
     doc,
-    getDoc,
+    onSnapshot,
     updateDoc,
     collection,
     query,
     where,
-    getDocs,
     writeBatch
 } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
@@ -44,11 +44,8 @@ const nameInput =
 const photoInput =
     document.getElementById("photo");
 
-const saveBtn =
+const saveProfile =
     document.getElementById("saveProfile");
-
-const logoutBtn =
-    document.getElementById("logoutBtn");
 
 const favoriteCount =
     document.getElementById("favoriteCount");
@@ -59,242 +56,321 @@ const bookmarkCount =
 const reviewCount =
     document.getElementById("reviewCount");
 
-const toast =
-    document.getElementById("toast");
+const logoutBtn =
+    document.getElementById("logoutBtn");
 
 
 // ======================================================
-// Current User
+// Variables
 // ======================================================
 
 let currentUser = null;
+
+let unsubscribeUser = null;
+let unsubscribeFavorites = null;
+let unsubscribeBookmarks = null;
+let unsubscribeReviews = null;
+
+let currentUserData = {};
 
 
 // ======================================================
 // Authentication
 // ======================================================
 
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(
+    auth,
+    (user) => {
 
-    // ถ้ายังไม่ได้ Login
-    if (!user) {
-
-        window.location.href = "login.html";
-
-        return;
-    }
-
-    currentUser = user;
-
-    await loadProfile();
-
-    await loadStatistics();
-
-});
+        // ยกเลิก listener เก่า
+        unsubscribeAll();
 
 
-// ======================================================
-// Load Profile
-// ======================================================
+        if (!user) {
 
-async function loadProfile() {
+            window.location.href =
+                "login.html";
 
-    try {
+            return;
+
+        }
+
+
+        currentUser =
+            user;
+
+
+        // ==============================================
+        // User Realtime
+        // ==============================================
 
         const userRef =
             doc(
                 db,
                 "users",
-                currentUser.uid
+                user.uid
             );
 
-        const snap =
-            await getDoc(userRef);
 
-        let data = {};
+        unsubscribeUser =
+            onSnapshot(
+                userRef,
+                (snap) => {
 
-        if (snap.exists()) {
+                    if (!snap.exists()) {
 
-            data = snap.data();
+                        currentUserData = {
 
-        }
+                            name:
+                                user.displayName ||
+                                user.email ||
+                                "User",
 
+                            email:
+                                user.email ||
+                                "",
 
-        // ==================================================
-        // Name
-        // ==================================================
+                            role:
+                                "user",
 
-        const name =
-            data.name ||
-            currentUser.displayName ||
-            "User";
+                            photo:
+                                user.photoURL ||
+                                ""
 
+                        };
 
-        // ==================================================
-        // Email
-        // ==================================================
+                    }
+                    else {
 
-        const email =
-            data.email ||
-            currentUser.email ||
-            "";
+                        currentUserData =
+                            snap.data();
 
-
-        // ==================================================
-        // Photo
-        // ==================================================
-        // ให้รูปที่บันทึกใน Firestore มาก่อน
-        // เพื่อป้องกัน Google Login เปลี่ยนรูปกลับ
-
-        const photo =
-            data.photo ||
-            data.photoURL ||
-            currentUser.photoURL ||
-            `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(name)}`;
+                    }
 
 
-        // ==================================================
-        // Role
-        // ==================================================
+                    updateProfileUI();
 
-        const role =
-            data.role ||
-            "user";
+                },
+
+                (error) => {
+
+                    console.error(
+                        "Profile user realtime error:",
+                        error
+                    );
+
+                }
+            );
 
 
-        // ==================================================
-        // Display
-        // ==================================================
+        // ==============================================
+        // Favorite count
+        // ==============================================
+
+        const favoriteQuery =
+            query(
+                collection(
+                    db,
+                    "favorites"
+                ),
+                where(
+                    "uid",
+                    "==",
+                    user.uid
+                )
+            );
+
+
+        unsubscribeFavorites =
+            onSnapshot(
+                favoriteQuery,
+                (snap) => {
+
+                    if (favoriteCount) {
+
+                        favoriteCount.textContent =
+                            snap.size;
+
+                    }
+
+                }
+            );
+
+
+        // ==============================================
+        // Bookmark count
+        // ==============================================
+
+        const bookmarkQuery =
+            query(
+                collection(
+                    db,
+                    "bookmarks"
+                ),
+                where(
+                    "uid",
+                    "==",
+                    user.uid
+                )
+            );
+
+
+        unsubscribeBookmarks =
+            onSnapshot(
+                bookmarkQuery,
+                (snap) => {
+
+                    if (bookmarkCount) {
+
+                        bookmarkCount.textContent =
+                            snap.size;
+
+                    }
+
+                }
+            );
+
+
+        // ==============================================
+        // Review count
+        // ==============================================
+
+        const reviewQuery =
+            query(
+                collection(
+                    db,
+                    "reviews"
+                ),
+                where(
+                    "uid",
+                    "==",
+                    user.uid
+                )
+            );
+
+
+        unsubscribeReviews =
+            onSnapshot(
+                reviewQuery,
+                (snap) => {
+
+                    if (reviewCount) {
+
+                        reviewCount.textContent =
+                            snap.size;
+
+                    }
+
+                }
+            );
+
+    }
+);
+
+
+// ======================================================
+// Update UI
+// ======================================================
+
+function updateProfileUI() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    const name =
+        currentUserData.name ||
+        currentUser.displayName ||
+        currentUser.email ||
+        "User";
+
+
+    const email =
+        currentUserData.email ||
+        currentUser.email ||
+        "";
+
+
+    const photo =
+        currentUserData.photo ||
+        currentUserData.photoURL ||
+        currentUser.photoURL ||
+        `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+            name
+        )}`;
+
+
+    const role =
+        currentUserData.role ||
+        "user";
+
+
+    // ==============================================
+    // Display
+    // ==============================================
+
+    if (displayName) {
 
         displayName.textContent =
             name;
 
+    }
+
+
+    if (displayEmail) {
+
         displayEmail.textContent =
             email;
 
-        // แสดงชื่อ Role แบบที่ผู้ใช้เห็น
-        if (role === "admin") {
+    }
 
-            displayRole.textContent =
-                "Reviewer";
 
-        }
-        else if (role === "superadmin") {
+    if (displayRole) {
 
-            displayRole.textContent =
-                "Super Admin";
+        displayRole.textContent =
+            role === "superadmin"
+                ? "Super Admin"
+                : role === "admin"
+                    ? "Reviewer"
+                    : "User";
 
-        }
-        else {
+    }
 
-            displayRole.textContent =
-                "User";
 
-        }
-
+    if (profileImage) {
 
         profileImage.src =
             photo;
 
+        profileImage.alt =
+            name;
+
+    }
+
+
+    // ==============================================
+    // Input
+    // ==============================================
+
+    if (
+        nameInput &&
+        document.activeElement !== nameInput
+    ) {
 
         nameInput.value =
             name;
 
+    }
+
+
+    if (
+        photoInput &&
+        document.activeElement !== photoInput
+    ) {
 
         photoInput.value =
-            data.photo ||
-            data.photoURL ||
-            "";
-
-    }
-    catch (error) {
-
-        console.error(
-            "Profile Error:",
-            error
-        );
-
-        showToast(
-            "โหลดโปรไฟล์ไม่สำเร็จ"
-        );
-
-    }
-
-}
-
-
-// ======================================================
-// Statistics
-// ======================================================
-
-async function loadStatistics() {
-
-    try {
-
-        const [
-            favoriteSnap,
-            bookmarkSnap,
-            reviewSnap
-        ] = await Promise.all([
-
-            getDocs(
-
-                query(
-                    collection(db, "favorites"),
-                    where(
-                        "uid",
-                        "==",
-                        currentUser.uid
-                    )
-                )
-
-            ),
-
-            getDocs(
-
-                query(
-                    collection(db, "bookmarks"),
-                    where(
-                        "uid",
-                        "==",
-                        currentUser.uid
-                    )
-                )
-
-            ),
-
-            getDocs(
-
-                query(
-                    collection(db, "reviews"),
-                    where(
-                        "uid",
-                        "==",
-                        currentUser.uid
-                    )
-                )
-
-            )
-
-        ]);
-
-
-        favoriteCount.textContent =
-            favoriteSnap.size;
-
-        bookmarkCount.textContent =
-            bookmarkSnap.size;
-
-        reviewCount.textContent =
-            reviewSnap.size;
-
-    }
-    catch (error) {
-
-        console.error(
-            "Statistics Error:",
-            error
-        );
+            photo;
 
     }
 
@@ -305,30 +381,16 @@ async function loadStatistics() {
 // Save Profile
 // ======================================================
 
-if (saveBtn) {
+if (saveProfile) {
 
-    saveBtn.addEventListener(
+    saveProfile.addEventListener(
         "click",
         async () => {
 
-            if (!currentUser) return;
+            if (!currentUser) {
 
-
-            const name =
-                nameInput.value.trim();
-
-            const photo =
-                photoInput.value.trim();
-
-
-            // ==================================================
-            // Validate
-            // ==================================================
-
-            if (!name) {
-
-                showToast(
-                    "กรุณากรอกชื่อผู้ใช้"
+                alert(
+                    "กรุณาเข้าสู่ระบบ"
                 );
 
                 return;
@@ -336,42 +398,65 @@ if (saveBtn) {
             }
 
 
-            saveBtn.disabled = true;
+            const name =
+                nameInput
+                    ? nameInput.value.trim()
+                    : "";
 
-            saveBtn.textContent =
+
+            const photo =
+                photoInput
+                    ? photoInput.value.trim()
+                    : "";
+
+
+            if (!name) {
+
+                alert(
+                    "กรุณากรอกชื่อ"
+                );
+
+                return;
+
+            }
+
+
+            saveProfile.disabled =
+                true;
+
+            saveProfile.textContent =
                 "กำลังบันทึก...";
 
 
             try {
 
-                // ==================================================
-                // Update Profile
-                // ==================================================
+                // ======================================
+                // Update User
+                // ======================================
 
-                const userRef =
+                await updateDoc(
                     doc(
                         db,
                         "users",
                         currentUser.uid
-                    );
-
-
-                await updateDoc(
-                    userRef,
+                    ),
                     {
-                        name: name,
-                        photo: photo
+                        name,
+                        photo
                     }
                 );
 
 
-                // ==================================================
+                // ======================================
                 // Update Existing Reviews
-                // ==================================================
+                // ======================================
 
                 const reviewQuery =
                     query(
-                        collection(db, "reviews"),
+                        collection(
+                            db,
+                            "reviews"
+                        ),
                         where(
                             "uid",
                             "==",
@@ -381,8 +466,23 @@ if (saveBtn) {
 
 
                 const reviewSnap =
-                    await getDocs(
-                        reviewQuery
+                    await new Promise(
+                        (resolve, reject) => {
+
+                            const unsubscribe =
+                                onSnapshot(
+                                    reviewQuery,
+                                    (snap) => {
+
+                                        unsubscribe();
+
+                                        resolve(snap);
+
+                                    },
+                                    reject
+                                );
+
+                        }
                     );
 
 
@@ -398,8 +498,11 @@ if (saveBtn) {
                             batch.update(
                                 reviewDoc.ref,
                                 {
-                                    username: name,
-                                    photoURL: photo
+                                    username:
+                                        name,
+
+                                    photoURL:
+                                        photo
                                 }
                             );
 
@@ -412,25 +515,31 @@ if (saveBtn) {
                 }
 
 
-                // ==================================================
-                // Update Profile Page
-                // ==================================================
+                // ======================================
+                // Preview immediately
+                // ======================================
 
-                const image =
-                    photo ||
-                    `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(name)}`;
+                if (profileImage) {
 
+                    profileImage.src =
+                        photo ||
+                        `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+                            name
+                        )}`;
 
-                displayName.textContent =
-                    name;
-
-
-                profileImage.src =
-                    image;
+                }
 
 
-                showToast(
-                    "บันทึกข้อมูลสำเร็จ"
+                if (displayName) {
+
+                    displayName.textContent =
+                        name;
+
+                }
+
+
+                alert(
+                    "บันทึกโปรไฟล์สำเร็จ"
                 );
 
             }
@@ -441,16 +550,17 @@ if (saveBtn) {
                     error
                 );
 
-                showToast(
-                    "บันทึกข้อมูลไม่สำเร็จ"
+                alert(
+                    "บันทึกโปรไฟล์ไม่สำเร็จ"
                 );
 
             }
             finally {
 
-                saveBtn.disabled = false;
+                saveProfile.disabled =
+                    false;
 
-                saveBtn.innerHTML =
+                saveProfile.innerHTML =
                     '<i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูล';
 
             }
@@ -473,23 +583,14 @@ if (logoutBtn) {
 
             try {
 
-                logoutBtn.disabled = true;
+                logoutBtn.disabled =
+                    true;
 
-                logoutBtn.innerHTML =
-                    '<i class="fa-solid fa-spinner fa-spin"></i> กำลังออกจากระบบ...';
-
-
-                // Firebase Logout
                 await signOut(auth);
 
-
-                // ==================================================
-                // Profile อยู่ใน pages/
-                // Login ก็อยู่ใน pages/
-                // ==================================================
-
-                window.location.href =
-                    "login.html";
+                window.location.replace(
+                    "login.html"
+                );
 
             }
             catch (error) {
@@ -499,12 +600,10 @@ if (logoutBtn) {
                     error
                 );
 
-                logoutBtn.disabled = false;
+                logoutBtn.disabled =
+                    false;
 
-                logoutBtn.innerHTML =
-                    '<i class="fa-solid fa-right-from-bracket"></i> Logout';
-
-                showToast(
+                alert(
                     "ออกจากระบบไม่สำเร็จ"
                 );
 
@@ -517,38 +616,37 @@ if (logoutBtn) {
 
 
 // ======================================================
-// Toast
+// Cleanup
 // ======================================================
 
-function showToast(message) {
+function unsubscribeAll() {
 
-    if (!toast) return;
+    if (unsubscribeUser) {
 
+        unsubscribeUser();
+        unsubscribeUser = null;
 
-    toast.textContent =
-        message;
+    }
 
+    if (unsubscribeFavorites) {
 
-    toast.classList.add(
-        "show"
-    );
+        unsubscribeFavorites();
+        unsubscribeFavorites = null;
 
+    }
 
-    clearTimeout(
-        window.profileToastTimer
-    );
+    if (unsubscribeBookmarks) {
 
+        unsubscribeBookmarks();
+        unsubscribeBookmarks = null;
 
-    window.profileToastTimer =
-        setTimeout(
-            () => {
+    }
 
-                toast.classList.remove(
-                    "show"
-                );
+    if (unsubscribeReviews) {
 
-            },
-            2500
-        );
+        unsubscribeReviews();
+        unsubscribeReviews = null;
+
+    }
 
 }

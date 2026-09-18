@@ -1,8 +1,9 @@
 // ======================================================
 // Anime Review Hub
 // users.js
-// User + Reviewer Management
+// User + Admin Management
 // Super Admin Only
+// REAL-TIME
 // ======================================================
 
 import { auth, db } from "./firebase.js";
@@ -15,8 +16,8 @@ import {
     collection,
     doc,
     getDoc,
-    getDocs,
-    updateDoc
+    updateDoc,
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
 
@@ -25,43 +26,69 @@ import {
 // ======================================================
 
 const totalUsers =
-    document.getElementById("totalUsers");
+    document.getElementById(
+        "totalUsers"
+    );
 
 const totalAdmins =
-    document.getElementById("totalAdmins");
+    document.getElementById(
+        "totalAdmins"
+    );
 
 const totalSuperAdmins =
-    document.getElementById("totalSuperAdmins");
+    document.getElementById(
+        "totalSuperAdmins"
+    );
 
 const searchUser =
-    document.getElementById("searchUser");
+    document.getElementById(
+        "searchUser"
+    );
 
 const refreshUsers =
-    document.getElementById("refreshUsers");
+    document.getElementById(
+        "refreshUsers"
+    );
 
 const loading =
-    document.getElementById("loading");
+    document.getElementById(
+        "loading"
+    );
 
 const usersTableWrapper =
-    document.getElementById("usersTableWrapper");
+    document.getElementById(
+        "usersTableWrapper"
+    );
 
 const usersTable =
-    document.getElementById("usersTable");
+    document.getElementById(
+        "usersTable"
+    );
 
 const emptyUsers =
-    document.getElementById("emptyUsers");
+    document.getElementById(
+        "emptyUsers"
+    );
 
 const resultText =
-    document.getElementById("resultText");
+    document.getElementById(
+        "resultText"
+    );
 
 const toast =
-    document.getElementById("toast");
+    document.getElementById(
+        "toast"
+    );
 
 const filterButtons =
-    document.querySelectorAll(".filter-btn");
+    document.querySelectorAll(
+        ".filter-btn"
+    );
 
 const summaryCards =
-    document.querySelectorAll(".summary-card");
+    document.querySelectorAll(
+        ".summary-card"
+    );
 
 
 // ======================================================
@@ -74,433 +101,530 @@ let usersData = [];
 
 let currentFilter = "all";
 
+let searchText = "";
+
+let unsubscribeUsers = null;
+
 
 // ======================================================
-// Authentication
+// AUTH
 // ======================================================
 
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(
+    auth,
+    async (user) => {
 
-    if (!user) {
+        if (unsubscribeUsers) {
 
-        window.location.href =
-            "../login.html";
+            unsubscribeUsers();
 
-        return;
-    }
+            unsubscribeUsers =
+                null;
 
-    currentUser = user;
-
-    try {
-
-        const snap = await getDoc(
-            doc(db, "users", user.uid)
-        );
-
-        if (!snap.exists()) {
-
-            alert("ไม่พบข้อมูลผู้ใช้");
-
-            window.location.href =
-                "../index.html";
-
-            return;
         }
 
-        const data = snap.data();
 
-        // Super Admin Only
-        if (data.role !== "superadmin") {
+        if (!user) {
 
-            alert(
-                "เฉพาะ Super Admin เท่านั้น"
+            window.location.href =
+                "../login.html";
+
+            return;
+
+        }
+
+
+        currentUser =
+            user;
+
+
+        try {
+
+            const snap =
+                await getDoc(
+                    doc(
+                        db,
+                        "users",
+                        user.uid
+                    )
+                );
+
+
+            if (!snap.exists()) {
+
+                alert(
+                    "ไม่พบข้อมูลผู้ใช้"
+                );
+
+                window.location.href =
+                    "../index.html";
+
+                return;
+
+            }
+
+
+            const data =
+                snap.data();
+
+
+            if (
+                data.role !==
+                "superadmin"
+            ) {
+
+                alert(
+                    "เฉพาะ Super Admin เท่านั้น"
+                );
+
+                window.location.href =
+                    "../index.html";
+
+                return;
+
+            }
+
+
+            startUsersRealtime();
+
+        }
+        catch (error) {
+
+            console.error(
+                "Auth Error:",
+                error
             );
 
-            window.location.href =
-                "../index.html";
+            showToast(
+                "ตรวจสอบสิทธิ์ไม่สำเร็จ"
+            );
 
-            return;
         }
 
-        await loadUsers();
-
     }
-    catch (error) {
-
-        console.error(
-            "Auth Error:",
-            error
-        );
-
-        showToast(
-            "ตรวจสอบสิทธิ์ไม่สำเร็จ"
-        );
-    }
-
-});
+);
 
 
 // ======================================================
-// Load Users
+// USERS REALTIME
 // ======================================================
 
-async function loadUsers() {
+function startUsersRealtime() {
 
     showLoading();
 
-    try {
 
-        const snapshot =
-            await getDocs(
-                collection(db, "users")
-            );
+    unsubscribeUsers =
+        onSnapshot(
+            collection(
+                db,
+                "users"
+            ),
+            (snapshot) => {
 
-        usersData =
-            snapshot.docs.map(
-                (docSnap) => ({
+                usersData =
+                    snapshot.docs.map(
+                        docSnap => ({
 
-                    id: docSnap.id,
+                            id:
+                                docSnap.id,
 
-                    ...docSnap.data()
+                            ...docSnap.data()
 
-                })
-            );
+                        })
+                    );
 
-        console.log(
-            "Users:",
-            usersData
+
+                updateSummary();
+
+                hideLoading();
+
+                applyFilter();
+
+            },
+
+            (error) => {
+
+                console.error(
+                    "Users realtime error:",
+                    error
+                );
+
+                hideLoading();
+
+                showToast(
+                    "โหลด Users ไม่สำเร็จ"
+                );
+
+            }
         );
 
-        updateSummary();
-
-        applyFilter();
-
-    }
-    catch (error) {
-
-        console.error(
-            "Load Users Error:",
-            error
-        );
-
-        hideLoading();
-
-        usersTable.innerHTML = `
-            <tr>
-                <td
-                    colspan="4"
-                    style="text-align:center;color:red;"
-                >
-                    โหลดข้อมูลไม่สำเร็จ
-                    <br>
-                    ${escapeHTML(error.message)}
-                </td>
-            </tr>
-        `;
-    }
 }
 
 
 // ======================================================
-// Summary
+// SUMMARY
 // ======================================================
 
 function updateSummary() {
 
-    const users =
-        usersData.filter(
-            (user) =>
-                !user.role ||
-                user.role === "user"
-        ).length;
+    let userCount = 0;
 
-    const reviewers =
-        usersData.filter(
-            (user) =>
-                user.role === "admin"
-        ).length;
+    let adminCount = 0;
 
-    const superadmins =
-        usersData.filter(
-            (user) =>
-                user.role === "superadmin"
-        ).length;
+    let superAdminCount = 0;
 
 
-    totalUsers.textContent =
-        users;
+    usersData.forEach(
+        user => {
 
-    totalAdmins.textContent =
-        reviewers;
+            const role =
+                user.role ||
+                "user";
 
-    totalSuperAdmins.textContent =
-        superadmins;
+
+            if (
+                role ===
+                "superadmin"
+            ) {
+
+                superAdminCount++;
+
+            }
+            else if (
+                role === "admin"
+            ) {
+
+                adminCount++;
+
+            }
+            else {
+
+                userCount++;
+
+            }
+
+        }
+    );
+
+
+    if (totalUsers) {
+
+        totalUsers.textContent =
+            userCount;
+
+    }
+
+
+    if (totalAdmins) {
+
+        totalAdmins.textContent =
+            adminCount;
+
+    }
+
+
+    if (totalSuperAdmins) {
+
+        totalSuperAdmins.textContent =
+            superAdminCount;
+
+    }
+
 }
 
 
 // ======================================================
-// Filter
+// FILTER
 // ======================================================
 
 function applyFilter() {
 
     const keyword =
-        searchUser
-            ? searchUser.value
-                .trim()
-                .toLowerCase()
-            : "";
+        searchText
+            .trim()
+            .toLowerCase();
 
 
-    let result = [...usersData];
+    const filtered =
+        usersData.filter(
+            user => {
+
+                const role =
+                    user.role ||
+                    "user";
 
 
-    // ==================================================
-    // Role Filter
-    // ==================================================
+                // ========================================
+                // Role Filter
+                // ========================================
 
-    if (currentFilter !== "all") {
+                if (
+                    currentFilter !==
+                    "all"
+                ) {
 
-        result =
-            result.filter(
-                (user) => {
+                    if (
+                        role !==
+                        currentFilter
+                    ) {
 
-                    const role =
-                        user.role || "user";
+                        return false;
 
-                    return role === currentFilter;
-
-                }
-            );
-    }
-
-
-    // ==================================================
-    // Search
-    // ==================================================
-
-    if (keyword) {
-
-        result =
-            result.filter(
-                (user) => {
-
-                    const name =
-                        String(
-                            user.name || ""
-                        ).toLowerCase();
-
-                    const email =
-                        String(
-                            user.email || ""
-                        ).toLowerCase();
-
-                    return (
-                        name.includes(keyword) ||
-                        email.includes(keyword)
-                    );
+                    }
 
                 }
-            );
-    }
 
 
-    renderUsers(result);
+                // ========================================
+                // Search
+                // ========================================
+
+                if (!keyword) {
+                    return true;
+                }
+
+
+                const name =
+                    String(
+                        user.name ||
+                        ""
+                    ).toLowerCase();
+
+
+                const email =
+                    String(
+                        user.email ||
+                        ""
+                    ).toLowerCase();
+
+
+                return (
+                    name.includes(
+                        keyword
+                    ) ||
+                    email.includes(
+                        keyword
+                    )
+                );
+
+            }
+        );
+
+
+    renderUsers(
+        filtered
+    );
+
 }
 
 
 // ======================================================
-// Render Users
+// RENDER USERS
 // ======================================================
 
-function renderUsers(list) {
+function renderUsers(
+    list
+) {
 
-    hideLoading();
+    if (!usersTable) {
+        return;
+    }
 
-    usersTable.innerHTML = "";
+
+    usersTable.innerHTML =
+        "";
 
 
     if (resultText) {
 
         resultText.textContent =
-            `พบ ${list.length} รายการ`;
+            `${list.length} Users`;
 
     }
 
 
-    if (list.length === 0) {
+    if (
+        list.length ===
+        0
+    ) {
 
-        usersTableWrapper.style.display =
-            "none";
+        if (usersTableWrapper) {
 
-        emptyUsers.style.display =
-            "block";
+            usersTableWrapper.style.display =
+                "none";
+
+        }
+
+
+        if (emptyUsers) {
+
+            emptyUsers.style.display =
+                "";
+
+        }
 
         return;
+
     }
 
 
-    usersTableWrapper.style.display =
-        "block";
+    if (usersTableWrapper) {
 
-    emptyUsers.style.display =
-        "none";
+        usersTableWrapper.style.display =
+            "";
+
+    }
+
+
+    if (emptyUsers) {
+
+        emptyUsers.style.display =
+            "none";
+
+    }
 
 
     list.forEach(
-        (user) => {
+        user => {
 
             const role =
-                user.role || "user";
+                user.role ||
+                "user";
 
 
-            const row =
-                document.createElement("tr");
+            let roleText =
+                "User";
+
+            let roleClass =
+                "user";
 
 
-            // ==================================================
-            // Avatar
-            // ==================================================
+            if (
+                role ===
+                "admin"
+            ) {
+
+                roleText =
+                    "Admin";
+
+                roleClass =
+                    "admin";
+
+            }
+
+
+            if (
+                role ===
+                "superadmin"
+            ) {
+
+                roleText =
+                    "Super Admin";
+
+                roleClass =
+                    "superadmin";
+
+            }
+
 
             const avatar =
                 user.photo ||
                 user.photoURL ||
                 `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
-                    user.name || "User"
+                    user.name ||
+                    "User"
                 )}`;
 
 
-            // ==================================================
-            // Role
-            // ==================================================
-
-            let roleClass =
-                "role-user";
-
-            let roleText =
-                "User";
+            const row =
+                document.createElement(
+                    "tr"
+                );
 
 
-            if (role === "admin") {
-
-                roleClass =
-                    "role-admin";
-
-                roleText =
-                    "Reviewer";
-
-            }
+            let actions =
+                "";
 
 
-            if (role === "superadmin") {
+            if (
+                role !==
+                "superadmin"
+            ) {
 
-                roleClass =
-                    "role-superadmin";
+                if (
+                    role ===
+                    "user"
+                ) {
 
-                roleText =
-                    "Super Admin";
+                    actions = `
+                        <button
+                            class="action-btn promote-btn"
+                            data-action="promote"
+                            data-id="${escapeAttribute(
+                                user.id
+                            )}"
+                        >
 
-            }
+                            ⬆️ ตั้งเป็น Admin
 
+                        </button>
+                    `;
 
-            // ==================================================
-            // Actions
-            // ==================================================
+                }
+                else {
 
-            let actions = "";
+                    actions = `
+                        <button
+                            class="action-btn demote-btn"
+                            data-action="demote"
+                            data-id="${escapeAttribute(
+                                user.id
+                            )}"
+                        >
 
+                            ⬇️ ลดเป็น User
 
-            if (role === "superadmin") {
+                        </button>
+                    `;
 
-                actions = `
-
-                    <button
-                        class="action-btn disabled-btn"
-                        disabled
-                    >
-
-                        🔒 ป้องกัน
-
-                    </button>
-
-                `;
+                }
 
             }
             else {
 
-                // ==================================================
-                // User → Reviewer
-                // ==================================================
+                actions = `
+                    <span class="protected-label">
 
-                if (role === "user") {
+                        <i class="fa-solid fa-lock"></i>
 
-                    actions = `
+                        Protected
 
-                        <div class="user-actions">
+                    </span>
+                `;
 
-                            <button
-                                class="action-btn promote-btn"
-                                data-action="promote"
-                                data-id="${user.id}"
-                            >
-
-                                ⬆️ ตั้งเป็น Reviewer
-
-                            </button>
-
-                        </div>
-
-                    `;
-
-                }
-
-                // ==================================================
-                // Reviewer → User
-                // ==================================================
-
-                else {
-
-                    actions = `
-
-                        <div class="user-actions">
-
-                            <button
-                                class="action-btn demote-btn"
-                                data-action="demote"
-                                data-id="${user.id}"
-                            >
-
-                                ⬇️ ลดเป็น User
-
-                            </button>
-
-                        </div>
-
-                    `;
-                }
             }
 
 
-            // ==================================================
-            // Row
-            // ==================================================
-
             row.innerHTML = `
-
                 <td>
 
                     <div class="user-cell">
 
                         <img
                             class="user-avatar"
-                            src="${escapeAttribute(avatar)}"
+                            src="${escapeAttribute(
+                                avatar
+                            )}"
                             alt="User"
                         >
+
 
                         <span class="user-name">
 
                             ${escapeHTML(
-                                user.name || "User"
+                                user.name ||
+                                "User"
                             )}
 
                         </span>
@@ -513,7 +637,8 @@ function renderUsers(list) {
                 <td>
 
                     ${escapeHTML(
-                        user.email || "-"
+                        user.email ||
+                        "-"
                     )}
 
                 </td>
@@ -537,18 +662,18 @@ function renderUsers(list) {
                     ${actions}
 
                 </td>
-
             `;
 
 
-            // ==================================================
+            // ==========================================
             // Promote
-            // ==================================================
+            // ==========================================
 
             const promoteBtn =
                 row.querySelector(
                     '[data-action="promote"]'
                 );
+
 
             if (promoteBtn) {
 
@@ -563,17 +688,19 @@ function renderUsers(list) {
 
                     }
                 );
+
             }
 
 
-            // ==================================================
+            // ==========================================
             // Demote
-            // ==================================================
+            // ==========================================
 
             const demoteBtn =
                 row.querySelector(
                     '[data-action="demote"]'
                 );
+
 
             if (demoteBtn) {
 
@@ -588,18 +715,22 @@ function renderUsers(list) {
 
                     }
                 );
+
             }
 
 
-            usersTable.appendChild(row);
+            usersTable.appendChild(
+                row
+            );
 
         }
     );
+
 }
 
 
 // ======================================================
-// Change Role
+// CHANGE ROLE
 // ======================================================
 
 async function changeRole(
@@ -609,20 +740,20 @@ async function changeRole(
 
     const user =
         usersData.find(
-            (item) =>
-                item.id === userId
+            item =>
+                item.id ===
+                userId
         );
 
 
-    if (!user) return;
+    if (!user) {
+        return;
+    }
 
-
-    // ==================================================
-    // Protect Super Admin
-    // ==================================================
 
     if (
-        user.role === "superadmin"
+        user.role ===
+        "superadmin"
     ) {
 
         showToast(
@@ -630,64 +761,47 @@ async function changeRole(
         );
 
         return;
+
     }
 
 
-    // ==================================================
-    // Confirm
-    // ==================================================
-
     const message =
-        newRole === "admin"
-
-            ? `ตั้ง ${user.name || "ผู้ใช้"} เป็น Reviewer?`
-
-            : `ลด ${user.name || "Reviewer"} เป็น User?`;
+        newRole ===
+        "admin"
+            ? `ตั้ง ${user.name || "ผู้ใช้"} เป็น Admin?`
+            : `ลด ${user.name || "Admin"} เป็น User?`;
 
 
     if (!confirm(message)) {
-
         return;
     }
 
 
-    // ==================================================
-    // Update Firestore
-    // ==================================================
-
     try {
 
         await updateDoc(
-
             doc(
                 db,
                 "users",
                 userId
             ),
-
             {
-                role: newRole
+                role:
+                    newRole
             }
-
         );
 
-
-        // ==================================================
-        // Toast
-        // ==================================================
 
         showToast(
-
-            newRole === "admin"
-
-                ? "✅ ตั้งเป็น Reviewer แล้ว"
-
-                : "✅ ลดสิทธิ์เป็น User แล้ว"
-
+            newRole ===
+                "admin"
+                ? "ตั้งเป็น Admin แล้ว"
+                : "ลดสิทธิ์เป็น User แล้ว"
         );
 
 
-        await loadUsers();
+        // ไม่ต้อง loadUsers()
+        // เพราะ onSnapshot จะอัปเดตเอง
 
     }
     catch (error) {
@@ -700,40 +814,40 @@ async function changeRole(
         showToast(
             "เปลี่ยนสิทธิ์ไม่สำเร็จ"
         );
+
     }
 
 }
 
 
 // ======================================================
-// Filter Buttons
+// FILTER BUTTONS
 // ======================================================
 
 filterButtons.forEach(
-    (button) => {
+    button => {
 
         button.addEventListener(
             "click",
             () => {
 
                 currentFilter =
-                    button.dataset.filter;
+                    button.dataset.filter ||
+                    "all";
 
 
-                filterButtons.forEach(
-                    (btn) => {
+                filterButtons
+                    .forEach(
+                        btn => {
 
-                        btn.classList.remove(
-                            "active"
-                        );
+                            btn.classList.toggle(
+                                "active",
+                                btn ===
+                                    button
+                            );
 
-                    }
-                );
-
-
-                button.classList.add(
-                    "active"
-                );
+                        }
+                    );
 
 
                 applyFilter();
@@ -746,31 +860,41 @@ filterButtons.forEach(
 
 
 // ======================================================
-// Summary Cards Filter
+// SUMMARY CARD FILTER
 // ======================================================
 
 summaryCards.forEach(
-    (card) => {
+    card => {
 
         card.addEventListener(
             "click",
             () => {
 
-                currentFilter =
+                const filter =
                     card.dataset.filter;
 
 
-                filterButtons.forEach(
-                    (btn) => {
+                if (!filter) {
+                    return;
+                }
 
-                        btn.classList.toggle(
-                            "active",
-                            btn.dataset.filter ===
-                            currentFilter
-                        );
 
-                    }
-                );
+                currentFilter =
+                    filter;
+
+
+                filterButtons
+                    .forEach(
+                        button => {
+
+                            button.classList.toggle(
+                                "active",
+                                button.dataset.filter ===
+                                    filter
+                            );
+
+                        }
+                    );
 
 
                 applyFilter();
@@ -783,36 +907,19 @@ summaryCards.forEach(
 
 
 // ======================================================
-// Search
+// SEARCH
 // ======================================================
 
 if (searchUser) {
 
     searchUser.addEventListener(
         "input",
-        applyFilter
-    );
+        () => {
 
-}
+            searchText =
+                searchUser.value;
 
-
-// ======================================================
-// Refresh
-// ======================================================
-
-if (refreshUsers) {
-
-    refreshUsers.addEventListener(
-        "click",
-        async () => {
-
-            refreshUsers.disabled =
-                true;
-
-            await loadUsers();
-
-            refreshUsers.disabled =
-                false;
+            applyFilter();
 
         }
     );
@@ -821,7 +928,32 @@ if (refreshUsers) {
 
 
 // ======================================================
-// Loading
+// REFRESH
+// ======================================================
+
+if (refreshUsers) {
+
+    refreshUsers.addEventListener(
+        "click",
+        () => {
+
+            // Real-time listener ทำงานอยู่แล้ว
+            // ปุ่มนี้ไว้ render ใหม่
+
+            applyFilter();
+
+            showToast(
+                "รีเฟรชข้อมูลแล้ว"
+            );
+
+        }
+    );
+
+}
+
+
+// ======================================================
+// LOADING
 // ======================================================
 
 function showLoading() {
@@ -833,12 +965,14 @@ function showLoading() {
 
     }
 
+
     if (usersTableWrapper) {
 
         usersTableWrapper.style.display =
             "none";
 
     }
+
 
     if (emptyUsers) {
 
@@ -863,12 +997,16 @@ function hideLoading() {
 
 
 // ======================================================
-// Toast
+// TOAST
 // ======================================================
 
-function showToast(message) {
+function showToast(
+    message
+) {
 
-    if (!toast) return;
+    if (!toast) {
+        return;
+    }
 
 
     toast.textContent =
@@ -880,61 +1018,61 @@ function showToast(message) {
     );
 
 
-    clearTimeout(
-        window.usersToastTimer
+    setTimeout(
+        () => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },
+        2500
     );
 
+}
 
-    window.usersToastTimer =
-        setTimeout(
-            () => {
 
-                toast.classList.remove(
-                    "show"
-                );
+// ======================================================
+// ESCAPE
+// ======================================================
 
-            },
-            2500
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
         );
 
 }
 
 
-// ======================================================
-// Escape HTML
-// ======================================================
+function escapeAttribute(
+    value
+) {
 
-function escapeHTML(value) {
+    return escapeHTML(
+        value
+    );
 
-    return String(value)
-
-        .replaceAll("&", "&amp;")
-
-        .replaceAll("<", "&lt;")
-
-        .replaceAll(">", "&gt;")
-
-        .replaceAll('"', "&quot;")
-
-        .replaceAll("'", "&#039;");
-}
-
-
-// ======================================================
-// Escape Attribute
-// ======================================================
-
-function escapeAttribute(value) {
-
-    return String(value)
-
-        .replaceAll("&", "&amp;")
-
-        .replaceAll('"', "&quot;")
-
-        .replaceAll("'", "&#039;")
-
-        .replaceAll("<", "&lt;")
-
-        .replaceAll(">", "&gt;");
 }
