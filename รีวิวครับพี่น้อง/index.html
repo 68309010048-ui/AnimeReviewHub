@@ -56,14 +56,11 @@
 
     <div class="user-left">
 
-        <!-- Profile -->
-
         <img
             id="userAvatar"
             class="user-avatar"
             src="https://api.dicebear.com/9.x/initials/svg?seed=User"
             alt="Profile">
-
 
         <div class="user-info">
 
@@ -76,12 +73,9 @@
     </div>
 
 
-    <!-- User Actions -->
-
     <div class="user-actions">
 
-
-        <!-- Dark Mode -->
+        <!-- Dark / Light Mode -->
 
         <button
             id="darkBtn"
@@ -165,15 +159,16 @@
             ========================== -->
 
             <div class="hero-search">
-    <i class="fa-solid fa-magnifying-glass"></i>
 
-    <input
-        type="text"
-        id="searchAnime"
-        placeholder="ค้นหาอนิเมะ..."
-        autocomplete="off"
-    >
-</div>
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="searchAnime"
+                    placeholder="ค้นหาอนิเมะ..."
+                    autocomplete="off">
+
+            </div>
 
 
         </div>
@@ -217,7 +212,7 @@
             </a>
 
 
-            <!-- Admin -->
+            <!-- Reviewer -->
 
             <a
                 href="pages/admin.html"
@@ -226,7 +221,7 @@
                 style="display:none;">
 
                 <span>⚙️</span>
-                <span>reviewer</span>
+                <span>Reviewer</span>
 
             </a>
 
@@ -267,15 +262,26 @@
 
 <section class="category-section">
 
+
+    <!-- =================================================
+         CATEGORY TOGGLE
+    ================================================= -->
+
     <button
         id="categoryToggle"
         class="category-toggle"
         type="button">
 
         <span>
+
             <i class="fa-solid fa-layer-group"></i>
-            หมวดหมู่
+
+            <span>
+                หมวดหมู่
+            </span>
+
         </span>
+
 
         <i
             id="categoryArrow"
@@ -285,92 +291,211 @@
     </button>
 
 
+
+    <!-- =================================================
+         CATEGORY CONTENT
+    ================================================= -->
+
     <div
         id="categoryContent"
         class="category-content">
 
+
         <div class="category">
 
+
+            <!-- ALL -->
+
             <button
+                type="button"
                 class="active"
+                data-category="All"
                 onclick="filterAnime(event, 'All')">
+
                 🔥 ทั้งหมด
+
             </button>
 
+
+            <!-- ACTION -->
+
             <button
+                type="button"
+                data-category="Action"
                 onclick="filterAnime(event, 'Action')">
+
                 🟣 Action
+
             </button>
 
+
+            <!-- ADVENTURE -->
+
             <button
+                type="button"
+                data-category="Adventure"
                 onclick="filterAnime(event, 'Adventure')">
+
                 🟢 Adventure
+
             </button>
 
+
+            <!-- FANTASY -->
+
             <button
+                type="button"
+                data-category="Fantasy"
                 onclick="filterAnime(event, 'Fantasy')">
+
                 🟠 Fantasy
+
             </button>
 
+
+            <!-- COMEDY -->
+
             <button
+                type="button"
+                data-category="Comedy"
                 onclick="filterAnime(event, 'Comedy')">
+
                 🟡 Comedy
+
             </button>
 
+
+            <!-- ROMANCE -->
+
             <button
+                type="button"
+                data-category="Romance"
                 onclick="filterAnime(event, 'Romance')">
+
                 ❤️ Romance
+
             </button>
 
+
+            <!-- SPORT -->
+
             <button
+                type="button"
+                data-category="Sport"
                 onclick="filterAnime(event, 'Sport')">
+
                 ⚽ Sport
+
             </button>
 
+
+            <!-- DRAMA -->
+
             <button
+                type="button"
+                data-category="Drama"
                 onclick="filterAnime(event, 'Drama')">
+
                 🎭 Drama
+
             </button>
 
+
+            <!-- SCI-FI -->
+
             <button
+                type="button"
+                data-category="Sci-Fi"
                 onclick="filterAnime(event, 'Sci-Fi')">
+
                 🚀 Sci-Fi
+
             </button>
 
+
+            <!-- MYSTERY -->
+
             <button
+                type="button"
+                data-category="Mystery"
                 onclick="filterAnime(event, 'Mystery')">
+
                 🕵️ Mystery
+
             </button>
 
+
+            <!-- HORROR -->
+
             <button
+                type="button"
+                data-category="Horror"
                 onclick="filterAnime(event, 'Horror')">
+
                 🎃 Horror
+
             </button>
 
+
+            <!-- SCHOOL -->
+
             <button
+                type="button"
+                data-category="School"
                 onclick="filterAnime(event, 'School')">
+
                 🏫 School
+
             </button>
 
+
+            <!-- SLICE OF LIFE -->
+
             <button
+                type="button"
+                data-category="Slice of Life"
                 onclick="filterAnime(event, 'Slice of Life')">
+
                 🌸 Slice of Life
+
             </button>
 
+
+            <!-- SUPERNATURAL -->
+
             <button
+                type="button"
+                data-category="Supernatural"
                 onclick="filterAnime(event, 'Supernatural')">
+
                 ✨ Supernatural
+
             </button>
 
+
+            <!-- ISEKAI -->
+
             <button
+                type="button"
+                data-category="Isekai"
                 onclick="filterAnime(event, 'Isekai')">
+
                 🌍 Isekai
+
             </button>
 
+
+            <!-- MUSIC -->
+
             <button
+                type="button"
+                data-category="Music"
                 onclick="filterAnime(event, 'Music')">
+
                 🎵 Music
+
             </button>
+
 
         </div>
 
@@ -414,6 +539,10 @@
 
         <div class="loader"></div>
 
+        <span>
+            กำลังโหลด Anime...
+        </span>
+
     </div>
 
 </section>
@@ -443,4 +572,3 @@
 </body>
 
 </html>
-
