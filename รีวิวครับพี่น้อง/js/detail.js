@@ -19,8 +19,6 @@ import {
     addDoc,
     updateDoc,
     deleteDoc,
-    getDocs,
-    getDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
@@ -29,17 +27,10 @@ import {
 // Anime ID
 // =====================================================
 
-const animeId =
-    localStorage.getItem(
-        "animeId"
-    );
-
+const animeId = localStorage.getItem("animeId");
 
 if (!animeId) {
-
-    window.location.href =
-        "../index.html";
-
+    window.location.href = "../index.html";
 }
 
 
@@ -110,6 +101,13 @@ const reviewCount =
 const toast =
     document.getElementById("toast");
 
+// Profile ที่อยู่บน Header / Navbar
+const userAvatar =
+    document.getElementById("userAvatar");
+
+const usernameText =
+    document.getElementById("usernameText");
+
 
 // =====================================================
 // Variables
@@ -122,6 +120,10 @@ let currentUser = null;
 let currentUserData = {};
 
 let reviewData = [];
+
+// =====================================================
+// คะแนนเดิม 10 คะแนน ห้ามเปลี่ยน
+// =====================================================
 
 let selectedRating = 10;
 
@@ -154,24 +156,16 @@ onAuthStateChanged(
 
         cleanupUserListeners();
 
-
-        currentUser =
-            user;
-
+        currentUser = user;
 
         if (!user) {
 
             setupLoggedOutState();
 
             return;
-
         }
 
-
-        setupLoggedInState(
-            user
-        );
-
+        setupLoggedInState(user);
     }
 );
 
@@ -180,37 +174,40 @@ onAuthStateChanged(
 // LOGIN STATE
 // =====================================================
 
-function setupLoggedInState(
-    user
-) {
+function setupLoggedInState(user) {
 
     // ===============================================
-    // User
+    // User Profile REALTIME
     // ===============================================
 
-    const userRef =
-        doc(
-            db,
-            "users",
-            user.uid
-        );
+    const userRef = doc(
+        db,
+        "users",
+        user.uid
+    );
 
+    unsubscribeUser = onSnapshot(
+        userRef,
+        (snap) => {
 
-    unsubscribeUser =
-        onSnapshot(
-            userRef,
-            (snap) => {
+            currentUserData =
+                snap.exists()
+                    ? snap.data()
+                    : {};
 
-                currentUserData =
-                    snap.exists()
-                        ? snap.data()
-                        : {};
+            updateUsername();
 
+            // อัปเดตรูป Profile บนหน้า Detail
+            updateDetailProfile();
+        },
+        (error) => {
 
-                updateUsername();
-
-            }
-        );
+            console.error(
+                "User profile realtime error:",
+                error
+            );
+        }
+    );
 
 
     // ===============================================
@@ -219,24 +216,22 @@ function setupLoggedInState(
 
     if (favoriteBtn) {
 
-        const q =
-            query(
-                collection(
-                    db,
-                    "favorites"
-                ),
-                where(
-                    "uid",
-                    "==",
-                    user.uid
-                ),
-                where(
-                    "animeId",
-                    "==",
-                    animeId
-                )
-            );
-
+        const q = query(
+            collection(
+                db,
+                "favorites"
+            ),
+            where(
+                "uid",
+                "==",
+                user.uid
+            ),
+            where(
+                "animeId",
+                "==",
+                animeId
+            )
+        );
 
         unsubscribeFavorite =
             onSnapshot(
@@ -248,14 +243,18 @@ function setupLoggedInState(
                             ? null
                             : snap.docs[0].id;
 
-
                     updateFavoriteButton(
                         !snap.empty
                     );
+                },
+                (error) => {
 
+                    console.error(
+                        "Favorite realtime error:",
+                        error
+                    );
                 }
             );
-
     }
 
 
@@ -265,24 +264,22 @@ function setupLoggedInState(
 
     if (bookmarkBtn) {
 
-        const q =
-            query(
-                collection(
-                    db,
-                    "bookmarks"
-                ),
-                where(
-                    "uid",
-                    "==",
-                    user.uid
-                ),
-                where(
-                    "animeId",
-                    "==",
-                    animeId
-                )
-            );
-
+        const q = query(
+            collection(
+                db,
+                "bookmarks"
+            ),
+            where(
+                "uid",
+                "==",
+                user.uid
+            ),
+            where(
+                "animeId",
+                "==",
+                animeId
+            )
+        );
 
         unsubscribeBookmark =
             onSnapshot(
@@ -294,21 +291,26 @@ function setupLoggedInState(
                             ? null
                             : snap.docs[0].id;
 
-
                     updateBookmarkButton(
                         !snap.empty
                     );
+                },
+                (error) => {
 
+                    console.error(
+                        "Bookmark realtime error:",
+                        error
+                    );
                 }
             );
-
     }
 
 
     updateUsername();
 
-    setupReviewForm();
+    updateDetailProfile();
 
+    setupReviewForm();
 }
 
 
@@ -320,37 +322,35 @@ function setupLoggedOutState() {
 
     if (usernameInput) {
 
-        usernameInput.value =
-            "";
+        usernameInput.value = "";
 
         usernameInput.placeholder =
             "กรุณาเข้าสู่ระบบ";
 
-        usernameInput.readOnly =
-            true;
-
+        usernameInput.readOnly = true;
     }
 
 
     if (submitReview) {
 
-        submitReview.disabled =
-            true;
+        submitReview.disabled = true;
 
         submitReview.textContent =
             "เข้าสู่ระบบก่อนรีวิว";
-
     }
 
 
-    updateFavoriteButton(
-        false
-    );
+    updateFavoriteButton(false);
 
-    updateBookmarkButton(
-        false
-    );
+    updateBookmarkButton(false);
 
+
+    // ล้าง Profile บน Detail
+    if (usernameText) {
+
+        usernameText.textContent =
+            "Guest";
+    }
 }
 
 
@@ -377,7 +377,182 @@ function updateUsername() {
 
     usernameInput.readOnly =
         true;
+}
 
+
+// =====================================================
+// UPDATE DETAIL PROFILE
+// =====================================================
+
+function updateDetailProfile() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    const name =
+        currentUserData.name ||
+        currentUser.displayName ||
+        currentUser.email ||
+        "User";
+
+
+    const photo =
+        currentUserData.photo ||
+        currentUserData.photoURL ||
+        currentUser.photoURL ||
+        "";
+
+
+    // ===============================================
+    // Username บน Header
+    // ===============================================
+
+    if (usernameText) {
+
+        usernameText.textContent =
+            name;
+    }
+
+
+    // ===============================================
+    // Avatar บน Header
+    // ===============================================
+
+    if (userAvatar) {
+
+        setProfileImage(
+            userAvatar,
+            name,
+            photo
+        );
+    }
+}
+
+
+// =====================================================
+// PROFILE IMAGE
+// =====================================================
+
+function setProfileImage(
+    element,
+    name,
+    photo
+) {
+
+    if (!element) {
+        return;
+    }
+
+
+    if (photo) {
+
+        element.src =
+            photo;
+
+        element.onerror =
+            () => {
+
+                element.src =
+                    createInitialAvatar(
+                        name
+                    );
+            };
+
+    }
+    else {
+
+        element.src =
+            createInitialAvatar(
+                name
+            );
+    }
+
+
+    element.alt =
+        name;
+}
+
+
+// =====================================================
+// INITIAL AVATAR
+// =====================================================
+
+function createInitialAvatar(name) {
+
+    const cleanName =
+        String(
+            name || "User"
+        ).trim();
+
+
+    const parts =
+        cleanName
+            .split(/\s+/)
+            .filter(Boolean);
+
+
+    let initials = "";
+
+
+    if (parts.length >= 2) {
+
+        initials =
+            parts[0].charAt(0) +
+            parts[1].charAt(0);
+
+    }
+    else {
+
+        initials =
+            cleanName.substring(
+                0,
+                2
+            );
+    }
+
+
+    initials =
+        initials.toUpperCase();
+
+
+    const svg = `
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="200"
+            height="200"
+            viewBox="0 0 200 200"
+        >
+
+            <rect
+                width="200"
+                height="200"
+                rx="100"
+                fill="#6d28d9"
+            />
+
+            <text
+                x="100"
+                y="100"
+                dominant-baseline="middle"
+                text-anchor="middle"
+                fill="white"
+                font-size="70"
+                font-family="Arial"
+                font-weight="bold"
+            >
+                ${escapeXML(initials)}
+            </text>
+
+        </svg>
+    `;
+
+
+    return (
+        "data:image/svg+xml;charset=UTF-8," +
+        encodeURIComponent(svg)
+    );
 }
 
 
@@ -406,7 +581,6 @@ function startAnimeRealtime() {
                         "../index.html";
 
                     return;
-
                 }
 
 
@@ -416,14 +590,12 @@ function startAnimeRealtime() {
                         snap.id,
 
                     ...snap.data()
-
                 };
 
 
                 showAnime(
                     currentAnime
                 );
-
             },
             (error) => {
 
@@ -431,10 +603,8 @@ function startAnimeRealtime() {
                     "Anime realtime error:",
                     error
                 );
-
             }
         );
-
 }
 
 
@@ -442,9 +612,7 @@ function startAnimeRealtime() {
 // SHOW ANIME
 // =====================================================
 
-function showAnime(
-    anime
-) {
+function showAnime(anime) {
 
     const image =
         anime.image ||
@@ -462,23 +630,19 @@ function showAnime(
 
                 poster.src =
                     "https://placehold.co/600x800?text=No+Image";
-
             };
-
     }
 
 
     if (banner) {
 
-        banner.style.backgroundImage =
-            `
+        banner.style.backgroundImage = `
             linear-gradient(
                 rgba(0,0,0,.45),
                 rgba(0,0,0,.45)
             ),
             url("${image}")
-            `;
-
+        `;
     }
 
 
@@ -487,7 +651,6 @@ function showAnime(
         title.textContent =
             anime.title ||
             "ไม่มีชื่อ";
-
     }
 
 
@@ -496,7 +659,6 @@ function showAnime(
         description.textContent =
             anime.description ||
             "-";
-
     }
 
 
@@ -505,7 +667,6 @@ function showAnime(
         episodes.textContent =
             anime.episodes ??
             "-";
-
     }
 
 
@@ -514,7 +675,6 @@ function showAnime(
         status.textContent =
             anime.status ||
             "-";
-
     }
 
 
@@ -523,7 +683,6 @@ function showAnime(
         type.textContent =
             anime.type ||
             "-";
-
     }
 
 
@@ -554,18 +713,17 @@ function showAnime(
 
             trailerBox.innerHTML = `
                 <div class="no-trailer">
+
                     <i class="fa-solid fa-video-slash"></i>
 
                     <p>
                         ยังไม่มีตัวอย่างอนิเมะ
                     </p>
+
                 </div>
             `;
-
         }
-
     }
-
 }
 
 
@@ -573,9 +731,7 @@ function showAnime(
 // CATEGORIES
 // =====================================================
 
-function renderCategories(
-    value
-) {
+function renderCategories(value) {
 
     const categories =
         normalizeCategories(
@@ -597,18 +753,49 @@ function renderCategories(
         categories.length
             ? categories
                 .map(
-                    item =>
-                        `
+                    item => `
                         <span>
                             ${escapeHTML(
                                 item
                             )}
                         </span>
-                        `
+                    `
                 )
                 .join("")
             : "<span>Anime</span>";
+}
 
+
+// =====================================================
+// NORMALIZE CATEGORIES
+// =====================================================
+
+function normalizeCategories(value) {
+
+    if (Array.isArray(value)) {
+
+        return value
+            .map(
+                item =>
+                    String(item).trim()
+            )
+            .filter(Boolean);
+    }
+
+
+    if (typeof value === "string") {
+
+        return value
+            .split(",")
+            .map(
+                item =>
+                    item.trim()
+            )
+            .filter(Boolean);
+    }
+
+
+    return [];
 }
 
 
@@ -655,7 +842,6 @@ function startReviewsRealtime() {
                 updateAverageReview();
 
                 loadCurrentUserReview();
-
             },
 
             (error) => {
@@ -664,10 +850,8 @@ function startReviewsRealtime() {
                     "Review realtime error:",
                     error
                 );
-
             }
         );
-
 }
 
 
@@ -695,20 +879,21 @@ function loadCurrentUserReview() {
         currentReviewId =
             null;
 
+
         if (!reviewInputDirty) {
 
             if (commentInput) {
 
                 commentInput.value =
                     "";
-
             }
+
 
             selectedRating =
                 10;
 
-            updateStars();
 
+            updateStars();
         }
 
 
@@ -719,11 +904,10 @@ function loadCurrentUserReview() {
 
             submitReview.textContent =
                 "ส่งรีวิว";
-
         }
 
-        return;
 
+        return;
     }
 
 
@@ -738,18 +922,17 @@ function loadCurrentUserReview() {
             commentInput.value =
                 myReview.comment ||
                 "";
-
         }
 
 
         selectedRating =
             Number(
-                myReview.rating || 10
+                myReview.rating ||
+                10
             );
 
 
         updateStars();
-
     }
 
 
@@ -760,9 +943,7 @@ function loadCurrentUserReview() {
 
         submitReview.textContent =
             "อัปเดตรีวิว";
-
     }
-
 }
 
 
@@ -797,7 +978,6 @@ function renderReviews() {
         `;
 
         return;
-
     }
 
 
@@ -809,25 +989,34 @@ function renderReviews() {
                     a.createdAt?.seconds ||
                     0;
 
+
                 const bTime =
                     b.createdAt?.seconds ||
                     0;
 
 
                 return bTime - aTime;
-
             }
         )
         .forEach(
             review => {
 
+                // ===================================
+                // Avatar
+                // ===================================
+
                 const avatar =
                     review.photoURL ||
+                    review.photo ||
                     `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
                         review.username ||
                         "User"
                     )}`;
 
+
+                // ===================================
+                // Delete Permission
+                // ===================================
 
                 const canDelete =
                     currentUser &&
@@ -835,20 +1024,37 @@ function renderReviews() {
                         currentUser.uid;
 
 
-                const stars =
-                    createStars(
-                        Number(
-                            review.rating ||
-                            0
-                        )
+                // ===================================
+                // Rating
+                // ยังคง 10 ดาวเหมือนเดิม
+                // ===================================
+
+                const rating =
+                    Number(
+                        review.rating ||
+                        0
                     );
 
+
+                const stars =
+                    createStars(
+                        rating
+                    );
+
+
+                // ===================================
+                // Date
+                // ===================================
 
                 const dateText =
                     formatDate(
                         review.createdAt
                     );
 
+
+                // ===================================
+                // Render
+                // ===================================
 
                 reviewList.innerHTML += `
                     <div class="review-card">
@@ -878,19 +1084,19 @@ function renderReviews() {
                                     </strong>
 
                                     <div class="review-stars">
+
                                         ${stars}
 
                                         <span>
-                                            (${Number(
-                                                review.rating ||
-                                                0
-                                            )}/10)
+                                            (${rating}/10)
                                         </span>
+
                                     </div>
 
                                 </div>
 
                             </div>
+
 
                             <div class="review-date">
 
@@ -930,7 +1136,6 @@ function renderReviews() {
 
                     </div>
                 `;
-
             }
         );
 
@@ -953,13 +1158,10 @@ function renderReviews() {
                         deleteReview(
                             button.dataset.reviewId
                         );
-
                     }
                 );
-
             }
         );
-
 }
 
 
@@ -977,15 +1179,21 @@ function setupReviewForm() {
     submitReview.disabled =
         false;
 
+
     submitReview.textContent =
-        "ส่งรีวิว";
+        currentReviewId
+            ? "อัปเดตรีวิว"
+            : "ส่งรีวิว";
 
 
     submitReview.onclick =
         saveReview;
 
 
-    if (commentInput) {
+    if (
+        commentInput &&
+        !commentInput.dataset.listenerAdded
+    ) {
 
         commentInput.addEventListener(
             "input",
@@ -993,12 +1201,13 @@ function setupReviewForm() {
 
                 reviewInputDirty =
                     true;
-
             }
         );
 
-    }
 
+        commentInput.dataset.listenerAdded =
+            "true";
+    }
 }
 
 
@@ -1015,7 +1224,6 @@ async function saveReview() {
         );
 
         return;
-
     }
 
 
@@ -1032,7 +1240,6 @@ async function saveReview() {
         );
 
         return;
-
     }
 
 
@@ -1045,7 +1252,6 @@ async function saveReview() {
 
             submitReview.textContent =
                 "กำลังบันทึก...";
-
         }
 
 
@@ -1077,6 +1283,10 @@ async function saveReview() {
                 currentUser.photoURL ||
                 "",
 
+            // ======================================
+            // คะแนนเดิม 1-10
+            // ======================================
+
             rating:
                 Number(
                     selectedRating
@@ -1087,7 +1297,6 @@ async function saveReview() {
 
             createdAt:
                 serverTimestamp()
-
         };
 
 
@@ -1122,7 +1331,6 @@ async function saveReview() {
             showToast(
                 "ส่งรีวิวสำเร็จ"
             );
-
         }
 
 
@@ -1134,7 +1342,6 @@ async function saveReview() {
 
             commentInput.value =
                 "";
-
         }
 
 
@@ -1143,7 +1350,6 @@ async function saveReview() {
 
 
         updateStars();
-
     }
     catch (error) {
 
@@ -1152,10 +1358,10 @@ async function saveReview() {
             error
         );
 
+
         showToast(
             "บันทึกรีวิวไม่สำเร็จ"
         );
-
     }
     finally {
 
@@ -1168,11 +1374,8 @@ async function saveReview() {
                 currentReviewId
                     ? "อัปเดตรีวิว"
                     : "ส่งรีวิว";
-
         }
-
     }
-
 }
 
 
@@ -1180,9 +1383,7 @@ async function saveReview() {
 // DELETE REVIEW
 // =====================================================
 
-async function deleteReview(
-    id
-) {
+async function deleteReview(id) {
 
     if (!currentUser) {
         return;
@@ -1207,7 +1408,6 @@ async function deleteReview(
         );
 
         return;
-
     }
 
 
@@ -1218,7 +1418,6 @@ async function deleteReview(
     ) {
 
         return;
-
     }
 
 
@@ -1244,25 +1443,25 @@ async function deleteReview(
             reviewInputDirty =
                 false;
 
+
             if (commentInput) {
 
                 commentInput.value =
                     "";
-
             }
+
 
             selectedRating =
                 10;
 
-            updateStars();
 
+            updateStars();
         }
 
 
         showToast(
             "ลบรีวิวเรียบร้อย"
         );
-
     }
     catch (error) {
 
@@ -1271,12 +1470,11 @@ async function deleteReview(
             error
         );
 
+
         showToast(
             "ลบรีวิวไม่สำเร็จ"
         );
-
     }
-
 }
 
 
@@ -1286,11 +1484,12 @@ async function deleteReview(
 
 function updateAverageReview() {
 
-    if (!userScore &&
-        !reviewCount) {
+    if (
+        !userScore &&
+        !reviewCount
+    ) {
 
         return;
-
     }
 
 
@@ -1303,7 +1502,6 @@ function updateAverageReview() {
 
             userScore.textContent =
                 "0.0";
-
         }
 
 
@@ -1311,11 +1509,10 @@ function updateAverageReview() {
 
             reviewCount.textContent =
                 "0 รีวิว";
-
         }
 
-        return;
 
+        return;
     }
 
 
@@ -1329,10 +1526,10 @@ function updateAverageReview() {
                 return (
                     sum +
                     Number(
-                        review.rating || 0
+                        review.rating ||
+                        0
                     )
                 );
-
             },
             0
         );
@@ -1347,7 +1544,6 @@ function updateAverageReview() {
 
         userScore.textContent =
             avg.toFixed(1);
-
     }
 
 
@@ -1355,14 +1551,13 @@ function updateAverageReview() {
 
         reviewCount.textContent =
             `${reviewData.length} รีวิว`;
-
     }
-
 }
 
 
 // =====================================================
 // STARS
+// คะแนนเดิม 10 ดาว
 // =====================================================
 
 function createStarUI() {
@@ -1411,7 +1606,6 @@ function createStarUI() {
 
 
                 updateStars();
-
             }
         );
 
@@ -1419,14 +1613,16 @@ function createStarUI() {
         starRating.appendChild(
             star
         );
-
     }
 
 
     updateStars();
-
 }
 
+
+// =====================================================
+// UPDATE STARS
+// =====================================================
 
 function updateStars() {
 
@@ -1436,9 +1632,7 @@ function updateStars() {
 
 
     starRating
-        .querySelectorAll(
-            "i"
-        )
+        .querySelectorAll("i")
         .forEach(
             star => {
 
@@ -1453,18 +1647,20 @@ function updateStars() {
                     rate <=
                         selectedRating
                 );
-
             }
         );
-
 }
 
 
-function createStars(
-    rating
-) {
+// =====================================================
+// CREATE STARS
+// คะแนนเดิม 10 ดาว
+// =====================================================
 
-    let html = "";
+function createStars(rating) {
+
+    let html =
+        "";
 
 
     for (
@@ -1477,12 +1673,10 @@ function createStars(
             i <= rating
                 ? '<i class="fa-solid fa-star active"></i>'
                 : '<i class="fa-regular fa-star"></i>';
-
     }
 
 
     return html;
-
 }
 
 
@@ -1496,7 +1690,6 @@ if (favoriteBtn) {
         "click",
         toggleFavorite
     );
-
 }
 
 
@@ -1509,7 +1702,6 @@ async function toggleFavorite() {
         );
 
         return;
-
     }
 
 
@@ -1542,10 +1734,8 @@ async function toggleFavorite() {
 
                     createdAt:
                         serverTimestamp()
-
                 }
             );
-
         }
 
     }
@@ -1556,18 +1746,19 @@ async function toggleFavorite() {
             error
         );
 
+
         showToast(
             "ไม่สามารถแก้ไข Favorite ได้"
         );
-
     }
-
 }
 
 
-function updateFavoriteButton(
-    active
-) {
+// =====================================================
+// FAVORITE BUTTON
+// =====================================================
+
+function updateFavoriteButton(active) {
 
     if (!favoriteBtn) {
         return;
@@ -1578,7 +1769,6 @@ function updateFavoriteButton(
         active
             ? "❤️ โปรดแล้ว"
             : "♡ Favorite";
-
 }
 
 
@@ -1592,7 +1782,6 @@ if (bookmarkBtn) {
         "click",
         toggleBookmark
     );
-
 }
 
 
@@ -1605,7 +1794,6 @@ async function toggleBookmark() {
         );
 
         return;
-
     }
 
 
@@ -1638,10 +1826,8 @@ async function toggleBookmark() {
 
                     createdAt:
                         serverTimestamp()
-
                 }
             );
-
         }
 
     }
@@ -1652,18 +1838,19 @@ async function toggleBookmark() {
             error
         );
 
+
         showToast(
             "ไม่สามารถแก้ไข Bookmark ได้"
         );
-
     }
-
 }
 
 
-function updateBookmarkButton(
-    active
-) {
+// =====================================================
+// BOOKMARK BUTTON
+// =====================================================
+
+function updateBookmarkButton(active) {
 
     if (!bookmarkBtn) {
         return;
@@ -1674,7 +1861,6 @@ function updateBookmarkButton(
         active
             ? "🔖 บันทึกแล้ว"
             : "🔖 Bookmark";
-
 }
 
 
@@ -1702,17 +1888,17 @@ if (shareBtn) {
             }
             catch (error) {
 
-                console.error(error);
+                console.error(
+                    error
+                );
+
 
                 showToast(
                     "ไม่สามารถคัดลอกลิงก์ได้"
                 );
-
             }
-
         }
     );
-
 }
 
 
@@ -1720,21 +1906,19 @@ if (shareBtn) {
 // TOAST
 // =====================================================
 
-function showToast(
-    message
-) {
+function showToast(message) {
 
     if (!toast) {
 
         alert(message);
 
         return;
-
     }
 
 
     toast.textContent =
         message;
+
 
     toast.classList.add(
         "show"
@@ -1751,7 +1935,6 @@ function showToast(
         },
         2500
     );
-
 }
 
 
@@ -1759,9 +1942,7 @@ function showToast(
 // DATE
 // =====================================================
 
-function formatDate(
-    timestamp
-) {
+function formatDate(timestamp) {
 
     if (
         !timestamp ||
@@ -1769,7 +1950,6 @@ function formatDate(
     ) {
 
         return "";
-
     }
 
 
@@ -1783,17 +1963,14 @@ function formatDate(
                 day: "numeric"
             }
         );
-
 }
 
 
 // =====================================================
-// ESCAPE
+// ESCAPE HTML
 // =====================================================
 
-function escapeHTML(
-    value
-) {
+function escapeHTML(value) {
 
     return String(
         value ?? ""
@@ -1818,18 +1995,50 @@ function escapeHTML(
             /'/g,
             "&#039;"
         );
-
 }
 
 
-function escapeAttribute(
-    value
-) {
+// =====================================================
+// ESCAPE ATTRIBUTE
+// =====================================================
+
+function escapeAttribute(value) {
 
     return escapeHTML(
         value
     );
+}
 
+
+// =====================================================
+// ESCAPE XML
+// =====================================================
+
+function escapeXML(value) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&apos;"
+        );
 }
 
 
@@ -1842,26 +2051,25 @@ function cleanupUserListeners() {
     if (unsubscribeUser) {
 
         unsubscribeUser();
-        unsubscribeUser = null;
 
+        unsubscribeUser = null;
     }
 
 
     if (unsubscribeFavorite) {
 
         unsubscribeFavorite();
-        unsubscribeFavorite = null;
 
+        unsubscribeFavorite = null;
     }
 
 
     if (unsubscribeBookmark) {
 
         unsubscribeBookmark();
+
         unsubscribeBookmark = null;
-
     }
-
 }
 
 

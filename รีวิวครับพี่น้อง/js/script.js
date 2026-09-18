@@ -1,10 +1,14 @@
 // =====================================================
 // Anime Review Hub
 // script.js
-// HOME REAL-TIME
+// HOME REAL-TIME + CATEGORY
 // =====================================================
 
-import { db } from "./firebase.js";
+import { auth, db } from "./firebase.js";
+
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 
 import {
     collection,
@@ -13,7 +17,7 @@ import {
 
 
 // =====================================================
-// Elements
+// ELEMENTS
 // =====================================================
 
 const animeList =
@@ -33,7 +37,7 @@ const categoryArrow =
 
 
 // =====================================================
-// Variables
+// VARIABLES
 // =====================================================
 
 let animeData = [];
@@ -84,14 +88,25 @@ if (
 
 
 // =====================================================
-// REAL-TIME START
+// START REAL-TIME
 // =====================================================
 
 function startRealtime() {
 
+    console.log(
+        "เริ่มระบบ Home Real-time..."
+    );
+
 
     // =================================================
-    // Anime
+    // STOP OLD LISTENERS
+    // =================================================
+
+    stopRealtime();
+
+
+    // =================================================
+    // ANIME REAL-TIME
     // =================================================
 
     unsubscribeAnime =
@@ -102,6 +117,12 @@ function startRealtime() {
             ),
 
             (snapshot) => {
+
+                console.log(
+                    "Anime realtime update:",
+                    snapshot.size
+                );
+
 
                 animeData =
                     snapshot.docs.map(
@@ -137,7 +158,7 @@ function startRealtime() {
 
 
     // =================================================
-    // Reviews
+    // REVIEWS REAL-TIME
     // =================================================
 
     unsubscribeReviews =
@@ -148,6 +169,12 @@ function startRealtime() {
             ),
 
             (snapshot) => {
+
+                console.log(
+                    "Review realtime update:",
+                    snapshot.size
+                );
+
 
                 reviewData =
                     snapshot.docs.map(
@@ -173,9 +200,6 @@ function startRealtime() {
                     error
                 );
 
-
-                renderCurrent();
-
             }
         );
 
@@ -183,7 +207,106 @@ function startRealtime() {
 
 
 // =====================================================
-// Get Filtered Anime
+// STOP REAL-TIME
+// =====================================================
+
+function stopRealtime() {
+
+    if (
+        typeof unsubscribeAnime ===
+        "function"
+    ) {
+
+        unsubscribeAnime();
+
+        unsubscribeAnime =
+            null;
+
+    }
+
+
+    if (
+        typeof unsubscribeReviews ===
+        "function"
+    ) {
+
+        unsubscribeReviews();
+
+        unsubscribeReviews =
+            null;
+
+    }
+
+}
+
+
+// =====================================================
+// AUTH STATE
+// =====================================================
+
+onAuthStateChanged(
+    auth,
+    (user) => {
+
+        console.log(
+            "Home Auth:",
+            user
+                ? user.uid
+                : "ไม่ได้ Login"
+        );
+
+
+        // =================================================
+        // NOT LOGIN
+        // =================================================
+
+        if (!user) {
+
+            stopRealtime();
+
+            animeData = [];
+
+            reviewData = [];
+
+            if (animeList) {
+
+                animeList.innerHTML = `
+
+                    <div class="empty">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <h2>
+                            กรุณาเข้าสู่ระบบ
+                        </h2>
+
+                        <p>
+                            ต้องเข้าสู่ระบบก่อนจึงจะดู Anime ได้
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+
+            return;
+
+        }
+
+
+        // =================================================
+        // LOGIN SUCCESS
+        // =================================================
+
+        startRealtime();
+
+    }
+);
+
+
+// =====================================================
+// GET FILTERED ANIME
 // =====================================================
 
 function getFilteredAnime() {
@@ -193,7 +316,7 @@ function getFilteredAnime() {
 
 
     // =================================================
-    // CATEGORY
+    // CATEGORY FILTER
     // =================================================
 
     if (
@@ -242,7 +365,7 @@ function getFilteredAnime() {
 
 
     // =================================================
-    // SEARCH
+    // SEARCH FILTER
     // =================================================
 
     const keyword =
@@ -273,13 +396,17 @@ function getFilteredAnime() {
 
 
                     return (
+
                         title.includes(
                             keyword
                         )
+
                         ||
+
                         categories.includes(
                             keyword
                         )
+
                     );
 
                 }
@@ -294,7 +421,7 @@ function getFilteredAnime() {
 
 
 // =====================================================
-// Render Current
+// RENDER CURRENT
 // =====================================================
 
 function renderCurrent() {
@@ -311,7 +438,7 @@ function renderCurrent() {
 
 
 // =====================================================
-// Render Anime
+// RENDER ANIME
 // =====================================================
 
 function renderAnime(
@@ -328,7 +455,7 @@ function renderAnime(
 
 
     // =================================================
-    // Empty
+    // EMPTY
     // =================================================
 
     if (
@@ -360,7 +487,7 @@ function renderAnime(
 
 
     // =================================================
-    // Create Cards
+    // CARDS
     // =================================================
 
     list.forEach(
@@ -368,7 +495,7 @@ function renderAnime(
 
 
             // =========================================
-            // Rating
+            // SCORE
             // =========================================
 
             const rating =
@@ -378,7 +505,7 @@ function renderAnime(
 
 
             // =========================================
-            // Category
+            // CATEGORY
             // =========================================
 
             const categories =
@@ -414,7 +541,7 @@ function renderAnime(
 
 
             // =========================================
-            // Image
+            // IMAGE
             // =========================================
 
             const image =
@@ -425,7 +552,7 @@ function renderAnime(
 
 
             // =========================================
-            // Title
+            // TITLE
             // =========================================
 
             const title =
@@ -434,7 +561,7 @@ function renderAnime(
 
 
             // =========================================
-            // Card
+            // CARD
             // =========================================
 
             const card =
@@ -524,7 +651,7 @@ function renderAnime(
 
 
             // =========================================
-            // Image Error
+            // IMAGE ERROR
             // =========================================
 
             const imageElement =
@@ -549,7 +676,7 @@ function renderAnime(
 
 
             // =========================================
-            // Detail Button
+            // DETAIL
             // =========================================
 
             const detailButton =
@@ -589,7 +716,7 @@ function renderAnime(
 
 
 // =====================================================
-// Average Score
+// AVERAGE SCORE
 // =====================================================
 
 function getAverageScore(
@@ -665,21 +792,12 @@ function getAverageScore(
 // =====================================================
 // CATEGORY FILTER
 // =====================================================
-// รองรับ:
-//
-// filterAnime("Action")
-//
-// และ:
-//
-// filterAnime(event, "Action")
-// =====================================================
 
 window.filterAnime =
     function (
         eventOrCategory,
         categoryValue
     ) {
-
 
         let category =
             "All";
@@ -690,7 +808,7 @@ window.filterAnime =
 
 
         // =================================================
-        // กรณี filterAnime("Action")
+        // filterAnime("Action")
         // =================================================
 
         if (
@@ -705,7 +823,7 @@ window.filterAnime =
 
 
         // =================================================
-        // กรณี filterAnime(event, "Action")
+        // filterAnime(event, "Action")
         // =================================================
 
         else {
@@ -723,7 +841,7 @@ window.filterAnime =
 
 
         // =================================================
-        // Save Category
+        // SAVE CATEGORY
         // =================================================
 
         currentCategory =
@@ -732,7 +850,7 @@ window.filterAnime =
 
 
         // =================================================
-        // Remove Active
+        // ACTIVE BUTTON
         // =================================================
 
         document
@@ -749,10 +867,6 @@ window.filterAnime =
                 }
             );
 
-
-        // =================================================
-        // Add Active
-        // =================================================
 
         if (
             clickedButton
@@ -809,7 +923,7 @@ window.filterAnime =
 
 
         // =================================================
-        // Filter
+        // RENDER
         // =================================================
 
         renderCurrent();
@@ -865,7 +979,7 @@ function showDetail(
 
 
 // =====================================================
-// Normalize Categories
+// NORMALIZE CATEGORY
 // =====================================================
 
 function normalizeCategories(
@@ -874,7 +988,7 @@ function normalizeCategories(
 
 
     // =================================================
-    // Array
+    // ARRAY
     // =================================================
 
     if (
@@ -904,7 +1018,7 @@ function normalizeCategories(
 
 
     // =================================================
-    // Null / Undefined
+    // EMPTY
     // =================================================
 
     if (
@@ -918,17 +1032,20 @@ function normalizeCategories(
 
 
     // =================================================
-    // String
+    // STRING
     // =================================================
 
     return String(
         category
     )
+
         .split(",")
+
         .map(
             item =>
                 item.trim()
         )
+
         .filter(
             Boolean
         );
@@ -937,7 +1054,7 @@ function normalizeCategories(
 
 
 // =====================================================
-// Escape HTML
+// ESCAPE HTML
 // =====================================================
 
 function escapeHTML(
@@ -977,7 +1094,7 @@ function escapeHTML(
 
 
 // =====================================================
-// Escape Attribute
+// ESCAPE ATTRIBUTE
 // =====================================================
 
 function escapeAttribute(
@@ -1018,15 +1135,12 @@ function showError(
                 }
             </h2>
 
+            <p>
+                เปิด F12 → Console เพื่อตรวจสอบข้อผิดพลาด
+            </p>
+
         </div>
 
     `;
 
 }
-
-
-// =====================================================
-// START REAL-TIME
-// =====================================================
-
-startRealtime();
